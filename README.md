@@ -2,6 +2,10 @@
 
 A minimalist Chrome extension that replaces your new tab page with a clean, dark interface focused on search functionality.
 
+## Screenshot
+
+![Min Tab Extension](screenshot.png)
+
 ## Features
 
 - **Clean Design**: Minimalist black interface with subtle animations

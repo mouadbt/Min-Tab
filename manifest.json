@@ -1,0 +1,15 @@
+{
+  "name": "Min Tab",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "A custom new tab page with a minimalist black design.",
+  "chrome_url_overrides": {
+    "newtab": "new_tab.html"
+  },
+  "permissions": [
+    "history"
+  ],
+  "icons": {
+    "128": "icon128.png"
+  }
+}

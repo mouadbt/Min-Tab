@@ -4,7 +4,7 @@ A minimalist Chrome extension that replaces your new tab page with a clean, dark
 
 ## Screenshot
 
-![Min Tab Extension](screenshot.png)
+![Min Tab Extension](image.png)
 
 ## Features
 

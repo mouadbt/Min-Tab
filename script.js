@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const firstSuggestion = document.querySelector(".search-result-item a");
         if (firstSuggestion) {
             firstSuggestion.focus();
+            searchInput.value = firstSuggestion.querySelector('span').textContent
         }
     }
 
@@ -94,6 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const nextIndex = currentIndex + direction;
         if (nextIndex >= 0 && nextIndex < allSuggestions.length) {
             allSuggestions[nextIndex].focus();
+            searchInput.value = allSuggestions[nextIndex].querySelector('span').textContent
         }
     }
 

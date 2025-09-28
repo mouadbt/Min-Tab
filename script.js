@@ -1,4 +1,6 @@
-// throw new Error for focusing on search input of the new tab instead of the browser address bar 
+// This ensures that the search input is focused when the new tab is opened.
+// It works by appending "?focus" to the URL and forcing a reload.
+// The error is intentionally thrown to halt script execution on the initial load
 if (location.search !== "?focus") {
     location.search = "?focus";
     throw new Error("Redirecting to focus mode");
@@ -32,43 +34,70 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /**
-     * Fetches and displays search suggestions based on user input.
-     */
+     * Fetches and displays search suggestions based on user input,
+     * prioritizing frequently visited sites.
+    */
     async function showSearchSuggestions() {
         suggestionsList.innerHTML = `<li><a><span>Loading...</span></a></li>`;
-        if (!chrome.history?.search) {
+        currentQuery = searchInput.value.trim().toLowerCase();
+
+        if (!currentQuery) {
             suggestionsList.innerHTML = '';
             return;
         }
-        chrome.history.search({ text: currentQuery, maxResults: 5 }, (historyItems) => {
-            suggestionsList.innerHTML = '';
-            historyItems.forEach(item => {
-                const url = new URL(item.url);
-                const faviconUrl = `https://www.google.com/s2/favicons?sz=32&domain_url=${url.origin}`;
 
-                const suggestionItem = document.createElement('li');
-                suggestionItem.className = 'search-result-item';
+        if (chrome.topSites && chrome.history) {
+            // First, get the user's most visited sites.
+            chrome.topSites.get((topSites) => {
+                // Filter the top sites based on the current query.
+                const filteredTopSites = topSites.filter(site =>
+                    site.title.toLowerCase().includes(currentQuery) ||
+                    site.url.toLowerCase().includes(currentQuery)
+                );
 
-                const link = document.createElement('a');
-                link.href = item.url;
+                // Then, search the rest of the history for other matches.
+                chrome.history.search({ text: currentQuery, maxResults: 100 }, (historyItems) => {
+                    // Combine and de-duplicate the results, giving priority to top sites.
+                    const combined = [...filteredTopSites];
+                    historyItems.forEach(item => {
+                        if (!combined.some(site => site.url === item.url)) {
+                            combined.push(item);
+                        }
+                    });
 
-                const favicon = document.createElement('img');
-                favicon.src = faviconUrl;
-                favicon.alt = '';
-                favicon.width = 16;
-                favicon.height = 16;
+                    suggestionsList.innerHTML = '';
+                    // Display a limited number of the best suggestions.
+                    combined.slice(0, 5).forEach(item => {
+                        const url = new URL(item.url);
+                        const faviconUrl = `https://www.google.com/s2/favicons?sz=32&domain_url=${url.origin}`;
 
-                const title = document.createElement('span');
-                title.textContent = item.title || item.url;
+                        const suggestionItem = document.createElement('li');
+                        suggestionItem.className = 'search-result-item';
 
-                const arrow = document.createElement('span');
-                arrow.textContent = '→';
+                        const link = document.createElement('a');
+                        link.href = item.url;
 
-                link.append(favicon, title, arrow);
-                suggestionItem.append(link);
-                suggestionsList.append(suggestionItem);
+                        const favicon = document.createElement('img');
+                        favicon.src = faviconUrl;
+                        favicon.alt = '';
+                        favicon.width = 16;
+                        favicon.height = 16;
+
+                        const title = document.createElement('span');
+                        title.textContent = item.title || item.url;
+
+                        const arrow = document.createElement('span');
+                        arrow.textContent = '→';
+
+                        link.append(favicon, title, arrow);
+                        suggestionItem.append(link);
+                        suggestionsList.append(suggestionItem);
+                    });
+                });
             });
-        });
+        } else {
+            suggestionsList.innerHTML = '<li><a><span>History API not available</span></a></li>';
+        }
     }
 
     /**

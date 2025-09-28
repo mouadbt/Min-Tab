@@ -201,7 +201,7 @@ svg:hover,
     color: var(--color-text-secondary);
     padding: var(--space-list);
     text-decoration: none;
-    width: 97%;
+    width: 100%;
     display: flex;
     overflow: hidden;
     gap: var(--space-gap);

@@ -6,6 +6,10 @@ A minimalist Chrome extension that replaces your new tab page with a clean, dark
 
 ![Min Tab Extension](image.png)
 
+| Suggestions Overview |  |
+|---------------------|--|
+| <img src="suggestions-1.png" width="200" alt="Image 1"> | <img src="suggestions-2.png" width="200" alt="Image 2"> |
+
 ## Features
 
 - **Clean Design**: Minimalist black interface with subtle animations

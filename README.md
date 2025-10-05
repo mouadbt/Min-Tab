@@ -9,11 +9,12 @@ A minimalist Chrome extension that replaces your new tab page with a clean, dark
 ## Features
 
 - **Clean Design**: Minimalist black interface with subtle animations
-- **Multi-Search Engine Support**: Choose between Startpage, Google, and DuckDuckGo
-- **Smart Suggestions**: History-based search suggestions with favicons
-- **Keyboard Navigation**: Full keyboard support with arrow keys
+- **Multi-Search Engine Support**: Startpage, Google, DuckDuckGo, Perplexity, and Mistral
+- **Configurable Engines**: Show/hide engines and remember your choices
+- **Smart Suggestions**: Top Sites + History suggestions with favicons
+- **Keyboard Navigation & Shortcuts**: Arrows to navigate, `/` to focus input, `Alt+S` to toggle settings, `Esc` to close
+- **Focus Management**: Optional auto-focus on load
 - **Accessibility**: Screen reader friendly with proper ARIA labels
-- **Focus Management**: Automatically focuses search input for immediate typing
 
 ## Installation
 
@@ -32,11 +33,17 @@ A minimalist Chrome extension that replaces your new tab page with a clean, dark
 - Use arrow keys to navigate through history suggestions
 
 ### Search Engines
-- Click on Startpage, Google, or DuckDuckGo to switch search engines
+- Click on Startpage, Google, DuckDuckGo, Perplexity, or Mistral to switch engines
 - The active engine is highlighted
-- Double-press Enter on a search engine button to search immediately
+- Double-press Enter on an engine button to search immediately
+- Use Settings to show/hide which engines appear
+
+> Note: `Mistral` is included but hidden by default. Enable it from Settings → "Show/hide engines".
 
 ### Keyboard Shortcuts
+- `/` - Focus the search input from anywhere
+- `Alt+S` - Toggle the Settings panel
+- `Esc` - Close the Settings panel
 - `↓` - Navigate down through suggestions
 - `↑` - Navigate up through suggestions or return to search box
 - `Enter` - Perform search or select suggestion
@@ -44,7 +51,9 @@ A minimalist Chrome extension that replaces your new tab page with a clean, dark
 ## Technical Details
 
 - **Manifest Version**: 3
-- **Permissions**: History access for search suggestions
+- **Permissions**: `history`, `topSites`
+- **Web Accessible Resources**: `search_engines.json`
+- **Local Storage**: Preferences (active engine, visibility, focus-on-load, placeholder, settings icon)
 - **Browser Support**: Chrome (Manifest V3 compatible)
 
 ## File Structure
@@ -54,9 +63,20 @@ A minimalist Chrome extension that replaces your new tab page with a clean, dark
 ├── new_tab.html       # Main HTML structure
 ├── style.css          # Styling and CSS variables
 ├── script.js          # JavaScript functionality
+├── search_engines.json # Default search engines and visibility
 ├── icon128.png        # Extension icon
+├── image.png          # README screenshot
 └── README.md          # This file
 ```
+
+## Settings
+
+The Settings panel (gear icon or press `Alt+S`) lets you:
+
+- **Focus search bar on new tab**: Enable/disable auto-focus on load
+- **Hide search placeholder**: Show a clean input without placeholder text
+- **Always show settings icon**: Keep the gear icon visible
+- **Show/hide engines**: Choose which engines appear in the navbar
 
 ## Customization
 

@@ -339,6 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function performSearch() {
         if (!currentQuery) return;
         currentQuery = searchInput.value.trim();
+        searchBtn.classList.add('loading');
         location.href = `${currentSearchUrl}+${encodeURIComponent(currentQuery)}`;
     }
 
@@ -440,7 +441,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Handle form submission
     searchForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        searchBtn.classList.add('loading')
         performSearch();
     });
 

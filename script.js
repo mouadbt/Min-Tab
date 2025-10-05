@@ -1,55 +1,289 @@
-// This ensures that the search input is focused when the new tab is opened.
-// It works by appending "?focus" to the URL and forcing a reload.
-// The error is intentionally thrown to halt script execution on the initial load
-if (location.search !== "?focus") {
-    location.search = "?focus";
-    throw new Error("Redirecting to focus mode");
+// Ensures the search input is automatically focused when a new tab is opened.
+// This is achieved by reloading the page once with a "?focus" URL parameter.
+// The error is thrown to prevent the rest of the script from executing on the initial page load, before the reload occurs.
+const shouldFocusOnLoad = localStorage.getItem('focusOnLoad') === null ? true : localStorage.getItem('focusOnLoad') === 'true';
+
+if (shouldFocusOnLoad) {
+    if (location.search !== "?focus") {
+        location.search = "?focus";
+        throw new Error("Redirecting to focus mode");
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // --- Constants ---
-    const DOUBLE_PRESS_DELAY_MS = 300; // Time window for double Enter press
-
     // --- DOM Elements ---
-    const searchEngines = document.querySelectorAll(".search-engine");
+    const searchEnginesNav = document.getElementById("search-engines");
     const searchForm = document.querySelector("form");
+    const settingsTrigger = document.querySelector(".setting-trigger button");
+    const settingsTriggerContainer = document.querySelector(".setting-trigger");
     const searchInput = document.querySelector("#search-input");
+    const searchBtn = document.querySelector("#search-icon");
     const suggestionsList = document.getElementById("suggestions");
-
+    const settingsPanel = document.getElementById("settings-panel");
+    const engineSettings = document.getElementById("engine-settings");
+    const focusOnLoadCheckbox = document.getElementById("focus-on-load");
+    const hidePlaceholderCheckbox = document.getElementById("hide-placeholder");
+    const alwaysShowSettingsCheckbox = document.getElementById("always-show-settings");
+    
     // --- State ---
     let lastEnterPressTime = 0;
     let currentSearchUrl = 'https://www.startpage.com/sp/search?q=';
     let currentQuery = '';
 
-    // --- Helper Functions ---
+    
+    // --- Settings panel controls ---
+    /** @type {{key:string,name:string,url:string,visible:boolean}[]} */
+    let engines = [];
+    let activeEngineKey = localStorage.getItem('activeEngine') || 'startpage';
+
+    // Set the initial state of the checkboxes from localStorage
+    focusOnLoadCheckbox.checked = shouldFocusOnLoad;
+    const defaultPlaceholder = searchInput.getAttribute('placeholder') || '';
+    const hidePlaceholder = localStorage.getItem('hidePlaceholder') === 'true';
+    hidePlaceholderCheckbox.checked = hidePlaceholder;
+    const alwaysShowSettings = localStorage.getItem('alwaysShowSettings') === 'true';
+    if (alwaysShowSettingsCheckbox) alwaysShowSettingsCheckbox.checked = alwaysShowSettings;
+
+    // Apply hide/show placeholder only (no longer controls settings icon visibility)
+    function applyHidePlaceholder(shouldHide) {
+        searchInput.setAttribute('placeholder', shouldHide ? '' : defaultPlaceholder);
+    }
+    applyHidePlaceholder(hidePlaceholder);
+
+    // Apply independent settings icon visibility
+    function applyAlwaysShowSettings(shouldShow) {
+        if (!settingsTriggerContainer) return;
+        settingsTriggerContainer.classList.toggle('always-visible', !!shouldShow);
+    }
+
+    // --- Small helpers: Settings panel controls ---
+    function isSettingsOpen() {
+        return settingsPanel && !settingsPanel.classList.contains('hidden');
+    }
+
+    function openSettingsPanel() {
+        if (settingsPanel) settingsPanel.classList.remove('hidden');
+    }
+
+    function closeSettingsPanel() {
+        if (settingsPanel) settingsPanel.classList.add('hidden');
+    }
+
+    function toggleSettingsPanel(forceState) {
+        if (!settingsPanel) return;
+        const shouldOpen = typeof forceState === 'boolean' ? forceState : settingsPanel.classList.contains('hidden');
+        settingsPanel.classList.toggle('hidden', !shouldOpen);
+    }
+
+    // --- Small helpers: Suggestions rendering ---
+    function clearSuggestions() {
+        suggestionsList.innerHTML = '';
+    }
+
+    function setSuggestionsLoading() {
+        suggestionsList.innerHTML = `<li><a><span>Loading...</span></a></li>`;
+    }
+
+    function getFaviconUrl(origin) {
+        return `https://www.google.com/s2/favicons?sz=32&domain_url=${origin}`;
+    }
+
+    function buildSuggestionItem(item) {
+        const urlObj = new URL(item.url);
+        const suggestionItem = document.createElement('li');
+        suggestionItem.className = 'search-result-item';
+
+        const link = document.createElement('a');
+        link.href = item.url;
+
+        const favicon = document.createElement('img');
+        favicon.src = getFaviconUrl(urlObj.origin);
+        favicon.alt = '';
+        favicon.width = 16;
+        favicon.height = 16;
+
+        const title = document.createElement('span');
+        title.textContent = item.title || item.url;
+
+        const arrow = document.createElement('span');
+        arrow.textContent = '→';
+
+        link.append(favicon, title, arrow);
+        suggestionItem.append(link);
+        return suggestionItem;
+    }
+
+    function renderSuggestionItems(items) {
+        clearSuggestions();
+        items.forEach(item => suggestionsList.append(buildSuggestionItem(item)));
+    }
+    applyAlwaysShowSettings(alwaysShowSettings);
+
+    // Save the setting to localStorage when the checkbox is changed
+    focusOnLoadCheckbox.addEventListener('change', () => {
+        localStorage.setItem('focusOnLoad', focusOnLoadCheckbox.checked);
+    });
+
+    hidePlaceholderCheckbox.addEventListener('change', () => {
+        localStorage.setItem('hidePlaceholder', hidePlaceholderCheckbox.checked);
+        applyHidePlaceholder(hidePlaceholderCheckbox.checked);
+    });
+
+    if (alwaysShowSettingsCheckbox) {
+        alwaysShowSettingsCheckbox.addEventListener('change', () => {
+            localStorage.setItem('alwaysShowSettings', alwaysShowSettingsCheckbox.checked);
+            applyAlwaysShowSettings(alwaysShowSettingsCheckbox.checked);
+        });
+    }
 
     /**
      * Sets the active search engine and updates the search URL.
      * @param {HTMLElement} engineElement - The clicked search engine element.
      */
+    function getEngineButtons() {
+        return searchEnginesNav.querySelectorAll('.search-engine');
+    }
+
     function setActiveSearchEngine(engineElement) {
-        searchEngines.forEach(el => el.classList.remove("active"));
+        getEngineButtons().forEach(el => el.classList.remove('active'));
         engineElement.classList.add('active');
         currentSearchUrl = engineElement.dataset.url;
+        activeEngineKey = engineElement.dataset.key || activeEngineKey;
+        localStorage.setItem('activeEngine', activeEngineKey);
+    }
+
+    async function loadEngines() {
+        try {
+            const url = chrome.runtime.getURL('search_engines.json');
+            const res = await fetch(url);
+            const defaultEngines = await res.json();
+            const storedVisibility = JSON.parse(localStorage.getItem('engineVisibility') || '{}');
+            engines = defaultEngines.map(e => ({
+                ...e,
+                visible: storedVisibility[e.key] !== undefined ? storedVisibility[e.key] : e.visible
+            }));
+        } catch (e) {
+            engines = [
+                { key: 'startpage', name: 'Startpage', url: 'https://www.startpage.com/sp/search?q=', visible: true },
+                { key: 'google', name: 'Google', url: 'https://www.google.com/search?q=', visible: true },
+                { key: 'duckduckgo', name: 'DuckDuckGo', url: 'https://duckduckgo.com/?q=', visible: true },
+                { key: 'perplexity', name: 'Perplexity', url: 'https://www.perplexity.ai/search?q=', visible: true },
+            ];
+        }
+    }
+
+    function saveVisibility() {
+        const map = engines.reduce((acc, e) => { acc[e.key] = !!e.visible; return acc; }, {});
+        localStorage.setItem('engineVisibility', JSON.stringify(map));
+    }
+
+    function renderEngines() {
+        searchEnginesNav.innerHTML = '';
+        const visibleEngines = engines.filter(e => e.visible);
+        if (!visibleEngines.some(e => e.key === activeEngineKey)) {
+            activeEngineKey = (visibleEngines[0] ? visibleEngines[0].key : engines[0].key);
+            localStorage.setItem('activeEngine', activeEngineKey);
+        }
+
+        visibleEngines.forEach((e, idx) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'search-engine' + (e.key === activeEngineKey ? ' active' : '');
+            btn.dataset.url = e.url;
+            btn.dataset.key = e.key;
+            btn.textContent = e.name;
+            searchEnginesNav.appendChild(btn);
+            if (idx < visibleEngines.length - 1) {
+                const sep = document.createElement('span');
+                sep.className = 'arrow';
+                sep.setAttribute('aria-hidden', 'true');
+                sep.textContent = '/';
+                searchEnginesNav.appendChild(sep);
+            }
+        });
+
+        const activeBtn = searchEnginesNav.querySelector('.search-engine.active');
+        if (activeBtn) {
+            currentSearchUrl = activeBtn.dataset.url;
+        }
+        attachEngineEvents();
+    }
+
+    /** Render settings checkboxes for engines using same structure/styles as other toggles */
+    function renderEngineSettings() {
+        if (!engineSettings) return;
+        engineSettings.innerHTML = '';
+        engines.forEach(e => {
+            const container = document.createElement('div');
+            container.className = 'container';
+
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.id = `engine-${e.key}`;
+            input.className = 'engine-toggle';
+            input.checked = !!e.visible;
+
+            const label = document.createElement('label');
+            label.setAttribute('for', input.id);
+
+            const checkDiv = document.createElement('div');
+            checkDiv.className = 'check';
+            checkDiv.innerHTML = `
+                <svg width="14px" height="14px" viewBox="0 0 18 18">
+                  <path d="M 1 9 L 1 9 c 0 -5 3 -8 8 -8 L 9 1 C 14 1 17 5 17 9 L 17 9 c 0 4 -4 8 -8 8 L 9 17 C 5 17 1 14 1 9 L 1 9 Z"></path>
+                  <polyline points="1 9 7 14 15 4"></polyline>
+                </svg>
+            `;
+
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = ` Show ${e.name}`;
+
+            label.appendChild(checkDiv);
+            label.appendChild(nameSpan);
+
+            input.addEventListener('change', () => {
+                // Enforce at least one visible engine
+                const visibleCount = engines.filter(x => x.visible).length;
+                if (!input.checked && visibleCount === 1 && e.visible) {
+                    input.checked = true;
+                    return;
+                }
+                e.visible = input.checked;
+                saveVisibility();
+                if (!e.visible && activeEngineKey === e.key) {
+                    const firstVisible = engines.find(x => x.visible);
+                    if (firstVisible) {
+                        activeEngineKey = firstVisible.key;
+                        localStorage.setItem('activeEngine', activeEngineKey);
+                    }
+                }
+                renderEngines();
+            });
+
+            container.appendChild(input);
+            container.appendChild(label);
+            engineSettings.appendChild(container);
+        });
     }
 
     /**
-     * Fetches and displays search suggestions based on user input,
-     * prioritizing frequently visited sites.
-    */
+     * Asynchronously fetches and displays search suggestions from the browser's history.
+     * It prioritizes results from the user's top sites and combines them
+     * with other history items that match the current query, displaying the top 5
+     * unique results.
+     */
     async function showSearchSuggestions() {
-        suggestionsList.innerHTML = `<li><a><span>Loading...</span></a></li>`;
+        setSuggestionsLoading();
         currentQuery = searchInput.value.trim().toLowerCase();
 
         if (!currentQuery) {
-            suggestionsList.innerHTML = '';
+            clearSuggestions();
             return;
         }
 
         if (chrome.topSites && chrome.history) {
             // First, get the user's most visited sites.
             chrome.topSites.get((topSites) => {
-                // Filter the top sites based on the current query.
                 const filteredTopSites = topSites.filter(site =>
                     site.title.toLowerCase().includes(currentQuery) ||
                     site.url.toLowerCase().includes(currentQuery)
@@ -57,42 +291,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 // Then, search the rest of the history for other matches.
                 chrome.history.search({ text: currentQuery, maxResults: 100 }, (historyItems) => {
-                    // Combine and de-duplicate the results, giving priority to top sites.
                     const combined = [...filteredTopSites];
                     historyItems.forEach(item => {
-                        if (!combined.some(site => site.url === item.url)) {
-                            combined.push(item);
-                        }
+                        if (!combined.some(site => site.url === item.url)) combined.push(item);
                     });
 
-                    suggestionsList.innerHTML = '';
                     // Display a limited number of the best suggestions.
-                    combined.slice(0, 5).forEach(item => {
-                        const url = new URL(item.url);
-                        const faviconUrl = `https://www.google.com/s2/favicons?sz=32&domain_url=${url.origin}`;
-
-                        const suggestionItem = document.createElement('li');
-                        suggestionItem.className = 'search-result-item';
-
-                        const link = document.createElement('a');
-                        link.href = item.url;
-
-                        const favicon = document.createElement('img');
-                        favicon.src = faviconUrl;
-                        favicon.alt = '';
-                        favicon.width = 16;
-                        favicon.height = 16;
-
-                        const title = document.createElement('span');
-                        title.textContent = item.title || item.url;
-
-                        const arrow = document.createElement('span');
-                        arrow.textContent = '→';
-
-                        link.append(favicon, title, arrow);
-                        suggestionItem.append(link);
-                        suggestionsList.append(suggestionItem);
-                    });
+                    renderSuggestionItems(combined.slice(0, 6));
                 });
             });
         } else {
@@ -107,7 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const firstSuggestion = document.querySelector(".search-result-item a");
         if (firstSuggestion) {
             firstSuggestion.focus();
-            searchInput.value = firstSuggestion.querySelector('span').textContent
+            searchInput.value = firstSuggestion.href
         }
     }
 
@@ -124,7 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const nextIndex = currentIndex + direction;
         if (nextIndex >= 0 && nextIndex < allSuggestions.length) {
             allSuggestions[nextIndex].focus();
-            searchInput.value = allSuggestions[nextIndex].querySelector('span').textContent
+            searchInput.value = allSuggestions[nextIndex].href
         }
     }
 
@@ -138,20 +343,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --- Event Listeners ---
-
-    // Set up search engine selection
-    searchEngines.forEach((engine) => {
-        engine.addEventListener("click", () => setActiveSearchEngine(engine));
-        engine.addEventListener("keydown", (e) => {
-            const now = Date.now();
-            if (e.key === "Enter") {
-                if (now - lastEnterPressTime < DOUBLE_PRESS_DELAY_MS) {
-                    performSearch();
+    function attachEngineEvents() {
+        getEngineButtons().forEach((engine) => {
+            engine.addEventListener("click", () => setActiveSearchEngine(engine));
+            engine.addEventListener("keydown", (e) => {
+                const now = Date.now();
+                if (e.key === "Enter") {
+                    if (now - lastEnterPressTime < DOUBLE_PRESS_DELAY_MS) {
+                        performSearch();
+                    }
+                    lastEnterPressTime = now;
                 }
-                lastEnterPressTime = now;
-            }
+            });
         });
-    });
+    }
+
+    (async function initEngines() {
+        await loadEngines();
+        saveVisibility();
+        renderEngines();
+        renderEngineSettings();
+    })();
 
     // Handle input changes for suggestions
     searchInput.addEventListener("input", async () => {
@@ -164,7 +376,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Handle keyboard navigation
-    document.addEventListener('keydown', (e) => {
+    function handleSlashFocus(e) {
+        if (e.key === '/' && document.activeElement !== searchInput) {
+            e.preventDefault();
+            searchInput.focus();
+        }
+    }
+
+    function handleSettingsToggleShortcut(e) {
+        if (e.altKey && e.key.toLowerCase() === 's') {
+            e.preventDefault();
+            toggleSettingsPanel();
+        }
+    }
+
+    function handleEscapeClose(e) {
+        if (e.key === 'Escape' && isSettingsOpen()) {
+            e.preventDefault();
+            closeSettingsPanel();
+        }
+    }
+
+    function handleArrowKeys(e) {
         if (e.key === 'ArrowDown') {
             if (e.target === searchInput) {
                 focusFirstSuggestion();
@@ -182,11 +415,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 moveFocusInSuggestions(-1, e.target);
             }
         }
-    });
+    }
+
+    function handleGlobalKeydown(e) {
+        handleSlashFocus(e);
+        handleSettingsToggleShortcut(e);
+        handleEscapeClose(e);
+        handleArrowKeys(e);
+    }
+
+    document.addEventListener('keydown', handleGlobalKeydown);
+
+    function handleDocumentClick(e) {
+        if (settingsPanel && !settingsPanel.contains(e.target)) {
+            closeSettingsPanel();
+        }
+        if (e.target === settingsTrigger) {
+            openSettingsPanel();
+        }
+    }
+
+    document.addEventListener('click', handleDocumentClick);
 
     // Handle form submission
     searchForm.addEventListener("submit", (e) => {
         e.preventDefault();
+        searchBtn.classList.add('loading')
         performSearch();
     });
 

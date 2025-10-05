@@ -86,6 +86,11 @@ body {
     transform: scaleX(1);
 }
 
+#search-input::placeholder {
+    font-size: var(--font-size-small);
+    color: var(--color-text-secondary);
+}
+
 .underline {
     position: absolute;
     bottom: 0;
@@ -115,6 +120,29 @@ body {
     align-items: center;
     padding: var(--icon-size-padding);
     transition: opacity var(--transition-fast);
+}
+
+#search-icon .loadingSVG {
+    display: none;
+    animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#search-icon.loading .loadingSVG {
+    display: block;
+}
+
+#search-icon.loading .searchSVG {
+    display: none;
 }
 
 .search-wrapper:focus-within #search-icon {
@@ -212,7 +240,6 @@ svg:hover,
     font-size: var(--font-size-base);
 }
 
-
 #suggestions a span:last-child {
     opacity: 0;
     transform: translateX(-200%);
@@ -227,8 +254,180 @@ svg:hover,
     background-color: var(--color-border);
 }
 
+#suggestions a:hover {
+    color: var(--color-text);
+    outline: 0;
+    background-color: var(--color-border);
+}
+
 #suggestions a:focus span:last-child {
     opacity: 1;
     transform: translateX(0);
 
+}
+
+#settings-panel {
+    position: fixed;
+    bottom: 35px;
+    right: 35px;
+    border: 1px solid var(--color-border);
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    background-color: var(--color-bg);
+}
+
+#settings-panel.hidden {
+    display: none;
+}
+
+#settings-panel h4 {
+    margin: 0;
+    margin-bottom: var(--space-lg);
+}
+
+#settings-panel label {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: var(--space-md);
+    cursor: pointer;
+    user-select: none;
+    font-size: var(--font-size-small);
+    margin-top: var(--space-md);
+}
+
+.check {
+    cursor: pointer;
+    position: relative;
+    width: 14px;
+    height: 14px;
+    -webkit-tap-highlight-color: transparent;
+    transform: translate3d(0, 0, 0);
+    flex-shrink: 0;
+}
+
+.check svg {
+    position: relative;
+    z-index: 1;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke: var(--color-text);
+    stroke-width: 1.5;
+    transform: translate3d(0, 0, 0);
+    transition: all 0.2s ease;
+}
+
+.check svg path {
+    stroke-dasharray: 60;
+    stroke-dashoffset: 0;
+    transition: all 0.3s linear;
+    transition-delay: 0.2s;
+}
+
+.check svg polyline {
+    stroke-dasharray: 22;
+    stroke-dashoffset: 66;
+    transition: all 0.2s linear;
+}
+
+label:hover .check:before {
+    opacity: 1;
+}
+
+#focus-on-load:checked+label .check svg path {
+    stroke-dashoffset: 60;
+    transition-delay: 0s;
+}
+
+#focus-on-load:checked+label .check svg polyline {
+    stroke-dashoffset: 42;
+    transition-delay: 0.15s;
+}
+
+/* Mirror the same check animation for the hide-placeholder toggle */
+#hide-placeholder:checked+label .check svg path {
+    stroke-dashoffset: 60;
+    transition-delay: 0s;
+}
+
+#hide-placeholder:checked+label .check svg polyline {
+    stroke-dashoffset: 42;
+    transition-delay: 0.15s;
+}
+
+/* Mirror the same check animation for the always-show-settings toggle */
+#always-show-settings:checked+label .check svg path {
+    stroke-dashoffset: 60;
+    transition-delay: 0s;
+}
+
+#always-show-settings:checked+label .check svg polyline {
+    stroke-dashoffset: 42;
+    transition-delay: 0.15s;
+}
+
+/* Generic engine toggle hidden input and animation (matches existing toggles) */
+.engine-toggle {
+    display: none;
+}
+
+.engine-toggle:checked+label .check svg path {
+    stroke-dashoffset: 60;
+    transition-delay: 0s;
+}
+
+.engine-toggle:checked+label .check svg polyline {
+    stroke-dashoffset: 42;
+    transition-delay: 0.15s;
+}
+
+.setting-trigger {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.setting-trigger button {
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(50%);
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.setting-trigger button::after{
+    content: '';position: absolute;inset: 0;width: 100%;height: 100%;
+}
+
+.setting-trigger:hover button {
+
+    opacity: 100;
+    transform: translateY(0);
+
+}
+
+.setting-trigger button svg * {
+    stroke: var(--color-underline);
+    fill: none;
+}
+
+.setting-trigger button:hover svg * {
+    stroke: white;
+}
+
+.setting-trigger.always-visible button {
+opacity: 1;
+transform: translateY(0);
+}
+.separator{
+    width: var(--space-xl);height: 1px;background-color: var(--color-text);margin-top: var(--space-lg);margin-bottom: var(--space-lg);
 }

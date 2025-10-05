@@ -10,6 +10,12 @@
     "history",
     "topSites"
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["search_engines.json"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "icons": {
     "128": "icon128.png"
   }

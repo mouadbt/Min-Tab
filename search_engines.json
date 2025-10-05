@@ -1,0 +1,32 @@
+[
+  {
+    "key": "startpage",
+    "name": "Startpage",
+    "url": "https://www.startpage.com/sp/search?q=",
+    "visible": true
+  },
+  {
+    "key": "google",
+    "name": "Google",
+    "url": "https://www.google.com/search?q=",
+    "visible": true
+  },
+  {
+    "key": "duckduckgo",
+    "name": "DuckDuckGo",
+    "url": "https://duckduckgo.com/?q=",
+    "visible": true
+  },
+  {
+    "key": "perplexity",
+    "name": "Perplexity",
+    "url": "https://www.perplexity.ai/search?q=",
+    "visible": true
+  },
+  {
+    "key": "mistral",
+    "name": "mistral",
+    "url": "https://chat.mistral.ai/chat?q=",
+    "visible": false
+  }
+]

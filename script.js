@@ -32,6 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let lastEnterPressTime = 0;
     let currentSearchUrl = 'https://www.startpage.com/sp/search?q=';
     let currentQuery = '';
+    // Delay window used to detect a double Enter press on engine buttons
+    const DOUBLE_PRESS_DELAY_MS = 350;
 
 
     // --- Settings panel controls ---

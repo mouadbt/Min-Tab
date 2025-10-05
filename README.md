@@ -8,7 +8,7 @@ A minimalist Chrome extension that replaces your new tab page with a clean, dark
 
 | Suggestions Overview |  |
 |---------------------|--|
-| <img src="suggestions-1.png" width="200" alt="Image 1"> | <img src="suggestions-2.png" width="200" alt="Image 2"> |
+| <img src="suggestions-1.png" alt="Image 1"> | <img src="suggestions-2.png" alt="Image 2"> |
 
 ## Features
 

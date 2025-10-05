@@ -2,13 +2,15 @@
 
 A minimalist Chrome extension that replaces your new tab page with a clean, dark interface focused on search functionality.
 
-## Screenshot
+## Screenshots  
 
 ![Min Tab Extension](image.png)
 
-| Suggestions Overview |  |
-|---------------------|--|
-| <img src="suggestions-2.png" width="100%" alt="Image 1"> | <img src="suggestions-1.png" width="120%" alt="Image 2"> |
+![Min Tab Extension](suggestions-1.png)
+
+![Min Tab Extension](suggestions-2.png)
+
+![Min Tab Extension](settings.png)
 
 ## Features
 

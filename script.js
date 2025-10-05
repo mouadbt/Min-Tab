@@ -24,13 +24,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const focusOnLoadCheckbox = document.getElementById("focus-on-load");
     const hidePlaceholderCheckbox = document.getElementById("hide-placeholder");
     const alwaysShowSettingsCheckbox = document.getElementById("always-show-settings");
-    
+    const pinnerSvg = `
+        <svg class="loadingSVG" viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3V6M3 12H6M5.63607 5.63604L7.75739 7.75736M5.63604 18.3639L7.75736 16.2426M21 12.0005H18M18.364 5.63639L16.2427 7.75771M11.9998 21.0002V18.0002M18.3639 18.3642L16.2426 16.2429" stroke-width="2" stroke="white" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>`;
     // --- State ---
     let lastEnterPressTime = 0;
     let currentSearchUrl = 'https://www.startpage.com/sp/search?q=';
     let currentQuery = '';
 
-    
+
     // --- Settings panel controls ---
     /** @type {{key:string,name:string,url:string,visible:boolean}[]} */
     let engines = [];
@@ -109,6 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
         arrow.textContent = '→';
 
         link.append(favicon, title, arrow);
+        link.innerHTML += pinnerSvg;
         suggestionItem.append(link);
         return suggestionItem;
     }
@@ -433,6 +437,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (e.target === settingsTrigger) {
             openSettingsPanel();
+        }
+        // Add 'loadingg' class to clicked search result links
+        if (e.target.closest('.search-result-item a')) {
+            e.target.closest('.search-result-item a').classList.add('loading');
         }
     }
 

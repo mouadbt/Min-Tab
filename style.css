@@ -26,7 +26,6 @@
     --space-xl: 40px;
     --space-gap: 0.5rem;
     --space-gap-md: 0.75rem;
-    --space-list: .5rem;
 
     /* Borders & lines */
     --border-thin: 1px;
@@ -227,7 +226,7 @@ svg:hover,
 
 #suggestions a {
     color: var(--color-text-secondary);
-    padding: var(--space-list);
+    padding: var(--space-gap-md);
     text-decoration: none;
     width: 100%;
     display: flex;
@@ -240,12 +239,13 @@ svg:hover,
     font-size: var(--font-size-base);
 }
 
-#suggestions a span:last-child {
+#suggestions a span:last-of-type {
     opacity: 0;
     transform: translateX(-200%);
     transition: all var(--transition-fast);
     font-size: var(--font-size-large);
     margin-left: auto;
+    line-height:0.5;
 }
 
 #suggestions a:focus {
@@ -260,10 +260,23 @@ svg:hover,
     background-color: var(--color-border);
 }
 
-#suggestions a:focus span:last-child {
+#suggestions a:focus span:last-of-type {
     opacity: 1;
     transform: translateX(0);
+}
 
+#suggestions a svg {
+    display: none;
+    margin-left: auto;
+    animation: spin 1s infinite linear;
+}
+
+#suggestions a.loading svg {
+    display: block;
+}
+
+#suggestions a.loading span:last-of-type {
+    display: none;
 }
 
 #settings-panel {
@@ -346,7 +359,6 @@ label:hover .check:before {
     transition-delay: 0.15s;
 }
 
-/* Mirror the same check animation for the hide-placeholder toggle */
 #hide-placeholder:checked+label .check svg path {
     stroke-dashoffset: 60;
     transition-delay: 0s;
@@ -357,7 +369,6 @@ label:hover .check:before {
     transition-delay: 0.15s;
 }
 
-/* Mirror the same check animation for the always-show-settings toggle */
 #always-show-settings:checked+label .check svg path {
     stroke-dashoffset: 60;
     transition-delay: 0s;
@@ -368,7 +379,6 @@ label:hover .check:before {
     transition-delay: 0.15s;
 }
 
-/* Generic engine toggle hidden input and animation (matches existing toggles) */
 .engine-toggle {
     display: none;
 }
@@ -404,12 +414,15 @@ label:hover .check:before {
     position: relative;
 }
 
-.setting-trigger button::after{
-    content: '';position: absolute;inset: 0;width: 100%;height: 100%;
+.setting-trigger button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .setting-trigger:hover button {
-
     opacity: 100;
     transform: translateY(0);
 
@@ -425,9 +438,14 @@ label:hover .check:before {
 }
 
 .setting-trigger.always-visible button {
-opacity: 1;
-transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
 }
-.separator{
-    width: var(--space-xl);height: 1px;background-color: var(--color-text);margin-top: var(--space-lg);margin-bottom: var(--space-lg);
+
+.separator {
+    width: var(--space-xl);
+    height: 1px;
+    background-color: var(--color-text);
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-lg);
 }

@@ -28,5 +28,11 @@
     "name": "mistral",
     "url": "https://chat.mistral.ai/chat?q=",
     "visible": false
+  },
+  {
+    "key": "gemini",
+    "name": "gemini",
+    "url": "https://www.google.com/search?udm=50&q=",
+    "visible": false
   }
 ]

@@ -1,129 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Min-new-tab</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section id="search-container">
+      <!-- Search Input -->
+      <div>
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Press / to start typing, Alt+S for settings"
+        />
+        <button id="search-btn" class="icon-btn"></button>
+      </div>
+      <!-- suggestions -->
+      <ul id="suggestions-list"></ul>
+    </section>
 
-<head>
-  <!-- Document metadata and character encoding -->
-  <meta charset="UTF-8" />
-  <!-- Responsive viewport settings -->
-  <title>Min Tab</title>
-  <!-- Link to external stylesheet -->
-  <link rel="stylesheet" href="style.css" />
-</head>
+    <!-- Settings -->
+    <section id="settings-container">
+      <!-- settings panel trigger -->
+      <button id="settings-btn" class="icon-btn"></button>
+      <!-- settings list -->
+      <div id="settings-panel">
+        <ul id="settings-list"></ul>
+      </div>
+    </section>
 
-<body>
-  <!-- Main container for the search interface -->
-  <main class="container">
-    <!-- Search form with accessibility attributes -->
-    <form class="search-wrapper" role="search" aria-label="Search form">
-      <!-- Hidden label for screen readers -->
-      <label for="search-input" class="visually-hidden">Search query</label>
-      <!-- Search input field with autofocus and a new placeholder -->
-      <input type="text" id="search-input" name="q" autocomplete="off" aria-label="Search input" autofocus
-        placeholder="Press / to start typing, Alt+S for settings" />
-      <!-- Visual underline for the search input -->
-      <div class="underline"></div>
-      <!-- Search button with magnifying glass icon -->
-      <button id="search-icon" type="submit" aria-label="Search">
-        <!-- SVG icon for search button -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="20" width="20" aria-hidden="true"
-          class="searchSVG">
-          <path
-            d="M10.979 16.8991C11.0591 17.4633 10.6657 17.9926 10.0959 17.9994C8.52021 18.0183 6.96549 17.5712 5.63246 16.7026C4.00976 15.6452 2.82575 14.035 2.30018 12.1709C1.77461 10.3068 1.94315 8.31525 2.77453 6.56596C3.60592 4.81667 5.04368 3.42838 6.82101 2.65875C8.59833 1.88911 10.5945 1.79039 12.4391 2.3809C14.2837 2.97141 15.8514 4.21105 16.8514 5.86977C17.8513 7.52849 18.2155 9.49365 17.8764 11.4005C17.5979 12.967 16.8603 14.4068 15.7684 15.543C15.3736 15.9539 14.7184 15.8787 14.3617 15.4343C14.0051 14.9899 14.0846 14.3455 14.4606 13.9173C15.1719 13.1073 15.6538 12.1134 15.8448 11.0393C16.0964 9.62426 15.8261 8.166 15.0841 6.93513C14.3421 5.70426 13.1788 4.78438 11.81 4.34618C10.4412 3.90799 8.95988 3.98125 7.641 4.55236C6.32213 5.12348 5.25522 6.15367 4.63828 7.45174C4.02135 8.74982 3.89628 10.2276 4.28629 11.6109C4.67629 12.9942 5.55489 14.1891 6.75903 14.9737C7.67308 15.5693 8.72759 15.8979 9.80504 15.9333C10.3746 15.952 10.8989 16.3349 10.979 16.8991Z">
-          </path>
-          <rect transform="rotate(-49.6812 12.2469 14.8859)" rx="1" height="10.1881" width="2" y="14.8859" x="12.2469">
-          </rect>
-        </svg>
-
-        <svg class="loadingSVG" viewBox="0 0 24 24" height="20" width="20" fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-          <g id="SVGRepo_iconCarrier">
-            <path
-              d="M12 3V6M3 12H6M5.63607 5.63604L7.75739 7.75736M5.63604 18.3639L7.75736 16.2426M21 12.0005H18M18.364 5.63639L16.2427 7.75771M11.9998 21.0002V18.0002M18.3639 18.3642L16.2426 16.2429"
-              stroke-width="2" stroke="white" stroke-linecap="round" stroke-linejoin="round"></path>
-          </g>
-        </svg>
-      </button>
-    </form>
-    <!-- Wrapper for suggestions and search engine selector -->
-    <div class="wrapper">
-      <!-- List of search suggestions (populated by JavaScript) -->
-      <ul id="suggestions"></ul>
-      <!-- Search engine selector with buttons for each engine -->
-      <nav id="search-engines" aria-label="Search engines">
-        <!-- Engines will be rendered dynamically by script.js -->
-      </nav>
-    </div>
-  </main>
-
-  <!-- settings trigger -->
-  <div class="setting-trigger">
-    <button>
-      <svg viewBox="0 0 24 24" fill="none" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-        <g id="SVGRepo_iconCarrier">
-          <path
-            d="M7.84308 20.1979C9.8718 21.3993 10.8862 22 12 22C13.1138 22 14.1282 21.3993 16.1569 20.1979L16.8431 19.7915C18.8718 18.5901 19.8862 17.9894 20.4431 17C21 16.0106 21 14.8092 21 12.4063M20.8147 8C20.7326 7.62759 20.6141 7.3038 20.4431 7C19.8862 6.01057 18.8718 5.40987 16.8431 4.20846L16.1569 3.80211C14.1282 2.6007 13.1138 2 12 2C10.8862 2 9.8718 2.6007 7.84308 3.80211L7.15692 4.20846C5.1282 5.40987 4.11384 6.01057 3.55692 7C3 7.98943 3 9.19084 3 11.5937V12.4063C3 14.8092 3 16.0106 3.55692 17C3.78326 17.4021 4.08516 17.74 4.5 18.0802"
-            stroke="#ffffff" stroke-width="2" stroke-linecap="round"></path>
-          <circle cx="12" cy="12" r="3" stroke-width="2"></circle>
-        </g>
-      </svg>
-    </button>
-  </div>
-  <!-- Settings Panel -->
-  <div id="settings-panel" class="hidden">
-    <h4>Settings</h4>
-    <div class="container">
-      <input type="checkbox" id="focus-on-load" style="display: none" />
-      <label for="focus-on-load">
-        <div class="check">
-          <svg width="14px" height="14px" viewBox="0 0 18 18">
-            <path
-              d="M 1 9 L 1 9 c 0 -5 3 -8 8 -8 L 9 1 C 14 1 17 5 17 9 L 17 9 c 0 4 -4 8 -8 8 L 9 17 C 5 17 1 14 1 9 L 1 9 Z">
-            </path>
-            <polyline points="1 9 7 14 15 4"></polyline>
-          </svg>
-        </div>
-        <span> Focus search bar on new tab </span>
-      </label>
-    </div>
-    <div class="container">
-      <input type="checkbox" id="hide-placeholder" style="display: none" />
-      <label for="hide-placeholder">
-        <div class="check">
-          <svg width="14px" height="14px" viewBox="0 0 18 18">
-            <path
-              d="M 1 9 L 1 9 c 0 -5 3 -8 8 -8 L 9 1 C 14 1 17 5 17 9 L 17 9 c 0 4 -4 8 -8 8 L 9 17 C 5 17 1 14 1 9 L 1 9 Z">
-            </path>
-            <polyline points="1 9 7 14 15 4"></polyline>
-          </svg>
-        </div>
-        <span> Hide search placeholder </span>
-      </label>
-    </div>
-    <div class="container">
-      <input type="checkbox" id="always-show-settings" style="display: none" />
-      <label for="always-show-settings">
-        <div class="check">
-          <svg width="14px" height="14px" viewBox="0 0 18 18">
-            <path
-              d="M 1 9 L 1 9 c 0 -5 3 -8 8 -8 L 9 1 C 14 1 17 5 17 9 L 17 9 c 0 4 -4 8 -8 8 L 9 17 C 5 17 1 14 1 9 L 1 9 Z">
-            </path>
-            <polyline points="1 9 7 14 15 4"></polyline>
-          </svg>
-        </div>
-        <span> Always show settings icon </span>
-      </label>
-    </div>
-    <div class="container" id="engine-settings-container">
-      <div class="separator"></div>
-      <div id="engine-settings"></div>
-    </div>
-  </div>
-  <!-- Link to external JavaScript file -->
-  <script src="script.js"></script>
-</body>
-
+    <!-- main script -->
+    <script src="script.js" type="module"></script>
+  </body>
 </html>

@@ -51,34 +51,59 @@ body {
     justify-content: center;
     align-items: center;
 }
+
 /* --------------------------------------- genral elements */
-.icon-btn{
-    z-index: 9;
+.icon-btn {
     border-radius: 100%;
-    border: none;outline: none;
+    border: none;
+    outline: none;
     width: var(--space-md);
     height: var(--space-md);
+    max-width: var(--space-md);
+    max-height: var(--space-md);
     background: transparent;
+    opacity: .5;
+    cursor: pointer;
+    aspect-ratio: 1;
 }
-.icon-btn:focus{
-    outline: 1px solid var(--foreground);
+
+.icon-btn:has(svg) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-btn:focus-visible {
+    outline: 2px solid var(--foreground50);
+    opacity: 1 !important;
+}
+
+.icon-btn:hover {
+    opacity: 1;
+}
+
+.icon-btn svg {
+    width: var(--space-sm);
+    height: var(--space-sm);
 }
 
 /* --------------------------------------- Search elements */
-#search-container > div{
+#search-container>div {
     position: relative;
     display: flex;
     justify-content: end;
     align-items: center;
     padding-bottom: var(--space-xxxs);
 }
-#search-container{
+
+#search-container {
     max-width: var(--width-search);
     width: 90%;
     border-bottom: 1px solid var(--foreground50);
     position: relative;
 }
-#search-container::after{
+
+#search-container::after {
     content: "";
     position: absolute;
     height: 1px;
@@ -86,23 +111,53 @@ body {
     width: 0;
     transition: width var(--transition);
 }
-#search-container:focus-within::after{
+
+#search-container:focus-within::after {
     width: 100%;
 }
-#search-container > div input{
+
+#search-btn {
+    position: absolute;
+    right: var(--space-xxxs);
+    top: 45%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--transition);
+}
+
+#search-container:focus-within #search-btn {
+    opacity: .5;
+    pointer-events: unset;
+}
+
+#search-container>div input {
     background: transparent;
     outline: none;
     border: none;
+    padding: var(--space-xxs);
     padding-right: var(--space-xl);
     width: 100%;
 }
-#suggestions-list{
-    padding: 0;margin: 0;
+
+#suggestions-list {
+    padding: 0;
+    margin: 0;
 }
 
 /* --------------------------------------- Settings elements */
-#settings-btn{
+#settings-btn {
     position: fixed;
     bottom: var(--space-md);
     right: var(--space-md);
+}
+
+#settings-btn svg * {
+    stroke: var(--foreground);
+    fill: none;
+}
+
+#settings-btn svg {
+    width: calc(var(--space-sm) - .16rem);
+    height: calc(var(--space-sm) - .16rem);
 }

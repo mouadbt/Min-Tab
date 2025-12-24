@@ -4,21 +4,18 @@
       "id": "focus-on-load",
       "label": "Focus search bar on new tab",
       "type": "checkbox",
-      "default": true,
       "storageKey": "focusOnLoad"
     },
     {
-      "id": "hide-placeholder",
-      "label": "Hide search placeholder",
+      "id": "show-placeholder",
+      "label": "Show search placeholder",
       "type": "checkbox",
-      "default": false,
-      "storageKey": "hidePlaceholder"
+      "storageKey": "showPlaceholder"
     },
     {
       "id": "always-show-settings",
       "label": "Always show settings icon",
       "type": "checkbox",
-      "default": false,
       "storageKey": "alwaysShowSettings"
     }
   ]

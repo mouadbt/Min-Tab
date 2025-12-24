@@ -2,7 +2,7 @@
     /* Colors */
     --background: #000000;
     --foreground: hsl(0, 0%, 80%);
-    --foreground50: hsl(0, 0%, 30%);
+    --foreground50: hsl(0, 0%, 25%);
 
     /* Typography */
     --font-family-base: "Courier New", Courier, monospace;
@@ -38,6 +38,8 @@
     color: var(--foreground);
     font-family: var(--font-family-base);
     font-size: var(--font-size-base);
+    margin: 0;
+    padding: 0;
 }
 
 html,
@@ -152,6 +154,11 @@ body {
     right: var(--space-md);
 }
 
+#search-btn.hidden{
+    display: none;
+    pointer-events: none;
+}
+
 #settings-btn svg * {
     stroke: var(--foreground);
     fill: none;
@@ -160,4 +167,22 @@ body {
 #settings-btn svg {
     width: calc(var(--space-sm) - .16rem);
     height: calc(var(--space-sm) - .16rem);
+}
+
+#settings-panel{
+    /* border-radius: var(--space-xxs); */
+    border: solid 1px var(--foreground50);
+    position: fixed;
+    bottom: var(--space-sm);
+    right: var(--space-sm);
+    background: var(--background);
+    padding: var(--space-xs);
+}
+#settings-panel h2{
+    font-size:var(--font-size-base);
+    font-weight: 900;
+}
+#settings-panel.hidden{
+    display: none;
+    pointer-events: none;
 }

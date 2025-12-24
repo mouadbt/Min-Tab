@@ -1,37 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Min-new-tab</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <section id="search-container">
-      <!-- Search Input -->
-      <div>
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Press / to start typing, Alt+S for settings"
-        />
-        <button id="search-btn" class="icon-btn" data-icon="search"></button>
-      </div>
-      <!-- suggestions -->
-      <ul id="suggestions-list"></ul>
-    </section>
 
-    <!-- Settings -->
-    <section id="settings-container">
-      <!-- settings panel trigger -->
-      <button id="settings-btn" class="icon-btn" data-icon="settings"></button>
-      <!-- settings list -->
-      <div id="settings-panel">
-        <ul id="settings-list"></ul>
-      </div>
-    </section>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Min-new-tab</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-    <!-- main script -->
-    <script src="script.js"></script>
-  </body>
+<body>
+  <section id="search-container">
+    
+    <!-- Search Input -->
+    <div>
+      <input type="text" id="search-input" placeholder="Press / to start typing, Alt+S for settings" />
+      <button id="search-btn" class="icon-btn" data-icon="search"></button>
+    </div>
+    
+    <!-- suggestions -->
+    <ul id="suggestions-list"></ul>
+  </section>
+
+  <!-- settings panel toggle and escape key functionality 
+    git commit -m "Refactor: restructure page by editing html/css --phase2: adds buttons icons and finish search input focus style"
+  -->
+  <!-- Settings -->
+  <section id="settings-container">
+    
+    <!-- settings panel trigger -->
+    <button id="settings-btn" class="icon-btn" data-icon="settings"></button>
+    
+    <!-- settings list -->
+    <div id="settings-panel" class="hidden">
+      <h2>Settings</h2>
+      <ul id="settings-list"></ul>
+    </div>
+  </section>
+
+  <!-- main script -->
+  <script src="script.js"></script>
+</body>
+
 </html>

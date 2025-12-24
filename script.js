@@ -1,11 +1,48 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  // Add svg icons to the page
   loadIcons();
+
+  // Select DOM elements related to the settings panel
+  const settingsBtn = document.querySelector("#settings-btn");
+  const settingsPanel = document.querySelector("#settings-panel");
+
+  // Function that checks the click target and toggles the settings panel visibility
+  const handleSettingsToggle = (e) => {
+    const isClickOnButton = settingsBtn.contains(e.target);
+    const isClickInsidePanel = settingsPanel.contains(e.target);
+
+    if (isClickOnButton) {
+      settingsPanel.classList.toggle("hidden");
+      settingsBtn.classList.toggle("hidden");
+    } else if (!isClickInsidePanel) {
+      settingsPanel.classList.add("hidden");
+      settingsBtn.classList.remove("hidden");
+    }
+  };
+
+  // Function that closes the settings panel when the Escape key is pressed
+  const handleSettingsEscape = (e) => {
+    if (e.key === 'Escape') {
+      settingsPanel.classList.add("hidden");
+      settingsBtn.classList.remove("hidden");
+    }
+  };
+
+  // Global event listener for click events
+  document.addEventListener('click', (e) => {
+    handleSettingsToggle(e);
+  });
+
+  // Global event listener for keydown events
+  document.addEventListener('keydown', (e) => {
+    handleSettingsEscape(e);
+  });
 
 });
 
-// Function that get all icons and load them in the page using createElement
-async function loadIcons() {
+// Function that gets all icons from JSON and injects them into the page using DOMParser
+const loadIcons = async () => {
   try {
     const response = await fetch('./assets/data/icons.json');
     const icons = await response.json();

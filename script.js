@@ -7,6 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const settingsBtn = document.querySelector("#settings-btn");
   const settingsPanel = document.querySelector("#settings-panel");
 
+  // Select DOM elements related to the search fonctionality
+  const searchInput = document.querySelector("#search-input");
+
+
   // Function that checks the click target and toggles the settings panel visibility
   const handleSettingsToggle = (e) => {
     const isClickOnButton = settingsBtn.contains(e.target);
@@ -29,6 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Focus on search input when pressing on "/"
+  const focusOnInput = (e) => {
+    if (e.key === '/' && document.activeElement !== searchInput) {
+      e.preventDefault();
+      searchInput.focus();
+    }
+  }
+
   // Global event listener for click events
   document.addEventListener('click', (e) => {
     handleSettingsToggle(e);
@@ -37,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Global event listener for keydown events
   document.addEventListener('keydown', (e) => {
     handleSettingsEscape(e);
+    focusOnInput(e);
   });
 
 });

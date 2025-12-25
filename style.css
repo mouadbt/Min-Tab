@@ -170,7 +170,7 @@ body {
 }
 
 #settings-panel{
-    /* border-radius: var(--space-xxs); */
+    border-radius: var(--space-xxs);
     border: solid 1px var(--foreground50);
     position: fixed;
     bottom: var(--space-sm);

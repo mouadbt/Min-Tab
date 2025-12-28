@@ -1,17 +1,55 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 
-  // Add svg icons to the page
   loadIcons();
 
-  // Select DOM elements related to the settings panel
+  const searchEnginesList = document.querySelector("#search-engines-list");
+
+  let searchEngines = JSON.parse(localStorage.getItem('searchEngines'));
+
+  if (!searchEngines) {
+    searchEngines = [
+      { key: "startpage", name: "Startpage", url: "https://www.startpage.com/sp/search?q=", visible: true, preferred: true },
+      { key: "google", name: "Google", url: "https://www.google.com/search?q=", visible: true, preferred: false },
+      { key: "duckduckgo", name: "DuckDuckGo", url: "https://duckduckgo.com/?q=", visible: true, preferred: false },
+      { key: "perplexity", name: "Perplexity", url: "https://www.perplexity.ai/search?q=", visible: true, preferred: false },
+      { key: "mistral", name: "mistral", url: "https://chat.mistral.ai/chat?q=", visible: false, preferred: false },
+      { key: "gemini", name: "gemini", url: "https://www.google.com/search?udm=50&q=", visible: false, preferred: false }
+    ];
+    localStorage.setItem('searchEngines', JSON.stringify(searchEngines));
+  }
+
+  const loadedEnginesFinished = await loadEngines(searchEngines, searchEnginesList);
+
+  if (loadedEnginesFinished) {
+    const searchEnginesBtns = document.querySelectorAll("#search-engines-list li button");
+
+    searchEnginesBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+
+        const clickedKey = btn.dataset.key;
+
+        searchEnginesBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        searchEngines = searchEngines.map(engine => {
+          if (engine.key === clickedKey) {
+            engine.preferred = true;
+          } else {
+            engine.preferred = false;
+          }
+          return engine;
+        });
+
+        localStorage.setItem('searchEngines', JSON.stringify(searchEngines));
+
+      });
+    });
+  }
+
   const settingsBtn = document.querySelector("#settings-btn");
   const settingsPanel = document.querySelector("#settings-panel");
-
-  // Select DOM elements related to the search fonctionality
   const searchInput = document.querySelector("#search-input");
 
-
-  // Function that checks the click target and toggles the settings panel visibility
   const handleSettingsToggle = (e) => {
     const isClickOnButton = settingsBtn.contains(e.target);
     const isClickInsidePanel = settingsPanel.contains(e.target);
@@ -25,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Function that closes the settings panel when the Escape key is pressed
   const handleSettingsEscape = (e) => {
     if (e.key === 'Escape') {
       settingsPanel.classList.add("hidden");
@@ -33,7 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Focus on search input when pressing on "/"
   const focusOnInput = (e) => {
     if (e.key === '/' && document.activeElement !== searchInput) {
       e.preventDefault();
@@ -41,20 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Global event listener for click events
-  document.addEventListener('click', (e) => {
-    handleSettingsToggle(e);
-  });
-
-  // Global event listener for keydown events
-  document.addEventListener('keydown', (e) => {
-    handleSettingsEscape(e);
-    focusOnInput(e);
-  });
+  document.addEventListener('click', (e) => handleSettingsToggle(e));
+  document.addEventListener('keydown', (e) => { handleSettingsEscape(e); focusOnInput(e); });
 
 });
 
-// Function that gets all icons from JSON and injects them into the page using DOMParser
 const loadIcons = async () => {
   try {
     const response = await fetch('./assets/data/icons.json');
@@ -69,12 +96,44 @@ const loadIcons = async () => {
             ${icon.content}
           </svg>
         `;
-
         const doc = parser.parseFromString(svgString, "image/svg+xml");
         el.replaceChildren(doc.documentElement);
       }
     }
   } catch (error) {
     console.error("Failed to load icons:", error);
+  }
+}
+
+const loadEngines = async (searchEngines, searchEnginesListEl) => {
+  try {
+    for (let i = 0; i < searchEngines.length; i++) {
+      const el = searchEngines[i];
+
+      if (!el.visible) continue;
+
+      const liEL = document.createElement("li");
+      const liButtonEl = document.createElement("button");
+      liButtonEl.textContent = el.name;
+      liButtonEl.dataset.key = el.key;
+      liEL.appendChild(liButtonEl);
+
+      if (el.preferred) {
+        liButtonEl.classList.add("active");
+      }
+
+      if (i != 0) {
+        const separationEl = document.createElement('li');
+        separationEl.classList.add('inactive');
+        separationEl.textContent = "/";
+        searchEnginesListEl.appendChild(separationEl);
+      }
+
+      searchEnginesListEl.appendChild(liEL);
+    }
+    return true;
+  } catch (error) {
+    console.error("Failed to load engines:", error);
+    return false;
   }
 }

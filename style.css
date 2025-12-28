@@ -14,6 +14,7 @@
     --width-search: 30rem;
 
     /* Spacing system */
+    --space-4xs: 0.15rem;
     --space-xxxs: 0.25rem;
     --space-xxs: 0.5rem;
     --space-xs: 1rem;
@@ -55,17 +56,19 @@ body {
 }
 
 /* --------------------------------------- genral elements */
+button {
+    background: transparent;
+    /* outline: none; */
+    border: none;
+}
+
 .icon-btn {
     border-radius: 100%;
-    border: none;
-    outline: none;
     width: var(--space-md);
     height: var(--space-md);
     max-width: var(--space-md);
     max-height: var(--space-md);
-    background: transparent;
     opacity: .5;
-    cursor: pointer;
     aspect-ratio: 1;
 }
 
@@ -76,7 +79,6 @@ body {
 }
 
 .icon-btn:focus-visible {
-    outline: 2px solid var(--foreground50);
     opacity: 1 !important;
 }
 
@@ -96,26 +98,33 @@ body {
     justify-content: end;
     align-items: center;
     padding-bottom: var(--space-xxxs);
+    border-bottom: 1px solid var(--foreground50);
+    transition: border var(--transition);
 }
 
 #search-container {
     max-width: var(--width-search);
     width: 90%;
-    border-bottom: 1px solid var(--foreground50);
     position: relative;
 }
 
-#search-container::after {
+#search-container>div::after {
     content: "";
     position: absolute;
     height: 1px;
     background: var(--foreground);
     width: 0;
     transition: width var(--transition);
+    bottom: 0px;
+    left: 0;
 }
 
-#search-container:focus-within::after {
+#search-container>div:focus-within::after {
     width: 100%;
+}
+
+#search-container>div:focus-within {
+    border-bottom: 1px solid transparent;
 }
 
 #search-btn {
@@ -125,14 +134,16 @@ body {
     transform: translateY(-50%);
     pointer-events: none;
     opacity: 0;
-    transition: opacity var(--transition);
 }
 
-#search-container:focus-within #search-btn {
+#search-container>div:focus-within #search-btn {
     opacity: .5;
     pointer-events: unset;
 }
 
+#search-container>div:focus-within #search-btn:hover {
+    opacity: 1;
+}
 #search-container>div input {
     background: transparent;
     outline: none;
@@ -142,9 +153,52 @@ body {
     width: 100%;
 }
 
+#search-container>div input::placeholder {
+    color: var(--foreground50);
+}
+
 #suggestions-list {
     padding: 0;
     margin: 0;
+}
+
+/* --------------------------------------- search engines elements */
+#search-engines-list {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    list-style: none;
+    gap: var(--space-xxxs);
+    padding: var(--space-xxs);
+    padding-left: 0;
+}
+
+#search-engines-list li button {
+    padding-inline: var(--space-xxs);
+    padding-block: var(--space-4xs);
+    border-radius: 50px;
+    font-size: var(--font-size-base);
+    /* border: solid transparent 1px; */
+    color: var(--foreground50);
+}
+
+#search-engines-list li button.active {
+    color: var(--foreground);
+}
+
+
+#search-engines-list li {
+    color: var(--foreground50);
+}
+
+#search-engines-list li button:focus {
+    /* outline: 1px var(--foreground) solid; */
+    /* border: solid var(--foreground) 1px; */
+    color: var(--foreground);
+}
+
+#search-engines-list li.inactive {
+    pointer-events: none;
 }
 
 /* --------------------------------------- Settings elements */
@@ -154,7 +208,7 @@ body {
     right: var(--space-md);
 }
 
-#search-btn.hidden{
+#search-btn.hidden {
     display: none;
     pointer-events: none;
 }
@@ -169,7 +223,7 @@ body {
     height: calc(var(--space-sm) - .16rem);
 }
 
-#settings-panel{
+#settings-panel {
     border-radius: var(--space-xxs);
     border: solid 1px var(--foreground50);
     position: fixed;
@@ -178,11 +232,13 @@ body {
     background: var(--background);
     padding: var(--space-xs);
 }
-#settings-panel h2{
-    font-size:var(--font-size-base);
+
+#settings-panel h2 {
+    font-size: var(--font-size-base);
     font-weight: 900;
 }
-#settings-panel.hidden{
+
+#settings-panel.hidden {
     display: none;
     pointer-events: none;
 }

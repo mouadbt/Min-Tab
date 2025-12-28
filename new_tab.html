@@ -11,11 +11,7 @@
     <section id="search-container">
       <!-- Search Input -->
       <div>
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Press / to start typing, Alt+S for settings"
-        />
+        <input type="text" id="search-input" />
         <button id="search-btn" class="icon-btn" data-icon="search"></button>
       </div>
 
@@ -26,19 +22,26 @@
       <ul id="suggestions-list"></ul>
     </section>
 
-    <!-- git commit -m "Refactor: restructure page by editing html/css --phase3: add settings panel toggle and escape key functionality" -->
+    <!-- git commit -m"Refactor: adding fonctionality to page by editing js --phase2: load search engines to the page and adding set active search engine fonctionality" -->
     <!--  git add .-->
     <!-- git push -u origin clean-refactor -->
 
     <!-- Settings -->
     <section id="settings-container">
       <!-- settings panel trigger -->
-      <button id="settings-btn" class="icon-btn" data-icon="settings"></button>
+      <div id="settings-trigger">
+        <button
+          id="settings-btn"
+          class="icon-btn"
+          data-icon="settings"
+        ></button>
+      </div>
 
       <!-- settings list -->
       <div id="settings-panel" class="hidden">
         <h2>Settings</h2>
-        <ul id="settings-list"></ul>
+        <ul id="settings-options" class="settings-list"></ul>
+        <ul id="settings-search-engines" class="settings-list"></ul>
       </div>
     </section>
 

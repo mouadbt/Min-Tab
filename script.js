@@ -1,3 +1,12 @@
+const shouldFocusOnLoad = localStorage.getItem('focusOnLoad') ?? 'true';
+
+if (shouldFocusOnLoad === 'true') {
+  if (location.search !== "?focus") {
+    location.search = "?focus";
+    throw new Error("Redirecting to focus mode");
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
 
   loadIcons();
@@ -55,11 +64,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const isClickInsidePanel = settingsPanel.contains(e.target);
 
     if (isClickOnButton) {
-      settingsPanel.classList.toggle("hidden");
-      settingsBtn.classList.toggle("hidden");
+      toggleSettingsPanel();
     } else if (!isClickInsidePanel) {
       settingsPanel.classList.add("hidden");
       settingsBtn.classList.remove("hidden");
+      updateSettingsButtonAccessibility(settingsBtn);
     }
   };
 
@@ -67,8 +76,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (e.key === 'Escape') {
       settingsPanel.classList.add("hidden");
       settingsBtn.classList.remove("hidden");
+      updateSettingsButtonAccessibility(settingsBtn);
     }
   };
+
+  const handleSettingsAls_s = (e) => {
+    if (e.altKey && e.key.toLowerCase() === 's') {
+      e.preventDefault();
+      toggleSettingsPanel();
+    }
+  }
+
+  const toggleSettingsPanel = () => {
+    settingsPanel.classList.toggle("hidden");
+    settingsBtn.classList.toggle("hidden");
+    updateSettingsButtonAccessibility(settingsBtn);
+  }
 
   const focusOnInput = (e) => {
     if (e.key === '/' && document.activeElement !== searchInput) {
@@ -78,7 +101,47 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   document.addEventListener('click', (e) => handleSettingsToggle(e));
-  document.addEventListener('keydown', (e) => { handleSettingsEscape(e); focusOnInput(e); });
+  document.addEventListener('keydown', (e) => {
+    handleSettingsEscape(e);
+    focusOnInput(e);
+    handleSettingsAls_s(e);
+  });
+
+  let settingsOptions = JSON.parse(localStorage.getItem('settingsOptions'));
+  if (!settingsOptions) {
+    settingsOptions = [{ "label": "Focus search bar on new tab", "active": true, "storageKey": "focusOnLoad" }, { "label": "Hide search placeholder", "active": false, "storageKey": "showPlaceholder" }, { "label": "Hide settings icon", "active": false, "storageKey": "alwaysShowSettings" }];
+    localStorage.setItem('settingsOptions', JSON.stringify(settingsOptions));
+  }
+
+  const loadedSettingsFinished = await loadSettings(settingsOptions);
+
+  const applySetting = (option) => {
+    switch (option.storageKey) {
+      case "focusOnLoad":
+        localStorage.setItem('focusOnLoad', option.active ? true : false);
+        break;
+      case "showPlaceholder":
+        document.querySelector("#search-input").placeholder = option.active ? "" : "Press / to start typing, Alt+S for settings";
+        break;
+      case "alwaysShowSettings":
+        settingsBtn.classList.toggle("disabled", option.active); updateSettingsButtonAccessibility(settingsBtn);
+        break;
+    }
+  };
+
+  if (loadedSettingsFinished) {
+    settingsOptions.forEach(applySetting);
+    document.querySelectorAll("#settings-options input[type='checkbox']").forEach(input => {
+      input.addEventListener("change", () => {
+        const option = settingsOptions.find(o => o.storageKey === input.id);
+        if (option) {
+          option.active = input.checked;
+          localStorage.setItem('settingsOptions', JSON.stringify(settingsOptions));
+          applySetting(option);
+        }
+      });
+    });
+  }
 
 });
 
@@ -137,3 +200,68 @@ const loadEngines = async (searchEngines, searchEnginesListEl) => {
     return false;
   }
 }
+
+const loadSettings = async (settingsOptions) => {
+  try {
+    const settingsOptionsContainer = document.querySelector("#settings-options");
+    const response = await fetch('./assets/data/icons.json');
+    const icons = await response.json();
+    const parser = new DOMParser();
+
+
+    for (let i = 0; i < settingsOptions.length; i++) {
+      const option = settingsOptions[i];
+
+      const liEl = document.createElement("li");
+
+      const inputEl = document.createElement("input");
+      inputEl.type = "checkbox";
+      inputEl.id = option.storageKey;
+      inputEl.checked = option.active;
+
+      const labelEl = document.createElement("label");
+      labelEl.setAttribute("for", option.storageKey);
+
+      const checkDiv = document.createElement("div");
+      checkDiv.classList.add("check");
+
+      const iconData = icons["check"];
+      if (iconData && iconData.content) {
+        const svgString = `
+          <svg width="14" height="14" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+            ${iconData.content}
+          </svg>
+        `;
+        const doc = parser.parseFromString(svgString, "image/svg+xml");
+        checkDiv.appendChild(doc.documentElement);
+      }
+
+      const spanEl = document.createElement("span");
+      spanEl.textContent = option.label;
+
+      labelEl.appendChild(checkDiv);
+      labelEl.appendChild(spanEl);
+
+      liEl.appendChild(inputEl);
+      liEl.appendChild(labelEl);
+
+      settingsOptionsContainer.appendChild(liEl);
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Failed to load settings:", error);
+    return false;
+  }
+};
+
+
+const updateSettingsButtonAccessibility = (settingsBtn) => {
+  if (settingsBtn.classList.contains("hidden") || settingsBtn.classList.contains("disabled")) {
+    settingsBtn.setAttribute("aria-hidden", "true");
+    settingsBtn.setAttribute("tabindex", "-1");
+  } else {
+    settingsBtn.removeAttribute("aria-hidden");
+    settingsBtn.removeAttribute("tabindex");
+  }
+};

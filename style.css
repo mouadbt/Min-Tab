@@ -7,6 +7,7 @@
     /* Typography */
     --font-family-base: "Courier New", Courier, monospace;
     --font-size-base: .95rem;
+    --font-size-md: 1.15rem;
     --font-size-large: 1.5rem;
     --font-size-small: 0.75rem;
 
@@ -22,6 +23,7 @@
     --space-md: 2rem;
     --space-lg: 2.5rem;
     --space-xl: 3rem;
+    --space-2xl: 9rem;
 
     --space-gap: 0.5rem;
     --space-gap-md: 1rem;
@@ -78,8 +80,8 @@ button {
     align-items: center;
 }
 
-.icon-btn:focus-visible {
-    opacity: 1 !important;
+.icon-btn:not(.opacity-0):focus-visible {
+    opacity: 1;
 }
 
 .icon-btn:hover {
@@ -144,6 +146,7 @@ button {
 #search-container>div:focus-within #search-btn:hover {
     opacity: 1;
 }
+
 #search-container>div input {
     background: transparent;
     outline: none;
@@ -203,14 +206,24 @@ button {
 
 /* --------------------------------------- Settings elements */
 #settings-btn {
+    transition: all var(--transition);
+}
+
+#settings-trigger{
     position: fixed;
-    bottom: var(--space-md);
-    right: var(--space-md);
+    padding-bottom: var(--space-md);
+    padding-right: var(--space-md);
+    width: var(--space-2xl);
+    height: var(--space-2xl);
+    bottom: 0;
+    right: 0;
+    display: flex;align-items: end;justify-content: end;
 }
 
 #search-btn.hidden {
     display: none;
     pointer-events: none;
+    transition: transform var(--transition);
 }
 
 #settings-btn svg * {
@@ -234,11 +247,78 @@ button {
 }
 
 #settings-panel h2 {
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-md);
     font-weight: 900;
+    margin-bottom: var(--space-xs);
 }
 
 #settings-panel.hidden {
     display: none;
     pointer-events: none;
+}
+
+#settings-btn.hidden,#settings-btn.disabled{
+    pointer-events: none;
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+#settings-trigger:hover #settings-btn{
+    transform: translateY(0);
+    opacity: 1 !important;
+    pointer-events: all !important;
+}
+
+#settings-panel li {
+    list-style: none;
+}
+
+#settings-panel ul{
+    display: flex;flex-direction: column;gap: var(--space-xxs);
+}
+
+#settings-panel input {
+    display: none;
+}
+
+#settings-panel label {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    cursor: pointer;
+    user-select: none;
+    font-size: var(￼--font-size-small);
+    margin-top: var(￼--space-md);
+    gap: var(￼--space-md);
+}
+
+#settings-panel label span {
+    padding-left: var(--space-xxs);
+}
+
+#settings-panel .check svg {
+    stroke: var(--foreground);
+    stroke-width: 1.5;
+}
+
+#settings-panel .check svg path {
+    stroke-dasharray: 60;
+    transition: all 0.3s linear;
+    transition-delay: 0.2s;
+}
+
+#settings-panel .check svg polyline {
+    stroke-dasharray: 22;
+    stroke-dashoffset: 66;
+    transition: all 0.2s linear;
+}
+
+#settings-panel input:checked+label .check svg path {
+    stroke-dashoffset: 60;
+    transition-delay: 0s;
+}
+
+#settings-panel input:checked+label .check svg polyline {
+    stroke-dashoffset: 42;
+    transition-delay: 0.2s;
 }

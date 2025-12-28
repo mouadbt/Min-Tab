@@ -1,21 +1,21 @@
 {
-  "options": [
+  "settings": [
     {
       "id": "focus-on-load",
       "label": "Focus search bar on new tab",
-      "type": "checkbox",
+      "active": true,
       "storageKey": "focusOnLoad"
     },
     {
       "id": "show-placeholder",
       "label": "Show search placeholder",
-      "type": "checkbox",
+      "active": true,
       "storageKey": "showPlaceholder"
     },
     {
       "id": "always-show-settings",
       "label": "Always show settings icon",
-      "type": "checkbox",
+      "active": true,
       "storageKey": "alwaysShowSettings"
     }
   ]

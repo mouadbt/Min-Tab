@@ -1,0 +1,68 @@
+{
+  "focusOnLoad": "true",
+  "searchEngines": [
+    {
+      "key": "startpage",
+      "name": "Startpage",
+      "visible": true,
+      "preferred": true
+    },
+    {
+      "key": "google",
+      "name": "Google",
+      "visible": true,
+      "preferred": false
+    },
+    {
+      "key": "duckduckgo",
+      "name": "DuckDuckGo",
+      "visible": true,
+      "preferred": false
+    },
+    {
+      "key": "perplexity",
+      "name": "Perplexity",
+      "visible": true,
+      "preferred": false
+    },
+    {
+      "key": "mistral",
+      "name": "Mistral",
+      "visible": false,
+      "preferred": false
+    },
+    {
+      "key": "gemini",
+      "name": "Gemini",
+      "visible": false,
+      "preferred": false
+    }
+  ],
+  "settingsOptions": [
+    {
+      "label": "Focus search bar on new tab",
+      "active": true,
+      "storageKey": "focusOnLoad"
+    },
+    {
+      "label": "Hide search placeholder",
+      "active": false,
+      "storageKey": "showPlaceholder"
+    },
+    {
+      "label": "Hide settings icon",
+      "active": false,
+      "storageKey": "alwaysShowSettings"
+    },
+    {
+      "label": "Hide search engines list",
+      "active": false,
+      "storageKey": "hideEngines"
+    },
+    {
+      "label": "Hide search button",
+      "active": false,
+      "storageKey": "hideSearchButton"
+    }
+  ]
+}

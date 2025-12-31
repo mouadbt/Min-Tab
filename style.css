@@ -91,6 +91,7 @@ button {
 .icon-btn svg {
     width: var(--space-sm);
     height: var(--space-sm);
+    fill: var(--foreground);
 }
 
 /* --------------------------------------- Search elements */

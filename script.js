@@ -266,13 +266,34 @@
 //   }
 // };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const init = async () => {
 
   // get the default data
-  const DEFAULTS = await fetchDefaults();
+  const DEFAULTS = await fetchResources('defaults');
 
   // Load icons from json file
-  const icons = await fetchIcons();
+  const icons = await fetchResources('icons');
 
   // Get the search engines from localstorage or default const
   const engines = loadData('searchEngines', DEFAULTS.searchEngines);
@@ -300,21 +321,33 @@ document.addEventListener("DOMContentLoaded", () => {
   init();
 });
 
-const fetchDefaults = async () => {
-  return true;
-}
-
-const fetchIcons = async () => {
-  return true;
+// Help fucntion to get data from resources
+const fetchResources = async (key) => {
+  const res = await fetch(`./assets/data/${key}.json`);
+  const data = await res.json();
+  return data
 }
 
 const loadData = () => {
   return true;
 }
 
-const renderIcons = () => {
-  return true;
+// render the icons in the relevent button
+const renderIcons = (icons) => {
+  console.log(icons)
+  document.querySelectorAll('.icon-btn').forEach((btn) => {
+    const svgIconContent = icons[btn.dataset.icon]?.content;
+    buildTheSvgIcon(svgIconContent, btn);
+  })
 }
+
+// Embed the the svg icon to the page  
+const buildTheSvgIcon = (svgIconContent, btn) => {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.innerHTML = svgIconContent;          
+  btn.appendChild(svg);
+};
 
 const renderEngines = () => {
   return true;

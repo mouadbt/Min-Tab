@@ -210,7 +210,7 @@ button {
     transition: all var(--transition);
 }
 
-#settings-trigger{
+#settings-trigger {
     position: fixed;
     padding-bottom: var(--space-md);
     padding-right: var(--space-md);
@@ -218,7 +218,9 @@ button {
     height: var(--space-2xl);
     bottom: 0;
     right: 0;
-    display: flex;align-items: end;justify-content: end;
+    display: flex;
+    align-items: end;
+    justify-content: end;
 }
 
 #search-btn.hidden {
@@ -258,13 +260,14 @@ button {
     pointer-events: none;
 }
 
-#settings-btn.hidden,#settings-btn.disabled{
+#settings-btn.hidden,
+#settings-btn.disabled {
     pointer-events: none;
     transform: translateY(100%);
     opacity: 0;
 }
 
-#settings-trigger:hover #settings-btn{
+#settings-trigger:hover #settings-btn {
     transform: translateY(0);
     opacity: 1 !important;
     pointer-events: all !important;
@@ -272,10 +275,6 @@ button {
 
 #settings-panel li {
     list-style: none;
-}
-
-#settings-panel ul{
-    display: flex;flex-direction: column;gap: var(--space-xxs);
 }
 
 #settings-panel input {
@@ -288,13 +287,19 @@ button {
     justify-content: start;
     cursor: pointer;
     user-select: none;
-    font-size: var(￼--font-size-small);
-    margin-top: var(￼--space-md);
-    gap: var(￼--space-md);
+    padding-block: var(--space-xxxs);
+    gap: var(--space-xxxs);
 }
 
 #settings-panel label span {
-    padding-left: var(--space-xxs);
+    font-size: var(--font-size-base);
+    width: 100%;
+}
+
+#settings-panel .check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #settings-panel .check svg {

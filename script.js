@@ -323,45 +323,168 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Help fucntion to get data from resources
 const fetchResources = async (key) => {
-  const res = await fetch(`./assets/data/${key}.json`);
-  const data = await res.json();
-  return data
+  try {
+    const res = await fetch(`./assets/data/${key}.json`);
+    if (!res.ok) throw new Error(`Failed to fetch ${key}`);
+    return await res.json();
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
 }
 
-const loadData = () => {
-  return true;
+const loadData = (key, defaults) => {
+  const raw = localStorage.getItem(key);
+  try {
+    return raw ? JSON.parse(raw) : defaults;
+  } catch {
+    return defaults;
+  }
 }
 
-// render the icons in the relevent button
+// Render the icons in the relevent button
 const renderIcons = (icons) => {
-  console.log(icons)
   document.querySelectorAll('.icon-btn').forEach((btn) => {
     const svgIconContent = icons[btn.dataset.icon]?.content;
     buildTheSvgIcon(svgIconContent, btn);
-  })
+  });
 }
 
 // Embed the the svg icon to the page  
-const buildTheSvgIcon = (svgIconContent, btn) => {
+const buildTheSvgIcon = (svgIconContent, btn, withDimensions) => {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "0 0 24 24");
-  svg.innerHTML = svgIconContent;          
+  if (withDimensions) {
+    svg.setAttribute("width", "20px");
+    svg.setAttribute("height", "20px");
+  }
+  svg.innerHTML = svgIconContent;
   btn.appendChild(svg);
 };
 
-const renderEngines = () => {
-  return true;
-}
+const renderEngines = (engines) => {
+  const searchEnginesList = document.querySelector("#search-engines-list");
 
-const renderSettings = () => {
-  return true;
-}
+  engines.filter((el) => el.visible === true).map((el, i) => {
+    const liEL = document.createElement("li");
+    const liButtonEl = document.createElement("button");
+    liButtonEl.textContent = el.name;
+    liButtonEl.dataset.key = el.key;
+    liEL.appendChild(liButtonEl);
+
+    if (el.preferred) {
+      liButtonEl.classList.add("active");
+    }
+
+    if (i != 0) {
+      const separationEl = document.createElement('li');
+      separationEl.classList.add('inactive');
+      separationEl.textContent = "/";
+      searchEnginesList.appendChild(separationEl);
+    }
+
+    searchEnginesList.appendChild(liEL);
+  });
+};
+
+const renderSettings = (settings, icons) => {
+  const settingsOptionsContainer = document.querySelector("#settings-options");
+  console.log(settings)
+  settings.map((option) => {
+
+    const liEl = document.createElement("li");
+
+    const inputEl = document.createElement("input");
+    inputEl.type = "checkbox";
+    inputEl.id = option.storageKey;
+    inputEl.checked = option.active;
+
+    const labelEl = document.createElement("label");
+    labelEl.setAttribute("for", option.storageKey);
+
+    const checkDiv = document.createElement("div");
+    checkDiv.classList.add("check");
+
+    const iconData = icons["check"];
+    if (iconData && iconData.content) {
+      buildTheSvgIcon(iconData.content, checkDiv, true);
+    }
+
+    const spanEl = document.createElement("span");
+    spanEl.textContent = option.label;
+
+    labelEl.appendChild(checkDiv);
+    labelEl.appendChild(spanEl);
+
+    liEl.appendChild(inputEl);
+    liEl.appendChild(labelEl);
+
+    settingsOptionsContainer.appendChild(liEl);
+
+  });
+
+};
 
 const applyAllSettings = () => {
   return true;
-}
+};
 
 const setupGlobalListeners = () => {
-  return true;
-}
+
+  const settingsBtnpanel = document.querySelector("#settings-panel");
+  const settingsBtn = document.querySelector("#settings-btn");
+
+  document.addEventListener('keydown', (e) => {
+
+    // Close settings panel
+    if (e.key === 'Escape') {
+      closeSettingsPanel(settingsBtnpanel, settingsBtn);
+    }
+    // Toggle settings panel
+    if (e.altKey && e.key.toLowerCase() === 's') {
+      e.preventDefault();
+      toggleSettings(settingsBtnpanel, settingsBtn);
+    };
+
+    // Focus on the search input 
+    if (e.key === '/' && document.activeElement.id !== "search-input") e.preventDefault() || document.querySelector("#search-input").focus();
+
+  });
+
+  // Open settings panel
+  settingsBtn.addEventListener('click', () => {
+    toggleSettings(settingsBtnpanel, settingsBtn)
+  });
+
+  // Close settings panel when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!settingsBtnpanel.contains(e.target) && !settingsBtn.contains(e.target)) {
+      closeSettingsPanel(settingsBtnpanel, settingsBtn);
+    }
+  });
+
+};
+
+// Settings panel helper functions
+const closeSettingsPanel = (settingsBtnpanel, settingsBtn) => {
+  settingsBtnpanel.classList.add("hidden");
+  settingsBtn.classList.remove("disabled");
+  updateSettingsButtonAccessibility(settingsBtn);
+};
+
+// Toggle settings panel
+const toggleSettings = (settingsBtnpanel, settingsBtn) => {
+  settingsBtnpanel.classList.toggle("hidden");
+  settingsBtn.classList.toggle("disabled");
+  updateSettingsButtonAccessibility(settingsBtn);
+};
+
+// Disabel settings button completely
+const updateSettingsButtonAccessibility = (settingsBtn) => {
+  if (settingsBtn.classList.contains("disabled")) {
+    settingsBtn.setAttribute("tabindex", "-1");
+  } else {
+    settingsBtn.removeAttribute("tabindex");
+  }
+};
 

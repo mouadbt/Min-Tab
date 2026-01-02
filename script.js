@@ -342,6 +342,10 @@ const loadData = (key, defaults) => {
   }
 }
 
+const saveData = (key, value) => {
+  localStorage.setItem(key, JSON.stringify(value));
+};
+
 // Render the icons in the relevent button
 const renderIcons = (icons) => {
   document.querySelectorAll('.icon-btn').forEach((btn) => {
@@ -364,7 +368,8 @@ const buildTheSvgIcon = (svgIconContent, btn, withDimensions) => {
 
 const renderEngines = (engines) => {
   const searchEnginesList = document.querySelector("#search-engines-list");
-
+  //  Clear the container of seach engines because this fucntion is called on laod and on update of the search engines selection / delegation
+  searchEnginesList.innerHTML=''; 
   engines.filter((el) => el.visible === true).map((el, i) => {
     const liEL = document.createElement("li");
     const liButtonEl = document.createElement("button");
@@ -387,9 +392,15 @@ const renderEngines = (engines) => {
   });
 };
 
+// Update the search engines list to set the active one to be the one that user clicked on 
+const handleEngineSelect = (key, engines) => {
+  const updated = engines.map(e => ({ ...e, preferred: e.key === key }));
+  saveData('searchEngines', updated);
+  renderEngines(updated);
+};
+
 const renderSettings = (settings, icons) => {
   const settingsOptionsContainer = document.querySelector("#settings-options");
-  console.log(settings)
   settings.map((option) => {
 
     const liEl = document.createElement("li");
@@ -429,7 +440,30 @@ const applyAllSettings = () => {
   return true;
 };
 
-const setupGlobalListeners = () => {
+// Settings panel helper functions
+const closeSettingsPanel = (settingsBtnpanel, settingsBtn) => {
+  settingsBtnpanel.classList.add("hidden");
+  settingsBtn.classList.remove("disabled");
+  updateSettingsButtonAccessibility(settingsBtn);
+};
+
+// Toggle settings panel
+const toggleSettings = (settingsBtnpanel, settingsBtn) => {
+  settingsBtnpanel.classList.toggle("hidden");
+  settingsBtn.classList.toggle("disabled");
+  updateSettingsButtonAccessibility(settingsBtn);
+};
+
+// Disabel settings button completely
+const updateSettingsButtonAccessibility = (settingsBtn) => {
+  if (settingsBtn.classList.contains("disabled")) {
+    settingsBtn.setAttribute("tabindex", "-1");
+  } else {
+    settingsBtn.removeAttribute("tabindex");
+  }
+};
+
+const setupGlobalListeners = (engines, settings) => {
 
   const settingsBtnpanel = document.querySelector("#settings-panel");
   const settingsBtn = document.querySelector("#settings-btn");
@@ -463,28 +497,13 @@ const setupGlobalListeners = () => {
     }
   });
 
-};
+  // Search engine selection / delegation
+  document.querySelector("#search-engines-list").addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (btn) {
+      handleEngineSelect(btn.dataset.key, engines)
+    };
+  });
 
-// Settings panel helper functions
-const closeSettingsPanel = (settingsBtnpanel, settingsBtn) => {
-  settingsBtnpanel.classList.add("hidden");
-  settingsBtn.classList.remove("disabled");
-  updateSettingsButtonAccessibility(settingsBtn);
-};
-
-// Toggle settings panel
-const toggleSettings = (settingsBtnpanel, settingsBtn) => {
-  settingsBtnpanel.classList.toggle("hidden");
-  settingsBtn.classList.toggle("disabled");
-  updateSettingsButtonAccessibility(settingsBtn);
-};
-
-// Disabel settings button completely
-const updateSettingsButtonAccessibility = (settingsBtn) => {
-  if (settingsBtn.classList.contains("disabled")) {
-    settingsBtn.setAttribute("tabindex", "-1");
-  } else {
-    settingsBtn.removeAttribute("tabindex");
-  }
 };
 

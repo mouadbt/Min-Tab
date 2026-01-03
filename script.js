@@ -109,14 +109,14 @@
 
 //   let settingsOptions = JSON.parse(localStorage.getItem('settingsOptions'));
 //   if (!settingsOptions) {
-//     settingsOptions = [{ "label": "Focus search bar on new tab", "active": true, "storageKey": "focusOnLoad" }, { "label": "Hide search placeholder", "active": false, "storageKey": "showPlaceholder" }, { "label": "Hide settings icon", "active": false, "storageKey": "alwaysShowSettings" }];
+//     settingsOptions = [{ "label": "Focus search bar on new tab", "active": true, "key": "focusOnLoad" }, { "label": "Hide search placeholder", "active": false, "key": "showPlaceholder" }, { "label": "Hide settings icon", "active": false, "key": "alwaysShowSettings" }];
 //     localStorage.setItem('settingsOptions', JSON.stringify(settingsOptions));
 //   }
 
 //   const loadedSettingsFinished = await loadSettings(settingsOptions);
 
 //   const applySetting = (option) => {
-//     switch (option.storageKey) {
+//     switch (option.key) {
 //       case "focusOnLoad":
 //         localStorage.setItem('focusOnLoad', option.active ? true : false);
 //         break;
@@ -133,7 +133,7 @@
 //     settingsOptions.forEach(applySetting);
 //     document.querySelectorAll("#settings-options input[type='checkbox']").forEach(input => {
 //       input.addEventListener("change", () => {
-//         const option = settingsOptions.find(o => o.storageKey === input.id);
+//         const option = settingsOptions.find(o => o.key === input.id);
 //         if (option) {
 //           option.active = input.checked;
 //           localStorage.setItem('settingsOptions', JSON.stringify(settingsOptions));
@@ -216,11 +216,11 @@
 
 //       const inputEl = document.createElement("input");
 //       inputEl.type = "checkbox";
-//       inputEl.id = option.storageKey;
+//       inputEl.id = option.key;
 //       inputEl.checked = option.active;
 
 //       const labelEl = document.createElement("label");
-//       labelEl.setAttribute("for", option.storageKey);
+//       labelEl.setAttribute("for", option.key);
 
 //       const checkDiv = document.createElement("div");
 //       checkDiv.classList.add("check");
@@ -308,15 +308,16 @@ const init = async () => {
   renderEngines(engines);
 
   //  Render the settings in the page
-  renderSettings(settings, icons);
+  renderSettings(settings, engines, icons);
 
   // Apply settings to the page element
   applyAllSettings(settings);
 
   // handle page actions
-  setupGlobalListeners(engines, settings);
+  setupGlobalListeners(engines);
 };
 
+// load and excute and start script afetr page fully load
 document.addEventListener("DOMContentLoaded", () => {
   init();
 });
@@ -331,8 +332,9 @@ const fetchResources = async (key) => {
     console.error(err);
     return null;
   }
-}
+};
 
+// get the defaults data from the localstorage or the default
 const loadData = (key, defaults) => {
   const raw = localStorage.getItem(key);
   try {
@@ -340,8 +342,9 @@ const loadData = (key, defaults) => {
   } catch {
     return defaults;
   }
-}
+};
 
+// Store updated data in localstorage
 const saveData = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
@@ -352,7 +355,7 @@ const renderIcons = (icons) => {
     const svgIconContent = icons[btn.dataset.icon]?.content;
     buildTheSvgIcon(svgIconContent, btn);
   });
-}
+};
 
 // Embed the the svg icon to the page  
 const buildTheSvgIcon = (svgIconContent, btn, withDimensions) => {
@@ -366,14 +369,15 @@ const buildTheSvgIcon = (svgIconContent, btn, withDimensions) => {
   btn.appendChild(svg);
 };
 
+// Render the search engines in the page
 const renderEngines = (engines) => {
   const searchEnginesList = document.querySelector("#search-engines-list");
   //  Clear the container of seach engines because this fucntion is called on laod and on update of the search engines selection / delegation
-  searchEnginesList.innerHTML=''; 
-  engines.filter((el) => el.visible === true).map((el, i) => {
+  searchEnginesList.innerHTML = '';
+  engines.filter((el) => el.active === true).map((el, i) => {
     const liEL = document.createElement("li");
     const liButtonEl = document.createElement("button");
-    liButtonEl.textContent = el.name;
+    liButtonEl.textContent = el.label;
     liButtonEl.dataset.key = el.key;
     liEL.appendChild(liButtonEl);
 
@@ -399,19 +403,27 @@ const handleEngineSelect = (key, engines) => {
   renderEngines(updated);
 };
 
-const renderSettings = (settings, icons) => {
+// render the settings options & search engines in the settings panel
+const renderSettings = (settings, engines, icons) => {
   const settingsOptionsContainer = document.querySelector("#settings-options");
-  settings.map((option) => {
+  const settingsOptions = [...settings, { separator: true }, ...engines];
+  console.log(settingsOptions)
+  settingsOptions.forEach((option) => {
+
+    if (option?.separator) {
+      renderSettingsSeparator(settingsOptionsContainer);
+      return;
+    }
 
     const liEl = document.createElement("li");
 
     const inputEl = document.createElement("input");
     inputEl.type = "checkbox";
-    inputEl.id = option.storageKey;
+    inputEl.id = option.key;
     inputEl.checked = option.active;
 
     const labelEl = document.createElement("label");
-    labelEl.setAttribute("for", option.storageKey);
+    labelEl.setAttribute("for", option.key);
 
     const checkDiv = document.createElement("div");
     checkDiv.classList.add("check");
@@ -436,6 +448,14 @@ const renderSettings = (settings, icons) => {
 
 };
 
+const renderSettingsSeparator = (settingsOptionsContainer) => {
+  const liEl = document.createElement("li");
+  const divEl = document.createElement("dev");
+  divEl.setAttribute("id", "settingsSeparator");
+  liEl.appendChild(divEl);
+  settingsOptionsContainer.appendChild(liEl);
+}
+
 const applyAllSettings = () => {
   return true;
 };
@@ -454,7 +474,7 @@ const toggleSettings = (settingsBtnpanel, settingsBtn) => {
   updateSettingsButtonAccessibility(settingsBtn);
 };
 
-// Disabel settings button completely
+// Disable settings button completely
 const updateSettingsButtonAccessibility = (settingsBtn) => {
   if (settingsBtn.classList.contains("disabled")) {
     settingsBtn.setAttribute("tabindex", "-1");
@@ -463,7 +483,7 @@ const updateSettingsButtonAccessibility = (settingsBtn) => {
   }
 };
 
-const setupGlobalListeners = (engines, settings) => {
+const setupGlobalListeners = (engines) => {
 
   const settingsBtnpanel = document.querySelector("#settings-panel");
   const settingsBtn = document.querySelector("#settings-btn");
@@ -474,6 +494,7 @@ const setupGlobalListeners = (engines, settings) => {
     if (e.key === 'Escape') {
       closeSettingsPanel(settingsBtnpanel, settingsBtn);
     }
+
     // Toggle settings panel
     if (e.altKey && e.key.toLowerCase() === 's') {
       e.preventDefault();
@@ -506,4 +527,3 @@ const setupGlobalListeners = (engines, settings) => {
   });
 
 };
-

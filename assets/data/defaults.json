@@ -3,38 +3,38 @@
   "searchEngines": [
     {
       "key": "startpage",
-      "name": "Startpage",
-      "visible": true,
+      "label": "Startpage",
+      "active": true,
       "preferred": true
     },
     {
       "key": "google",
-      "name": "Google",
-      "visible": true,
+      "label": "Google",
+      "active": true,
       "preferred": false
     },
     {
       "key": "duckduckgo",
-      "name": "DuckDuckGo",
-      "visible": true,
+      "label": "DuckDuckGo",
+      "active": true,
       "preferred": false
     },
     {
       "key": "perplexity",
-      "name": "Perplexity",
-      "visible": true,
+      "label": "Perplexity",
+      "active": true,
       "preferred": false
     },
     {
       "key": "mistral",
-      "name": "Mistral",
-      "visible": false,
+      "label": "Mistral",
+      "active": false,
       "preferred": false
     },
     {
       "key": "gemini",
-      "name": "Gemini",
-      "visible": false,
+      "label": "Gemini",
+      "active": false,
       "preferred": false
     }
   ],
@@ -42,27 +42,27 @@
     {
       "label": "Focus search bar on new tab",
       "active": true,
-      "storageKey": "focusOnLoad"
+      "key": "focusOnLoad"
     },
     {
       "label": "Hide search placeholder",
       "active": false,
-      "storageKey": "showPlaceholder"
+      "key": "showPlaceholder"
     },
     {
       "label": "Hide settings icon",
       "active": false,
-      "storageKey": "alwaysShowSettings"
+      "key": "alwaysShowSettings"
     },
     {
       "label": "Hide search engines list",
       "active": false,
-      "storageKey": "hideEngines"
+      "key": "hideEngines"
     },
     {
       "label": "Hide search button",
       "active": false,
-      "storageKey": "hideSearchButton"
+      "key": "hideSearchButton"
     }
   ]
 }

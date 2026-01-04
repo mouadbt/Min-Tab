@@ -177,6 +177,10 @@ button {
     padding-left: 0;
 }
 
+#search-engines-list.hidden{
+    display: none !important;
+}
+
 #search-engines-list li button {
     padding-inline: var(--space-xxs);
     padding-block: var(--space-4xs);
@@ -229,6 +233,11 @@ button {
     transition: transform var(--transition);
 }
 
+#search-btn.disabled{
+    display: none !important;
+    pointer-events: none;
+}
+
 #settings-btn svg * {
     stroke: var(--foreground);
     fill: none;
@@ -252,7 +261,6 @@ button {
 #settings-panel h2 {
     font-size: var(--font-size-md);
     font-weight: 900;
-    margin-bottom: var(--space-xs);
 }
 
 #settings-panel.hidden {
@@ -331,9 +339,13 @@ button {
 
 #settingsSeparator{
     width: var(--space-lg);
-    background: var(--foreground);
-    height: var(--space-4xs);
+    background: var(--foreground50);
+    height: 1px;
     border-radius: 50px;
     display: inline-block;
-    margin-bottom: var(--space-xxxs);
+    margin-block: var(--space-xxs);
+}
+#settingsSeparator.title{
+    margin-bottom: var(--space-xs);
+    margin-top: var(--space-xxs);
 }

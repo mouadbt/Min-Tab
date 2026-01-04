@@ -1,5 +1,4 @@
 {
-  "focusOnLoad": "true",
   "searchEngines": [
     {
       "key": "startpage",
@@ -50,9 +49,9 @@
       "key": "showPlaceholder"
     },
     {
-      "label": "Hide settings icon",
+      "label": "Hide settings button",
       "active": false,
-      "key": "alwaysShowSettings"
+      "key": "hideSettingsButton"
     },
     {
       "label": "Hide search engines list",

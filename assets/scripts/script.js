@@ -64,6 +64,7 @@ const saveData = (key, value) => {
 const renderIcons = (icons) => {
   document.querySelectorAll('.icon-btn').forEach((btn) => {
     const svgIconContent = icons[btn.dataset.icon]?.content;
+    btn.innerHTML = '';
     buildTheSvgIcon(svgIconContent, btn);
   });
 };
@@ -76,7 +77,7 @@ const buildTheSvgIcon = (svgIconContent, btn, withDimensions) => {
     svg.setAttribute("width", "20px");
     svg.setAttribute("height", "20px");
   }
-  svg.innerHTML = svgIconContent;
+  svg.innerHTML += svgIconContent;
   btn.appendChild(svg);
 };
 
@@ -197,6 +198,7 @@ const applyAllSettings = (settings) => {
   settings.forEach(s => applySystemSetting(s.key, s.active));
 };
 
+// Focus the cursor on the search input and override the browser's default behavior of focusing the address bar
 const focusOnSearchInputInsteadOfBrowserAddressBar = (inputEl) => {
   inputEl.focus();
   if (location.search !== "?focus") {
@@ -319,6 +321,15 @@ const setupGlobalListeners = (engines, settings) => {
         callback(e.target.id, e.target.checked, store);
       }
     });
+  });
+
+  // Add loading class to the clicked search suggestion to show loading icon
+  const suggestionsList = document.querySelector("#suggestions-list");
+
+  suggestionsList.addEventListener("click", (e) => {
+    const link = e.target.closest(".suggestion-link");
+    if (!link) return;
+    link.classList.add("loading"); // show loading icon
   });
 
 };

@@ -357,9 +357,9 @@ button {
     height: max-content;
     display: inline-block;
     position: absolute;
-    bottom: 0;
+    top: 0;
     left: 0;
-    transform: translateY(88%);
+    transform: translateY(var(--space-lg));
     z-index: 9;
 }
 
@@ -396,21 +396,22 @@ button {
     font-size: var(--font-size-large);
     margin-left: auto;
     line-height: 0.5;
+    margin-top: -3px;
 }
 
 #suggestions-list a:hover,
-#suggestions-list a:hover {
+#suggestions-list a:focus {
     outline: 0;
     background: var(--foreground75);
 }
 
 #suggestions-list a:hover span,
-#suggestions-list a:hover span {
+#suggestions-list a:focus span {
     color: var(--foreground);
 }
 
-#suggestions-list a:focus span:last-of-type,
-#suggestions-list a:hover span:last-of-type {
+#suggestions-list a:hover span:last-of-type,
+#suggestions-list a:focus span:last-of-type {
     opacity: 1;
     transform: translateX(0);
 }

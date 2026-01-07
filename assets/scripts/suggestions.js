@@ -1,5 +1,8 @@
+import { fetchResources } from './utils.js';
+import { buildTheSvgIcon } from './ui.js';
+
 // the fucntion that start excuting after the user start typing and holds all the logic from getting the suggestions tell going to the user's distination
-const initLogic = () => {
+export const initLogic = () => {
     const searchInput = document.querySelector("#search-input");
     const searchBtn = document.querySelector("#search-btn");
     const suggestionsList = document.querySelector("#suggestions-list");
@@ -62,7 +65,7 @@ const renderSuggestionItems = async (items, suggestionsList) => {
 };
 
 // get loading svg from the json file
-const getLoadingSvgContent = async() => {
+const getLoadingSvgContent = async () => {
     const svgIcons = await fetchResources('icons');
     return svgIcons["loading"].content;
 };
@@ -104,8 +107,3 @@ const getFaviconUrl = (origin) => {
 const clearSuggestions = (suggestionsList) => {
     suggestionsList.innerHTML = '';
 };
-
-// excute logic after page fully load 
-document.addEventListener("DOMContentLoaded", () => {
-    initLogic();
-});

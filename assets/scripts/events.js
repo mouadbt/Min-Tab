@@ -1,6 +1,6 @@
 import { closeSettingsPanel, toggleSettings } from './ui.js';
 import { handleEngineSelect, handleSettingChange, handleEngineSettingChange } from './settings.js';
-import { naigateBetweenSuggestions } from './keyboardNavigation.js';
+import { navigateBetweenSuggestions } from './keyboardNavigation.js';
 export const setupGlobalListeners = (engines, settings) => {
 
     const settingsBtnpanel = document.querySelector("#settings-panel");
@@ -26,9 +26,23 @@ export const setupGlobalListeners = (engines, settings) => {
             searchInput.focus();
         }
 
+        // navigate between search suggestions using keybord
         if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-            naigateBetweenSuggestions(e, searchInput, suggestionsList,searchBtn);
+            navigateBetweenSuggestions(e, searchInput, suggestionsList, searchBtn);
         }
+
+        // perform search
+        searchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                const query = e.target.value.trim().toLowerCase();
+                performSearch(query);
+            }
+        });
+
+        searchBtn.addEventListener('click', () => {
+            const query = e.target.value.trim().toLowerCase();
+            performSearch(query);
+        });
 
     });
 

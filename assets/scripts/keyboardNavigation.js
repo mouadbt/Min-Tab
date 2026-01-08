@@ -1,19 +1,41 @@
-export const naigateBetweenSuggestions = (e, searchInput, suggestionsList, searchBtn) => {
-    const suggestionItems = Array.from(suggestionsList.querySelectorAll('a'));
-    if (e.key === "ArrowDown" && (e.target === searchInput || e.target === searchBtn)) {
-        suggestionItems[0].focus();
-    }
-    if (e.key === "ArrowUp" && suggestionItems.includes(e.target)) {
+let activeIndex = -1; // input/button is focused
 
-        // console.log(document.activeElement, e.target);
-        suggestionItems.forEach((_, i) => {
-            if (i === 0) {
-                searchInput.focus();
-                console.log('1st');
-            }
-            else {
-                suggestionItems[i + 1].focus();
-            }
-        });
+export const navigateBetweenSuggestions = (e, searchInput, suggestionsList, searchBtn) => {
+
+    const suggestionItems = Array.from(suggestionsList.querySelectorAll('a'));
+
+    const direction = e.key === "ArrowDown" ? 1 : -1;
+
+    // Determine current active index
+    if (e.target === searchInput || e.target === searchBtn) {
+        activeIndex = -1;
     }
+    else {
+        activeIndex = suggestionItems.indexOf(e.target);
+    };
+
+    // Compute next index
+    let nextIndex = activeIndex + direction;
+
+    if (nextIndex < 0) {
+        // Move focus to input when moving above first suggestion
+        focusOnInput(searchInput);
+        activeIndex = -1;
+    } else if (nextIndex >= suggestionItems.length) {
+        // Move focus to input when moving past last suggestion
+        focusOnInput(searchInput);
+        activeIndex = -1;
+    } else {
+        // Move focus to the suggestion item
+        suggestionItems[nextIndex].focus();
+        activeIndex = nextIndex;
+    }
+};
+
+const focusOnInput = (input) => {
+    input.focus();
+    requestAnimationFrame(() => {
+        const len = input.value.length;
+        input.setSelectionRange(len, len);
+    });
 }

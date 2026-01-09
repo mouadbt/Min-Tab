@@ -4,37 +4,43 @@
       "key": "startpage",
       "label": "Startpage",
       "active": true,
-      "preferred": true
+      "preferred": true,
+      "url": "https://www.startpage.com/sp/search?q="
     },
     {
       "key": "google",
       "label": "Google",
       "active": true,
-      "preferred": false
+      "preferred": false,
+      "url": "https://www.google.com/search?q="
     },
     {
       "key": "duckduckgo",
       "label": "DuckDuckGo",
       "active": true,
-      "preferred": false
+      "preferred": false,
+      "url": "https://duckduckgo.com/?q="
     },
     {
       "key": "perplexity",
       "label": "Perplexity",
       "active": true,
-      "preferred": false
+      "preferred": false,
+      "url": "https://www.perplexity.ai/search?q="
     },
     {
       "key": "mistral",
       "label": "Mistral",
       "active": false,
-      "preferred": false
+      "preferred": false,
+      "url": "https://chat.mistral.ai/chat?q="
     },
     {
       "key": "gemini",
       "label": "Gemini",
       "active": false,
-      "preferred": false
+      "preferred": false,
+      "url": "https://www.google.com/search?udm=50&q="
     }
   ],
   "settingsOptions": [

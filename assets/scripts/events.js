@@ -1,6 +1,7 @@
 import { closeSettingsPanel, toggleSettings } from './ui.js';
 import { handleEngineSelect, handleSettingChange, handleEngineSettingChange } from './settings.js';
 import { navigateBetweenSuggestions } from './keyboardNavigation.js';
+import { performSearch } from './search.js';
 export const setupGlobalListeners = (engines, settings) => {
 
     const settingsBtnpanel = document.querySelector("#settings-panel");
@@ -12,7 +13,7 @@ export const setupGlobalListeners = (engines, settings) => {
         // Close settings panel
         if (e.key === 'Escape') {
             closeSettingsPanel(settingsBtnpanel, settingsBtn);
-        }
+        };
 
         // Toggle settings panel
         if (e.altKey && e.key.toLowerCase() === 's') {
@@ -24,26 +25,25 @@ export const setupGlobalListeners = (engines, settings) => {
         if (e.key === '/' && document.activeElement.id !== "search-input") {
             e.preventDefault();
             searchInput.focus();
-        }
+        };
 
         // navigate between search suggestions using keybord
         if (e.key === "ArrowDown" || e.key === "ArrowUp") {
             navigateBetweenSuggestions(e, searchInput, suggestionsList, searchBtn);
-        }
+        };
 
         // perform search
-        searchInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                const query = e.target.value.trim().toLowerCase();
-                performSearch(query);
-            }
-        });
-
-        searchBtn.addEventListener('click', () => {
+        if (e.key === 'Enter' && e.target === searchInput) {
             const query = e.target.value.trim().toLowerCase();
-            performSearch(query);
-        });
+            performSearch(query, engines);
+        };
 
+    });
+
+    // perform search when the search button is clicked
+    searchBtn.addEventListener('click', () => {
+        const query = searchInput.value.trim().toLowerCase();
+        performSearch(query, engines);
     });
 
     // Open settings panel

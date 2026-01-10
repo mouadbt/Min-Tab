@@ -1,4 +1,0 @@
-
-git commit -m"refactor entire script to better architecture --phase-3: selection / delegation of search engines"
-git add . 
-git push -u origin clean-refactor

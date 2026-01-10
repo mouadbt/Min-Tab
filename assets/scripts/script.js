@@ -14,7 +14,7 @@ const init = async () => {
   // Get the search engines from localstorage or default const
   const engines = loadData("searchEngines", DEFAULTS.searchEngines);
 
-  // Get the ssettings from localstorage or default const
+  // Get the settings from localstorage or default const
   const settings = loadData("settingsOptions", DEFAULTS.settingsOptions);
 
   // Render the icons in the page
@@ -36,7 +36,7 @@ const init = async () => {
   initLogic();
 };
 
-// load and excute and start script afetr page fully load
+// load and execute and start script after page fully load
 document.addEventListener("DOMContentLoaded", () => {
   init();
 });

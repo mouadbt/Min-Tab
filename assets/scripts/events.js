@@ -27,7 +27,7 @@ export const setupGlobalListeners = (engines, settings) => {
             searchInput.focus();
         };
 
-        // navigate between search suggestions using keybord
+        // navigate between search suggestions using keyboard
         if (e.key === "ArrowDown" || e.key === "ArrowUp") {
             navigateBetweenSuggestions(e, searchInput, suggestionsList, searchBtn);
         };

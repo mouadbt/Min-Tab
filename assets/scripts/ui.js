@@ -1,4 +1,4 @@
-// Embed the the svg icon to the page  
+// Embed the svg icon to the page  
 export const buildTheSvgIcon = (svgIconContent, btn, withDimensions) => {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "0 0 24 24");
@@ -10,7 +10,7 @@ export const buildTheSvgIcon = (svgIconContent, btn, withDimensions) => {
   btn.appendChild(svg);
 };
 
-// Render the icons in the relevent button
+// Render the icons in the relevant button
 export const renderIcons = (icons) => {
   document.querySelectorAll('.icon-btn').forEach((btn) => {
     const svgIconContent = icons[btn.dataset.icon]?.content;
@@ -22,7 +22,7 @@ export const renderIcons = (icons) => {
 // Render the search engines in the page
 export const renderEngines = (engines) => {
   const searchEnginesList = document.querySelector("#search-engines-list");
-  //  Clear the container of seach engines because this fucntion is called on laod and on update of the search engines selection / delegation
+  //  Clear the container of search engines because this function is called on load and on update of the search engines selection / delegation
   searchEnginesList.innerHTML = '';
   engines.filter((el) => el.active === true).forEach((el, i) => {
     const liEL = document.createElement("li");

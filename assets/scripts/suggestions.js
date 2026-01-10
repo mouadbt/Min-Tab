@@ -1,7 +1,7 @@
 import { fetchResources } from './utils.js';
 import { buildTheSvgIcon } from './ui.js';
 
-// the fucntion that start excuting after the user start typing and holds all the logic from getting the suggestions tell going to the user's distination
+// the function that start executing after the user start typing and holds all the logic from getting the suggestions tell going to the user's destination
 export const initLogic = () => {
     const searchInput = document.querySelector("#search-input");
     const searchBtn = document.querySelector("#search-btn");
@@ -98,7 +98,7 @@ const buildSuggestionItem = (item, loadingSvgContent) => {
     return suggestionItem;
 };
 
-// Get the Icon of the wesbite to show it in the suggested website
+// Get the Icon of the website to show it in the suggested website
 const getFaviconUrl = (origin) => {
     return `https://www.google.com/s2/favicons?sz=32&domain_url=${origin}`;
 };

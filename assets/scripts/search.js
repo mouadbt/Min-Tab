@@ -1,5 +1,9 @@
 export function performSearch(query) {
-    
+
+    if (!query) {
+        return;
+    }
+
     const engines = JSON.parse(localStorage.getItem('searchEngines'));
 
     if (isValidUrl(query)) {

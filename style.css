@@ -171,6 +171,14 @@ button {
     gap: var(--space-xxxs);
     padding: var(--space-xxs);
     padding-left: 0;
+    max-width: 456px;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#search-engines-list ::-webkit-scrollbar {
+    display: none;
 }
 
 #search-engines-list.hidden {

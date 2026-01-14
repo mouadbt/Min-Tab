@@ -41,6 +41,13 @@
       "active": false,
       "preferred": false,
       "url": "https://www.google.com/search?udm=50&q="
+    },
+    {
+      "key": "chatgpt",
+      "label": "ChatGPT",
+      "active": false,
+      "preferred": false,
+      "url": "https://chat.openai.com/?q="
     }
   ],
   "settingsOptions": [

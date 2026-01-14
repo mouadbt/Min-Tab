@@ -49,6 +49,8 @@ A minimalist Chrome extension that replaces your new tab page with a clean, dark
 
 > Note: `Mistral` and `Gemini` are included but hidden by default. Enable them from Settings → "Show/hide engines".
 
+> Gemini integration uses **Google AI Mode** and requires that you are signed in with a **Google (Gmail) account** in your browser. The extension redirects you to the Google AI interface; if you are not signed in or not eligible, Google will not return a response and you will instead see the message: `"Something went wrong and an AI response wasn't generated."`
+
 ### Keyboard Shortcuts
 - `/` - Focus the search input from anywhere
 - `Alt+S` - Toggle the Settings panel

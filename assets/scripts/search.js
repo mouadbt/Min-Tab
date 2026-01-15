@@ -20,10 +20,17 @@ export function performSearch(query) {
 }
 
 function isValidUrl(str) {
+
     try {
         new URL(str);
         return true;
     } catch {
+        // Check again if new URL method failed using a simpler regex for common domain patterns
+        const domainRegex = /^(?:[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?::[0-9]{1,5})?(?:\/.*)?$/;
+
+        if (domainRegex.test(str)) {
+            return true;
+        }
         return false;
     }
 }

@@ -5,10 +5,9 @@ export function performSearch(query) {
     }
 
     const engines = JSON.parse(localStorage.getItem('searchEngines'));
-
-    if (isValidUrl(query)) {
-        window.location.href = query;
-        console.log(query);
+    const { isItUrl, queryFromFunction } = isValidUrl(query);
+    if (isItUrl) {
+        window.location.href = queryFromFunction;
         return;
     }
 
@@ -19,18 +18,20 @@ export function performSearch(query) {
     window.location.href = url;
 }
 
+// Check if the query is a url
 function isValidUrl(str) {
 
     try {
         new URL(str);
-        return true;
+        return { isItUrl: true, queryFromFunction: str };
     } catch {
         // Check again if new URL method failed using a simpler regex for common domain patterns
         const domainRegex = /^(?:[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?::[0-9]{1,5})?(?:\/.*)?$/;
 
         if (domainRegex.test(str)) {
-            return true;
+            return { isItUrl: true, queryFromFunction: 'https://' + str };
+
         }
-        return false;
+        return { isItUrl: false, queryFromFunction: null };
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "Min Tab",
-  "version": "1.0",
+  "version": "2.2",
   "manifest_version": 3,
   "description": "A custom new tab page with a minimalist black design.",
   "chrome_url_overrides": {

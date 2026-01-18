@@ -48,9 +48,23 @@ export const applyAllSettings = (settings) => {
   settings.forEach(s => applySystemSetting(s.key, s.active));
 };
 
-// Update the search engines list to set the active one to be the one that user clicked on 
+// Update the search engines list to set the selected engine as preferred and ensure it's active
 export const handleEngineSelect = (key, engines) => {
-  const updated = engines.map(e => ({ ...e, preferred: e.key === key }));
+  // Find the engine that was clicked
+  const clickedEngine = engines.find(e => e.key === key);
+
+  // If the clicked engine is not active (not checked in settings), make it active
+  if (clickedEngine && !clickedEngine.active) {
+    clickedEngine.active = true;
+  }
+
+  // Set the clicked engine as preferred (active in the UI)
+  const updated = engines.map(e => ({
+    ...e,
+    preferred: e.key === key,
+    active: e.key === key ? true : e.active // Ensure the selected engine is active
+  }));
+
   saveData('searchEngines', updated);
   renderEngines(updated);
 };
@@ -65,11 +79,28 @@ export const handleSettingChange = (key, isActive, settings) => {
   }
 };
 
-// update the new search engine settings applied by user in the localstorage and in the page 
+// update the new search engine settings applied by user in the localstorage and in the page
 export const handleEngineSettingChange = (key, isActive, engines) => {
   const engine = engines.find(e => e.key === key);
   if (engine) {
     engine.active = isActive;
+
+    // If the engine is being activated (checked) and there's no preferred engine or this engine is being activated,
+    // make it the preferred engine as well
+    if (isActive) {
+      // Check if there's no currently preferred engine, or if user is activating an engine
+      const currentPreferred = engines.find(e => e.preferred);
+
+      // If no engine is currently preferred OR the activated engine is not the current preferred one,
+      // make the activated engine the preferred one
+      if (!currentPreferred || currentPreferred.key !== key) {
+        // Set all engines as not preferred first
+        engines.forEach(e => e.preferred = false);
+        // Then set the activated engine as preferred
+        engine.preferred = true;
+      }
+    }
+
     saveData('searchEngines', engines);
     renderEngines(engines);
   }

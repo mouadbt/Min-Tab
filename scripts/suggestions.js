@@ -1,6 +1,8 @@
 import { fetchResources } from './utils.js';
 import { buildTheSvgIcon } from './ui.js';
 
+const isFirefox = typeof browser !== 'undefined';
+
 // the function that start executing after the user start typing and holds all the logic from getting the suggestions tell going to the user's destination
 export const initLogic = () => {
     const searchInput = document.querySelector("#search-input");
@@ -17,38 +19,49 @@ export const initLogic = () => {
     });
 };
 
-/**
- * Asynchronously fetches and displays search suggestions from the browser's history
- * It prioritizes results from the user's top sites and combines them
- * with other history items that match the current query, displaying the top 5
- * unique results
- */
-const showSuggestions = (query, suggestionsList) => {
+const showSuggestions = async (query, suggestionsList) => {
 
-    // Check if we have access to the browser top site and history
-    if (chrome.topSites && chrome.history) {
-        // Then, get the user's most visited sites from his browser
-        chrome.topSites.get((topSites) => {
-            const filteredTopSites = topSites.filter((site) => {
-                site.title.toLowerCase().includes(query)
-                    ||
-                    site.url.toLowerCase().includes(query)
-            });
+    // Check if browser APIs are available
+    const hasTopSites = (isFirefox && typeof browser !== 'undefined'
+        && browser.topSites) || (!isFirefox && typeof chrome !== 'undefined' && chrome.topSites);
+    const hasHistory = (isFirefox && typeof browser !== 'undefined' && browser.history) || (!isFirefox && typeof chrome !== 'undefined' && chrome.history);
 
-            // Fetch throw the rest of the history for other matches
-            chrome.history.search({ text: query, maxResults: 100 }, (historyItems) => {
-                const combined = [...filteredTopSites];
-                historyItems.forEach(item => {
-                    if (!combined.some(site => site.url === item.url)) combined.push(item);
-                });
+    if (!hasTopSites || !hasHistory) {
+        suggestionsList.innerHTML = '<li><a><span>We have issue getting the suggestion from your browser</span ></a ></li > ';
+        return;
+    }
 
-                // Display the suggestions.
-                renderSuggestionItems(combined.slice(0, 6), suggestionsList);
-            });
+    let topSites = [];
+    let historyItems = [];
+
+    if (isFirefox) {
+        // Get data from Firefox
+        topSites = await getTopSitesFirefox();
+        historyItems = await searchHistoryFirefox({
+            text: query,
+            maxResults: 100
         });
     } else {
-        suggestionsList.innerHTML = '<li><a><span>We have issue getting the suggestion from your browser</span></a></li>';
+        // Get data from Chrome
+        topSites = await new Promise(resolve => getTopSitesChrome
+            (resolve));
+        historyItems = await new Promise(resolve =>
+            searchHistoryChrome({ text: query, maxResults: 100 }, resolve));
     }
+
+    const filteredTopSites = topSites.filter((site) => {
+        return site.title && (site.title.toLowerCase().includes(query)
+            || site.url.toLowerCase().includes(query));
+    });
+
+    const combined = [...filteredTopSites];
+    historyItems.forEach(item => {
+        if (!combined.some(site => site.url === item.url)) combined.
+            push(item);
+    });
+
+    // Display the suggestions.
+    renderSuggestionItems(combined.slice(0, 6), suggestionsList);
 };
 
 // show the suggestions in the suggestions list when user start typing
@@ -62,6 +75,41 @@ const renderSuggestionItems = async (items, suggestionsList) => {
 
     // start rendering the suggestions
     items.forEach(item => suggestionsList.append(buildSuggestionItem(item, loadingSvgContent)));
+};
+
+// Get top sites from Firefox
+const getTopSitesFirefox = async () => {
+    try {
+        return await browser.topSites.get();
+    } catch (error) {
+        console.error('Error getting top sites from Firefox:',
+            error);
+        return [];
+    }
+};
+
+// Get top sites from Chrome
+const getTopSitesChrome = (callback) => {
+    chrome.topSites.get((topSites) => {
+        callback(topSites || []);
+    });
+};
+
+// Search history in Firefox (uses Promises) 
+const searchHistoryFirefox = async (options) => {
+    try {
+        return await browser.history.search(options);
+    } catch (error) {
+        console.error('Error searching history in Firefox:', error);
+        return [];
+    }
+};
+
+// Search history in Chrome
+const searchHistoryChrome = (options, callback) => {
+    chrome.history.search(options, (historyItems) => {
+        callback(historyItems || []);
+    });
 };
 
 // get loading svg from the json file

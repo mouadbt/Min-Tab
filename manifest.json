@@ -3,22 +3,18 @@
   "version": "2.2",
   "manifest_version": 3,
   "description": "A custom new tab page with a minimalist black design.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "min-tab@extension.local",
+      "strict_min_version": "109.0"
+    }
+  },
   "chrome_url_overrides": {
     "newtab": "new_tab.html"
   },
   "permissions": [
     "history",
     "topSites"
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "search_engines.json"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
-    }
   ],
   "icons": {
     "128": "./assets/images/icon128.png"

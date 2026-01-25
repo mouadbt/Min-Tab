@@ -1,6 +1,6 @@
 {
   "name": "Min Tab",
-  "version": "2.2",
+  "version": "2.3",
   "manifest_version": 3,
   "description": "A custom new tab page with a minimalist black design.",
   "browser_specific_settings": {

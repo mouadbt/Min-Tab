@@ -1,6 +1,6 @@
 # Min Tab
 
-A minimalist Chrome extension that replaces your new tab page with a clean, dark interface focused on search functionality.
+A minimalist browser extension (Chrome + Firefox) that replaces your new tab page with a clean, dark interface focused on search functionality.
 
 ## Screenshots  
 
@@ -28,10 +28,20 @@ A minimalist Chrome extension that replaces your new tab page with a clean, dark
 
 ### From Source
 1. Clone or download this repository
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode" in the top right
-4. Click "Load unpacked" and select the extension folder
-5. The extension will automatically replace your new tab page
+
+#### Chrome / Chromium
+1. Open Chrome and navigate to `chrome://extensions/`
+2. Enable "Developer mode" (top right)
+3. Click "Load unpacked" and select the extension folder
+4. The extension will automatically replace your new tab page
+
+#### Firefox
+1. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
+2. Click "Load Temporary Add-on…"
+3. Select the repository's `manifest.json`
+4. Open a new tab to see the new tab page
+
+> Note: The temporary add-on install resets when you restart Firefox. If you want a persistent install, package/sign the extension or load it as a developer extension in a Firefox profile.
 
 ## Usage
 
@@ -65,7 +75,7 @@ A minimalist Chrome extension that replaces your new tab page with a clean, dark
 - **Version**: 2.0
 - **Permissions**: `history`, `topSites`
 - **Local Storage**: Preferences (active engine, visibility, focus-on-load, placeholder, settings button visibility, search engines visibility, search button visibility)
-- **Browser Support**: Chrome (Manifest V3 compatible)
+- **Browser Support**: Chrome / Chromium and Firefox
 
 ## File Structure
 
@@ -117,8 +127,8 @@ The extension uses CSS custom properties for easy theming. Key variables in `sty
 ## Privacy
 
 - No data is collected or transmitted to external servers
-- History suggestions are processed locally using Chrome's history API
-- Top sites are retrieved locally using Chrome's topSites API
+- History suggestions are processed locally using the browser's history API
+- Top sites are retrieved locally using the browser's topSites API
 - Search queries are sent directly to your chosen search engine
 - Favicons are loaded from Google's favicon service
 

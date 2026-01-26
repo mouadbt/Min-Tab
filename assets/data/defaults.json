@@ -75,6 +75,11 @@
       "label": "Hide search button",
       "active": false,
       "key": "hideSearchButton"
+    },
+    {
+      "label": "Hide search engine logo",
+      "active": false,
+      "key": "hideSearchLogo"
     }
   ]
 }

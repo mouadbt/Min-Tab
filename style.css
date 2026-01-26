@@ -162,6 +162,15 @@ button {
     color: var(--foreground50);
 }
 
+#searchIcon img{
+    width: var(--space-xs);
+    height: auto;
+}
+
+#searchIcon.hidden{
+    display: none;
+}
+
 /* --------------------------------------- search engines elements */
 #search-engines-list {
     display: flex;

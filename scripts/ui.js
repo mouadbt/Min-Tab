@@ -33,6 +33,7 @@ export const renderEngines = (engines) => {
 
     if (el.preferred) {
       liButtonEl.classList.add("active");
+      renderPreferedEngineIcon(el.key);
     }
 
     if (i != 0) {
@@ -45,6 +46,15 @@ export const renderEngines = (engines) => {
     searchEnginesList.appendChild(liEL);
   });
 };
+
+// Render icon of the active prefered search engine
+const renderPreferedEngineIcon = (key) => {
+  const iconEl = document.querySelector("#searchIcon");
+  const icon = document.createElement('img');
+  icon.src = `./assets/images/searchLogos/${key}.webp`;
+  iconEl.innerHTML = '';
+  iconEl.appendChild(icon);
+}
 
 // helper to create & append a single option
 const createOptionElement = (option, icons, container) => {

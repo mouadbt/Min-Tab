@@ -27,7 +27,7 @@ const showSuggestions = async (query, suggestionsList) => {
     const hasHistory = (isFirefox && typeof browser !== 'undefined' && browser.history) || (!isFirefox && typeof chrome !== 'undefined' && chrome.history);
 
     if (!hasTopSites || !hasHistory) {
-        suggestionsList.innerHTML = '<li><a><span>We have issue getting the suggestion from your browser</span ></a ></li > ';
+        suggestionsList.innerHTML = '<li><a class="suggestion-link"><span>We have issue getting the suggestion from your browser</span><span></span></a></li>';
         return;
     }
 

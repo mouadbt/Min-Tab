@@ -37,6 +37,11 @@ export const applySystemSetting = (key, isActive) => {
         .classList.toggle('disabled', isActive);
       break;
 
+    case 'hideSearchLogo':
+      document.querySelector('#searchIcon')
+        .classList.toggle('hidden', isActive);
+      break;
+
     default:
       // no-op
       break;

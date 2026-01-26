@@ -1,20 +1,13 @@
-import { saveData } from './utils.js';
+import { saveData, switchToLightMode, focusOnSearchInput } from './utils.js';
 import { renderEngines } from './ui.js';
 
-// Focus the cursor on the search input and override the browser's default behavior of focusing the address bar
-const focusOnSearchInputInsteadOfBrowserAddressBar = (inputEl) => {
-  inputEl.focus();
-  if (location.search !== "?focus") {
-    location.search = "?focus";
-    throw new Error("Redirecting to focus mode");
-  }
-};
+
 
 // apply the settings to the page and behavior
 export const applySystemSetting = (key, isActive) => {
   switch (key) {
     case 'focusOnLoad':
-      isActive && focusOnSearchInputInsteadOfBrowserAddressBar(document.querySelector("#search-input"));
+      isActive && focusOnSearchInput(document.querySelector("#search-input"));
       break;
 
     case 'showPlaceholder':
@@ -40,6 +33,10 @@ export const applySystemSetting = (key, isActive) => {
     case 'hideSearchLogo':
       document.querySelector('#searchIcon')
         .classList.toggle('hidden', isActive);
+      break;
+
+    case 'lightmode':
+      switchToLightMode(isActive);
       break;
 
     default:
@@ -105,7 +102,6 @@ export const handleEngineSettingChange = (key, isActive, engines) => {
         engine.preferred = true;
       }
     }
-
     saveData('searchEngines', engines);
     renderEngines(engines);
   }

@@ -24,3 +24,31 @@ export const loadData = (key, defaults) => {
 export const saveData = (key, value) => {
     localStorage.setItem(key, JSON.stringify(value));
 };
+
+// Toggles CSS theme variables between light and dark mode based on isactive
+export const switchToLightMode = (isactive) => {
+    const root = document.documentElement;
+
+    if (isactive) {
+        // Light mode
+        root.style.setProperty('--background', '#ffffff');
+        root.style.setProperty('--foreground', 'hsl(0, 0%, 10%)');
+        root.style.setProperty('--foreground50', 'hsl(0, 0%, 50%)');
+        root.style.setProperty('--foreground75', 'hsl(0, 0%, 85%)');
+    } else {
+        // Dark mode
+        root.style.setProperty('--background', '#000000');
+        root.style.setProperty('--foreground', 'hsl(0, 0%, 80%)');
+        root.style.setProperty('--foreground50', 'hsl(0, 0%, 25%)');
+        root.style.setProperty('--foreground75', 'hsl(0, 0%, 5%)');
+    }
+};
+
+// Focus the cursor on the search input and override the browser's default behavior of focusing the address bar
+export const focusOnSearchInput = (inputEl) => {
+    inputEl.focus();
+    if (location.search !== "?focus") {
+        location.search = "?focus";
+        throw new Error("Redirecting to focus mode");
+    }
+};

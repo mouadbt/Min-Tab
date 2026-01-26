@@ -1,6 +1,6 @@
 :root {
     /* Colors */
-    --background: #000000;
+    --background: hsl(0, 0%, 0%);
     --foreground: hsl(0, 0%, 80%);
     --foreground50: hsl(0, 0%, 25%);
     --foreground75: hsl(0, 0%, 5%);
@@ -61,7 +61,6 @@ body {
 /* --------------------------------------- genral elements */
 button {
     background: transparent;
-    /* outline: none; */
     border: none;
 }
 
@@ -162,13 +161,9 @@ button {
     color: var(--foreground50);
 }
 
-#searchIcon img{
+#searchIcon img {
     width: var(--space-xs);
     height: auto;
-}
-
-#searchIcon.hidden{
-    display: none;
 }
 
 /* --------------------------------------- search engines elements */
@@ -184,6 +179,7 @@ button {
     overflow-x: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    padding-left: var(--space-4xs);
 }
 
 #search-engines-list ::-webkit-scrollbar {
@@ -199,8 +195,8 @@ button {
     padding-block: var(--space-4xs);
     border-radius: 50px;
     font-size: var(--font-size-base);
-    /* border: solid transparent 1px; */
     color: var(--foreground50);
+    line-height: 1;
 }
 
 #search-engines-list li button.active {
@@ -213,8 +209,6 @@ button {
 }
 
 #search-engines-list li button:focus {
-    /* outline: 1px var(--foreground) solid; */
-    /* border: solid var(--foreground) 1px; */
     color: var(--foreground);
 }
 
@@ -328,16 +322,21 @@ button {
     stroke-width: 1.5;
 }
 
+#settings-panel .check svg polyline,
+#settings-panel .check svg path {
+    fill: var(--background);
+}
+
 #settings-panel .check svg path {
     stroke-dasharray: 60;
-    transition: all 0.3s linear;
+    transition: stroke-dashoffset 0.3s linear;
     transition-delay: 0.2s;
 }
 
 #settings-panel .check svg polyline {
     stroke-dasharray: 22;
     stroke-dashoffset: 66;
-    transition: all 0.2s linear;
+    transition: stroke-dashoffset 0.2s linear;
 }
 
 #settings-panel input:checked+label .check svg path {

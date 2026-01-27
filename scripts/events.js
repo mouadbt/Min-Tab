@@ -8,6 +8,8 @@ export const setupGlobalListeners = (engines, settings) => {
     const settingsBtn = document.querySelector("#settings-btn");
     const searchBtn = document.querySelector("#search-btn");
     const searchInput = document.querySelector("#search-input");
+    const scrollContainer = document.getElementById("search-engines-list");
+
     document.addEventListener('keydown', (e) => {
 
         // Close settings panel
@@ -102,4 +104,8 @@ export const setupGlobalListeners = (engines, settings) => {
         link.classList.add("loading"); // show loading icon
     });
 
+    scrollContainer.addEventListener("wheel", (evt) => {
+        evt.preventDefault();
+        scrollContainer.scrollLeft += evt.deltaY;
+    });
 };

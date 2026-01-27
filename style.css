@@ -176,10 +176,14 @@ button {
     padding: var(--space-xxs);
     padding-left: 0;
     max-width: 456px;
-    overflow-x: scroll;
+    overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding-left: var(--space-4xs);
+}
+
+#search-engines-list>* {
+    flex-shrink: 0;
 }
 
 #search-engines-list ::-webkit-scrollbar {

@@ -52,6 +52,7 @@ const renderPreferedEngineIcon = (key) => {
   const iconEl = document.querySelector("#searchIcon");
   const icon = document.createElement('img');
   icon.src = `./assets/images/searchLogos/${key}.webp`;
+  icon.alt = `${key}'s logo`;
   iconEl.innerHTML = '';
   iconEl.appendChild(icon);
 }

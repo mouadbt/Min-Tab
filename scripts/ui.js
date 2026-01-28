@@ -111,15 +111,15 @@ const updateSettingsButtonAccessibility = (settingsBtn) => {
 };
 
 // Settings panel helper functions
-export const closeSettingsPanel = (settingsBtnpanel, settingsBtn) => {
-  settingsBtnpanel.classList.add("hidden");
+export const closeSettingsPanel = (settingspanel, settingsBtn) => {
+  settingspanel.classList.add("hidden");
   settingsBtn.classList.remove("disabled");
   updateSettingsButtonAccessibility(settingsBtn);
 };
 
 // Toggle settings panel
-export const toggleSettings = (settingsBtnpanel, settingsBtn) => {
-  settingsBtnpanel.classList.toggle("hidden");
+export const toggleSettings = (settingspanel, settingsBtn) => {
+  settingspanel.classList.toggle("hidden");
   settingsBtn.classList.toggle("disabled");
   updateSettingsButtonAccessibility(settingsBtn);
 };

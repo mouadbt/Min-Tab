@@ -4,7 +4,7 @@ import { navigateBetweenSuggestions } from './keyboardNavigation.js';
 import { performSearch } from './search.js';
 export const setupGlobalListeners = (engines, settings) => {
 
-    const settingsBtnpanel = document.querySelector("#settings-panel");
+    const settingspanel = document.querySelector("#settings-panel");
     const settingsBtn = document.querySelector("#settings-btn");
     const searchBtn = document.querySelector("#search-btn");
     const searchInput = document.querySelector("#search-input");
@@ -14,13 +14,13 @@ export const setupGlobalListeners = (engines, settings) => {
 
         // Close settings panel
         if (e.key === 'Escape') {
-            closeSettingsPanel(settingsBtnpanel, settingsBtn);
+            closeSettingsPanel(settingspanel, settingsBtn);
         };
 
         // Toggle settings panel
         if (e.altKey && e.key.toLowerCase() === 's') {
             e.preventDefault();
-            toggleSettings(settingsBtnpanel, settingsBtn);
+            toggleSettings(settingspanel, settingsBtn);
         };
 
         // Focus on the search input 
@@ -50,13 +50,13 @@ export const setupGlobalListeners = (engines, settings) => {
 
     // Open settings panel
     settingsBtn.addEventListener('click', () => {
-        toggleSettings(settingsBtnpanel, settingsBtn)
+        toggleSettings(settingspanel, settingsBtn)
     });
 
     // Close settings panel when clicking outside
     document.addEventListener('click', (e) => {
-        if (!settingsBtnpanel.contains(e.target) && !settingsBtn.contains(e.target) && !settingsBtnpanel.classList.contains("hidden")) {
-            closeSettingsPanel(settingsBtnpanel, settingsBtn);
+        if (!settingspanel.contains(e.target) && !settingsBtn.contains(e.target) && !settingspanel.classList.contains("hidden")) {
+            closeSettingsPanel(settingspanel, settingsBtn);
         }
     });
 

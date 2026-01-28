@@ -104,6 +104,7 @@ export const setupGlobalListeners = (engines, settings) => {
         link.classList.add("loading"); // show loading icon
     });
 
+    // make user able to scroll horizontally throw the search egnines by moving the cursor wheel
     scrollContainer.addEventListener("wheel", (evt) => {
         evt.preventDefault();
         scrollContainer.scrollLeft += evt.deltaY;

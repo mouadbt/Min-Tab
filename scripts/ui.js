@@ -55,7 +55,7 @@ const renderPreferedEngineIcon = (key) => {
   icon.alt = `${key}'s logo`;
   iconEl.innerHTML = '';
   iconEl.appendChild(icon);
-}
+};
 
 // helper to create & append a single option
 const createOptionElement = (option, icons, container) => {

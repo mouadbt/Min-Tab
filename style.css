@@ -190,7 +190,8 @@ button {
     display: none;
 }
 
-#search-engines-list.hidden {
+#search-engines-list.hidden,
+#searchIcon.hidden {
     display: none !important;
 }
 

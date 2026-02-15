@@ -23,15 +23,15 @@ function isValidUrl(str) {
 
     try {
         new URL(str);
-        return { isItUrl: true, queryFromFunction: str };
+        return { isItUrl: true, queryFromFunction: str }
     } catch {
         // Check again if new URL method failed using a simpler regex for common domain patterns
         const domainRegex = /^(?:[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?::[0-9]{1,5})?(?:\/.*)?$/;
 
         if (domainRegex.test(str)) {
-            return { isItUrl: true, queryFromFunction: 'https://' + str };
+            return { isItUrl: true, queryFromFunction: 'https://' + str }
 
         }
-        return { isItUrl: false, queryFromFunction: null };
+        return { isItUrl: false, queryFromFunction: null }
     }
 }

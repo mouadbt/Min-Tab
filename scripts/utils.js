@@ -8,7 +8,7 @@ export const fetchResources = async (key) => {
         console.error(err);
         return null;
     }
-};
+}
 
 // Get the defaults data from the localstorage or the default
 export const loadData = (key, defaults) => {
@@ -18,12 +18,12 @@ export const loadData = (key, defaults) => {
     } catch {
         return defaults;
     }
-};
+}
 
 // Store updated data in localstorage
 export const saveData = (key, value) => {
     localStorage.setItem(key, JSON.stringify(value));
-};
+}
 
 // Toggles CSS theme variables between light and dark mode based on isactive
 export const switchToLightMode = (isactive) => {
@@ -42,7 +42,7 @@ export const switchToLightMode = (isactive) => {
         root.style.setProperty('--foreground50', 'hsl(0, 0%, 25%)');
         root.style.setProperty('--foreground75', 'hsl(0, 0%, 5%)');
     }
-};
+}
 
 // Focus the cursor on the search input and override the browser's default behavior of focusing the address bar
 export const focusOnSearchInput = (inputEl) => {
@@ -51,4 +51,4 @@ export const focusOnSearchInput = (inputEl) => {
         location.search = "?focus";
         throw new Error("Redirecting to focus mode");
     }
-};
+}

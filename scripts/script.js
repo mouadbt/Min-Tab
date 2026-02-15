@@ -34,7 +34,7 @@ const init = async () => {
 
   // Initialize searching logic
   initLogic();
-};
+}
 
 // load and execute and start script after page fully load
 document.addEventListener("DOMContentLoaded", () => {

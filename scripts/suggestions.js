@@ -17,7 +17,7 @@ export const initLogic = () => {
         }
         showSuggestions(query, suggestionsList);
     });
-};
+}
 
 const showSuggestions = async (query, suggestionsList) => {
 
@@ -62,7 +62,7 @@ const showSuggestions = async (query, suggestionsList) => {
 
     // Display the suggestions.
     renderSuggestionItems(combined.slice(0, 6), suggestionsList);
-};
+}
 
 // show the suggestions in the suggestions list when user start typing
 const renderSuggestionItems = async (items, suggestionsList) => {
@@ -75,7 +75,7 @@ const renderSuggestionItems = async (items, suggestionsList) => {
 
     // start rendering the suggestions
     items.forEach(item => suggestionsList.append(buildSuggestionItem(item, loadingSvgContent)));
-};
+}
 
 // Get top sites from Firefox
 const getTopSitesFirefox = async () => {
@@ -86,14 +86,14 @@ const getTopSitesFirefox = async () => {
             error);
         return [];
     }
-};
+}
 
 // Get top sites from Chrome
 const getTopSitesChrome = (callback) => {
     chrome.topSites.get((topSites) => {
         callback(topSites || []);
     });
-};
+}
 
 // Search history in Firefox (uses Promises) 
 const searchHistoryFirefox = async (options) => {
@@ -103,20 +103,20 @@ const searchHistoryFirefox = async (options) => {
         console.error('Error searching history in Firefox:', error);
         return [];
     }
-};
+}
 
 // Search history in Chrome
 const searchHistoryChrome = (options, callback) => {
     chrome.history.search(options, (historyItems) => {
         callback(historyItems || []);
     });
-};
+}
 
 // get loading svg from the json file
 const getLoadingSvgContent = async () => {
     const svgIcons = await fetchResources('icons');
     return svgIcons["loading"].content;
-};
+}
 
 // Build the actual suggestion item
 const buildSuggestionItem = (item, loadingSvgContent) => {
@@ -144,14 +144,14 @@ const buildSuggestionItem = (item, loadingSvgContent) => {
     buildTheSvgIcon(loadingSvgContent, link, true);
     suggestionItem.append(link);
     return suggestionItem;
-};
+}
 
 // Get the Icon of the website to show it in the suggested website
 const getFaviconUrl = (origin) => {
     return `https://www.google.com/s2/favicons?sz=32&domain_url=${origin}`;
-};
+}
 
 // remove the suggestions from the suggestions list
 const clearSuggestions = (suggestionsList) => {
     suggestionsList.innerHTML = '';
-};
+}

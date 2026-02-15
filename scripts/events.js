@@ -15,30 +15,30 @@ export const setupGlobalListeners = (engines, settings) => {
         // Close settings panel
         if (e.key === 'Escape') {
             closeSettingsPanel(settingspanel, settingsBtn);
-        };
+        }
 
         // Toggle settings panel
         if (e.altKey && e.key.toLowerCase() === 's') {
             e.preventDefault();
             toggleSettings(settingspanel, settingsBtn);
-        };
+        }
 
         // Focus on the search input 
         if (e.key === '/' && document.activeElement.id !== "search-input") {
             e.preventDefault();
             searchInput.focus();
-        };
+        }
 
         // navigate between search suggestions using keyboard
         if (e.key === "ArrowDown" || e.key === "ArrowUp") {
             navigateBetweenSuggestions(e, searchInput, suggestionsList, searchBtn);
-        };
+        }
 
         // perform search
         if (e.key === 'Enter' && e.target === searchInput) {
             const query = e.target.value.trim().toLowerCase();
             performSearch(query, engines);
-        };
+        }
 
     });
 
@@ -65,7 +65,7 @@ export const setupGlobalListeners = (engines, settings) => {
         const btn = e.target.closest('button');
         if (btn) {
             handleEngineSelect(btn.dataset.key, engines)
-        };
+        }
     });
 
     // ------ handle changes in settings panel and search engines
@@ -109,4 +109,4 @@ export const setupGlobalListeners = (engines, settings) => {
         evt.preventDefault();
         scrollContainer.scrollLeft += evt.deltaY;
     });
-};
+}

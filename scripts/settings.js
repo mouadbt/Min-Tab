@@ -43,12 +43,12 @@ export const applySystemSetting = (key, isActive) => {
       // no-op
       break;
   }
-};
+}
 
 // Apply the settings to the page on load and on settings change
 export const applyAllSettings = (settings) => {
   settings.forEach(s => applySystemSetting(s.key, s.active));
-};
+}
 
 // Update the search engines list to set the selected engine as preferred and ensure it's active
 export const handleEngineSelect = (key, engines) => {
@@ -69,7 +69,7 @@ export const handleEngineSelect = (key, engines) => {
 
   saveData('searchEngines', updated);
   renderEngines(updated);
-};
+}
 
 // update the new settings applied by user in the localstorage and in the page 
 export const handleSettingChange = (key, isActive, settings) => {
@@ -79,7 +79,7 @@ export const handleSettingChange = (key, isActive, settings) => {
     saveData('settingsOptions', settings);
     applySystemSetting(key, isActive);
   }
-};
+}
 
 // update the new search engine settings applied by user in the localstorage and in the page
 export const handleEngineSettingChange = (key, isActive, engines) => {
@@ -105,4 +105,4 @@ export const handleEngineSettingChange = (key, isActive, engines) => {
     saveData('searchEngines', engines);
     renderEngines(engines);
   }
-};
+}

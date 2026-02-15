@@ -8,7 +8,7 @@ export const buildTheSvgIcon = (svgIconContent, btn, withDimensions) => {
   }
   svg.innerHTML += svgIconContent;
   btn.appendChild(svg);
-};
+}
 
 // Render the icons in the relevant button
 export const renderIcons = (icons) => {
@@ -17,7 +17,7 @@ export const renderIcons = (icons) => {
     btn.innerHTML = '';
     buildTheSvgIcon(svgIconContent, btn);
   });
-};
+}
 
 // Render the search engines in the page
 export const renderEngines = (engines) => {
@@ -45,7 +45,7 @@ export const renderEngines = (engines) => {
 
     searchEnginesList.appendChild(liEL);
   });
-};
+}
 
 // Render icon of the active prefered search engine
 const renderPreferedEngineIcon = (key) => {
@@ -55,7 +55,7 @@ const renderPreferedEngineIcon = (key) => {
   icon.alt = `${key}'s logo`;
   iconEl.innerHTML = '';
   iconEl.appendChild(icon);
-};
+}
 
 // helper to create & append a single option
 const createOptionElement = (option, icons, container) => {
@@ -88,7 +88,7 @@ const createOptionElement = (option, icons, container) => {
   liEl.appendChild(labelEl);
 
   container.appendChild(liEl);
-};
+}
 
 // render the settings options & search engines in the settings panel
 export const renderSettings = (settings, engines, icons) => {
@@ -100,7 +100,7 @@ export const renderSettings = (settings, engines, icons) => {
 
   // render search engines
   engines.forEach(option => createOptionElement(option, icons, enginesContainer));
-};
+}
 
 // Disable settings button completely
 const updateSettingsButtonAccessibility = (settingsBtn) => {
@@ -109,18 +109,18 @@ const updateSettingsButtonAccessibility = (settingsBtn) => {
   } else {
     settingsBtn.removeAttribute("tabindex");
   }
-};
+}
 
 // Settings panel helper functions
 export const closeSettingsPanel = (settingspanel, settingsBtn) => {
   settingspanel.classList.add("hidden");
   settingsBtn.classList.remove("disabled");
   updateSettingsButtonAccessibility(settingsBtn);
-};
+}
 
 // Toggle settings panel
 export const toggleSettings = (settingspanel, settingsBtn) => {
   settingspanel.classList.toggle("hidden");
   settingsBtn.classList.toggle("disabled");
   updateSettingsButtonAccessibility(settingsBtn);
-};
+}

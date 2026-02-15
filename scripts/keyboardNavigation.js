@@ -12,7 +12,7 @@ export const navigateBetweenSuggestions = (e, searchInput, suggestionsList, sear
     }
     else {
         activeIndex = suggestionItems.indexOf(e.target);
-    };
+    }
 
     // Compute next index
     let nextIndex = activeIndex + direction;
@@ -30,7 +30,7 @@ export const navigateBetweenSuggestions = (e, searchInput, suggestionsList, sear
         suggestionItems[nextIndex].focus();
         activeIndex = nextIndex;
     }
-};
+}
 
 const focusOnInput = (input) => {
     input.focus();

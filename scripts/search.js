@@ -10,10 +10,11 @@ export function performSearch(query) {
         window.location.href = queryFromFunction;
         return;
     }
-
-    const engine = engines.find(el => el.preferred);
-    const engineURL = engine?.preferred ? engine?.url : 'https://www.startpage.com/sp/search?q=';
-
+    let engineURL = 'https://www.startpage.com/sp/search?q=';
+    if (engines) {
+        const engine = engines.find(el => el.preferred);
+        engineURL = engine.url;
+    }
     const url = `${engineURL}${encodeURIComponent(query)}`;
     window.location.href = url;
 }

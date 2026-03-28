@@ -1,5 +1,11 @@
 # Min Tab
 
+![Version](https://img.shields.io/badge/version-2.0-blue)
+![Chrome](https://img.shields.io/badge/Chrome-supported-brightgreen?logo=googlechrome)
+![Firefox](https://img.shields.io/badge/Firefox-supported-brightgreen?logo=firefox)
+![License](https://img.shields.io/badge/license-open%20source-green)
+![No Tracking](https://img.shields.io/badge/tracking-none-lightgrey)
+
 A minimalist browser extension (Chrome + Firefox) that replaces your new tab page with a clean interface focused on search functionality.
 
 ## Screenshots  

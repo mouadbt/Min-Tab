@@ -1,10 +1,12 @@
 # Min Tab
 
-A minimalist browser extension (Chrome + Firefox) that replaces your new tab page with a clean, dark interface focused on search functionality.
+A minimalist browser extension (Chrome + Firefox) that replaces your new tab page with a clean interface focused on search functionality.
 
 ## Screenshots  
 
 ![Min Tab Extension](./assets/screenshots/image.png)
+
+![Light Mode](./assets/screenshots/light-mode.png)
 
 ![suggestions](./assets/screenshots/suggestions-1.png)
 
@@ -14,7 +16,7 @@ A minimalist browser extension (Chrome + Firefox) that replaces your new tab pag
 
 ## Features
 
-- **Clean Design**: Minimalist black interface with subtle animations
+- **Clean Design**: Minimalist interface
 - **Multi-Search Engine Support**: Startpage, Google, DuckDuckGo, Perplexity, Mistral, and Gemini
 - **Configurable Engines**: Show/hide engines and remember your choices
 - **Smart Suggestions**: Top Sites + History suggestions with favicons (up to 6 results)
@@ -112,17 +114,6 @@ The Settings panel (gear icon or press `Alt+S`) lets you:
 - **Hide search engines list**: Hide the search engine selector buttons
 - **Hide search button**: Disable the search button (Enter key still works)
 - **Show/hide engines**: Choose which engines appear in the navbar
-
-## Customization
-
-The extension uses CSS custom properties for easy theming. Key variables in `style.css`:
-
-```css
---color-bg: #000000;           /* Background color */
---color-text: #cccccc;         /* Primary text color */
---color-text-secondary: #555555; /* Secondary text color */
---color-underline: #bbbbbb;    /* Accent color */
-```
 
 ## Privacy
 

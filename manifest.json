@@ -2,7 +2,7 @@
   "name": "Min Tab",
   "version": "2.4",
   "manifest_version": 3,
-  "description": "A custom new tab page with a minimalist black design.",
+  "description": "A minimalist new tab page with multi-engine search, smart suggestions from history, keyboard navigation, and light/dark theme support.",
   "browser_specific_settings": {
     "gecko": {
       "id": "min-tab@extension.local",

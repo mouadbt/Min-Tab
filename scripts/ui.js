@@ -1,4 +1,4 @@
-// Embed the svg icon to the page  
+// Embed the svg icon to the page
 export const buildTheSvgIcon = (svgIconContent, btn, withDimensions) => {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "0 0 24 24");
@@ -6,7 +6,13 @@ export const buildTheSvgIcon = (svgIconContent, btn, withDimensions) => {
     svg.setAttribute("width", "20px");
     svg.setAttribute("height", "20px");
   }
-  svg.innerHTML += svgIconContent;
+  const wrappedContent = `<svg xmlns="http://www.w3.org/2000/svg">${svgIconContent}</svg>`;
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(wrappedContent, "image/svg+xml");
+  const imported = document.importNode(doc.documentElement, true);
+  while (imported.firstChild) {
+    svg.appendChild(imported.firstChild);
+  }
   btn.appendChild(svg);
 }
 

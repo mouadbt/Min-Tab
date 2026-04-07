@@ -8,9 +8,23 @@
 
 A minimalist browser extension (Chrome + Firefox) that replaces your new tab page with a clean interface focused on search functionality.
 
+![Min Tab Extension](./assets/screenshots/screenshot.png)
+
+## Table of Contents
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Technical Details](#technical-details)
+- [File Structure](#file-structure)
+- [Settings](#settings)
+- [Privacy](#privacy)
+- [License](#license)
+- [Contributing](#contributing)
+
 ## Screenshots  
 
-![Min Tab Extension](./assets/screenshots/image.png)
+![screenshot](./assets/screenshots/image.png)
 
 ![Light Mode](./assets/screenshots/light-mode.png)
 

@@ -1,12 +1,13 @@
 # Min Tab
 
-![Version](https://img.shields.io/badge/version-2.0-blue)
+![Version](https://img.shields.io/badge/version-2.4-blue)
 ![Chrome](https://img.shields.io/badge/Chrome-supported-brightgreen?logo=googlechrome)
-![Firefox](https://img.shields.io/badge/Firefox-supported-brightgreen?logo=firefox)
+[![Mozilla Add-on](https://img.shields.io/badge/Firefox_Add--on-Install-orange?logo=firefox)](https://addons.mozilla.org/addon/min-tab/)
 ![License](https://img.shields.io/badge/license-open%20source-green)
 ![No Tracking](https://img.shields.io/badge/tracking-none-lightgrey)
 
 A minimalist browser extension (Chrome + Firefox) that replaces your new tab page with a clean interface focused on search functionality.
+**🎉 Now available on [Mozilla Add-ons](https://addons.mozilla.org/addon/min-tab/)!**
 
 ![Min Tab Extension](./assets/screenshots/screenshot.png)
 
@@ -48,22 +49,30 @@ A minimalist browser extension (Chrome + Firefox) that replaces your new tab pag
 
 ## Installation
 
-### From Source
-1. Clone or download this repository
+### Firefox
 
-#### Chrome / Chromium
-1. Open Chrome and navigate to `chrome://extensions/`
-2. Enable "Developer mode" (top right)
-3. Click "Load unpacked" and select the extension folder
-4. The extension will automatically replace your new tab page
-
-#### Firefox
-1. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
-2. Click "Load Temporary Add-on…"
-3. Select the repository's `manifest.json`
+#### From Mozilla Add-ons (Recommended)
+1. Visit[Min Tab on Mozilla Add-ons](https://addons.mozilla.org/addon/min-tab/)
+2. Click "Add to Firefox"
+3. Confirm the installation prompt
 4. Open a new tab to see the new tab page
 
-> Note: The temporary add-on install resets when you restart Firefox. If you want a persistent install, package/sign the extension or load it as a developer extension in a Firefox profile.
+#### From Source (Developer Mode)
+1. Clone or download this repository
+2. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
+3. Click "Load Temporary Add-on…"
+4. Select the repository's `manifest.json`
+5. Open a new tab to see the new tab page
+
+> Note: The temporary add-on install resets when you restart Firefox. If you want a persistent install, use the[Mozilla Add-ons link](https://addons.mozilla.org/addon/min-tab/) above.
+
+### Chrome / Chromium
+
+1. Clone or download this repository
+2. Open Chrome and navigate to `chrome://extensions/`
+3. Enable "Developer mode" (top right)
+4. Click "Load unpacked" and select the extension folder
+5. The extension will automatically replace your new tab page
 
 ## Usage
 
@@ -94,7 +103,7 @@ A minimalist browser extension (Chrome + Firefox) that replaces your new tab pag
 ## Technical Details
 
 - **Manifest Version**: 3
-- **Version**: 2.0
+- **Version**: 2.4
 - **Permissions**: `history`, `topSites`
 - **Local Storage**: Preferences (active engine, visibility, focus-on-load, placeholder, settings button visibility, search engines visibility, search button visibility)
 - **Browser Support**: Chrome / Chromium and Firefox

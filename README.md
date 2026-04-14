@@ -52,7 +52,7 @@ A minimalist browser extension (Chrome + Firefox) that replaces your new tab pag
 ### Firefox
 
 #### From Mozilla Add-ons (Recommended)
-1. Visit[Min Tab on Mozilla Add-ons](https://addons.mozilla.org/addon/min-tab/)
+1. Visit [Min Tab on Mozilla Add-ons](https://addons.mozilla.org/addon/min-tab/)
 2. Click "Add to Firefox"
 3. Confirm the installation prompt
 4. Open a new tab to see the new tab page

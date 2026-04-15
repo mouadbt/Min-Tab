@@ -39,6 +39,10 @@ export const applySystemSetting = (key, isActive) => {
       switchToLightMode(isActive);
       break;
 
+    case 'useBrowserTheme':
+      // useBrowserTheme(isActive);
+      break;
+
     default:
       // no-op
       break;

@@ -64,7 +64,7 @@ button {
     border: none;
 }
 
-button:focus {
+button:focus-visible {
     outline: 1px solid;
 }
 

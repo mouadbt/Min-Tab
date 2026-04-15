@@ -85,6 +85,11 @@
       "label": "switch to light mode",
       "active": false,
       "key": "lightmode"
+    },
+    {
+      "label": "Use browser theme",
+      "active": false,
+      "key": "useBrowserTheme"
     }
   ]
 }

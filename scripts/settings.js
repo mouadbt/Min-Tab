@@ -1,5 +1,6 @@
-import { saveData, switchToLightMode, focusOnSearchInput } from './utils.js';
+import { saveData, focusOnSearchInput } from './utils.js';
 import { renderEngines } from './ui.js';
+import { changeTheme } from './theme.js';
 
 
 
@@ -36,11 +37,11 @@ export const applySystemSetting = (key, isActive) => {
       break;
 
     case 'lightmode':
-      switchToLightMode(isActive);
+      isActive ? changeTheme('light') : changeTheme('dark');
       break;
 
     case 'useBrowserTheme':
-      // useBrowserTheme(isActive);
+      isActive ? changeTheme('browser') : changeTheme('dark');
       break;
 
     default:
@@ -80,6 +81,27 @@ export const handleSettingChange = (key, isActive, settings) => {
   const option = settings.find(s => s.key === key);
   if (option) {
     option.active = isActive;
+
+    // Connect lightmode and useBrowserTheme
+    if (key === 'lightmode') {
+
+      // If we toggle light mode option then we need to disable the dynamic browser theme option and make it false + update ui 
+      const browserThemeOption = settings.find(s => s.key === 'useBrowserTheme');
+      if (browserThemeOption) {
+        browserThemeOption.active = false;
+        const browserThemeInput = document.getElementById('useBrowserTheme');
+        if (browserThemeInput) browserThemeInput.checked = false;
+      }
+      // Same logic of toggling light mode option applies to useBrowserTheme option 
+    } else if (key === 'useBrowserTheme') {
+      const lightmodeOption = settings.find(s => s.key === 'lightmode');
+      if (lightmodeOption) {
+        lightmodeOption.active = false;
+        const lightmodeInput = document.getElementById('lightmode');
+        if (lightmodeInput) lightmodeInput.checked = false;
+      }
+    }
+
     saveData('settingsOptions', settings);
     applySystemSetting(key, isActive);
   }

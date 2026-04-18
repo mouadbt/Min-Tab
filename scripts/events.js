@@ -64,7 +64,8 @@ export const setupGlobalListeners = (engines, settings) => {
     document.querySelector("#search-engines-list").addEventListener('click', (e) => {
         const btn = e.target.closest('button');
         if (btn) {
-            handleEngineSelect(btn.dataset.key, engines)
+            handleEngineSelect(btn.dataset.key, engines);
+            searchInput.focus();
         }
     });
 

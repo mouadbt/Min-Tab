@@ -37,15 +37,17 @@ A minimalist browser extension (Chrome + Firefox) that replaces your new tab pag
 
 ## Features
 
-- **Clean Design**: Minimalist interface
-- **Multi-Search Engine Support**: Startpage, Google, DuckDuckGo, Perplexity, Mistral, and Gemini
-- **Configurable Engines**: Show/hide engines and remember your choices
-- **Smart Suggestions**: Top Sites + History suggestions with favicons (up to 6 results)
-- **URL Detection**: Automatically navigate to URLs when entered directly
-- **Keyboard Navigation & Shortcuts**: Arrows to navigate, `/` to focus input, `Alt+S` to toggle settings, `Esc` to close
-- **Focus Management**: Optional auto-focus on load
-- **Loading Indicators**: Visual feedback when navigating to suggestions
-- **Accessibility**: Screen reader friendly with proper ARIA labels
+- **Clean Design**: Minimalist terminal-like interface using `Courier New` font.
+- **Multi-Search Engine Support**: Startpage, Google, DuckDuckGo, Brave, Bing, Perplexity, Mistral, Gemini, and ChatGPT.
+- **Configurable Engines**: Show/hide engines and remember your choices.
+- **Smart Suggestions**: Combined Top Sites + History suggestions with favicons (up to 6 results).
+- **URL Detection**: Automatically navigate to URLs when entered directly (e.g., `github.com` redirects to `https://github.com`).
+- **Keyboard Navigation & Shortcuts**: Arrows to navigate, `/` to focus input, `Alt+S` to toggle settings, `Esc` to close it.
+- **Auto-Focus Logic**: Optional focus on load and automatic focus on the search input when switching engines.
+- **Theme Support**: Dark mode (default), Light mode, and Browser Theme integration (Firefox only).
+- **Loading Indicators**: Visual feedback when navigating to suggestions.
+- **Horizontal Engine Scrolling**: Use the mouse wheel to scroll through the search engine list.
+- **Accessibility**: Screen reader friendly with proper ARIA labels.
 
 ## Installation
 
@@ -64,7 +66,7 @@ A minimalist browser extension (Chrome + Firefox) that replaces your new tab pag
 4. Select the repository's `manifest.json`
 5. Open a new tab to see the new tab page
 
-> Note: The temporary add-on install resets when you restart Firefox. If you want a persistent install, use the[Mozilla Add-ons link](https://addons.mozilla.org/addon/min-tab/) above.
+> Note: The temporary add-on install resets when you restart Firefox. If you want a persistent install, use the [Mozilla Add-ons link](https://addons.mozilla.org/addon/min-tab/) above.
 
 ### Chrome / Chromium
 
@@ -77,36 +79,39 @@ A minimalist browser extension (Chrome + Firefox) that replaces your new tab pag
 ## Usage
 
 ### Search
-- Type your query in the search box
-- Press Enter or click the search icon to search
-- Enter a URL directly to navigate to it (e.g., `github.com` or `https://example.com`)
-- Use arrow keys to navigate through history suggestions
+- Type your query in the search box.
+- Press **Enter** or click the search icon to search.
+- Enter a URL directly to navigate to it (e.g., `github.com`).
+- Use **arrow keys** to navigate through history and top sites suggestions.
 
 ### Search Engines
-- Click on any search engine button to switch engines
-- The active engine is highlighted
-- Use Settings to show/hide which engines appear in the navbar
-- Available engines: Startpage (default), Google, DuckDuckGo, Perplexity, Mistral, and Gemini
+- Click on any search engine button to switch engines.
+- The active engine is highlighted, and the search input is automatically focused.
+- Use the **mouse wheel** to scroll horizontally through the engine list if it exceeds the container width.
+- Available engines: Startpage (default), Google, DuckDuckGo, Brave, Bing, Perplexity, Mistral, Gemini, and ChatGPT.
 
-> Note: `Mistral` and `Gemini` are included but hidden by default. Enable them from Settings → "Show/hide engines".
+> Note: `Brave`, `Bing`, `Mistral`, `Gemini`, and `ChatGPT` are included but some may be hidden by default. Enable them from Settings → "Show/hide engines".
 
-> Gemini integration uses **Google AI Mode** and requires that you are signed in with a **Google (Gmail) account** in your browser. The extension redirects you to the Google AI interface; if you are not signed in or not eligible, Google will not return a response and you will instead see the message: `"Something went wrong and an AI response wasn't generated."`
+> Gemini integration uses **Google AI Mode** and requires that you are signed in with a **Google (Gmail) account** in your browser.
 
 ### Keyboard Shortcuts
-- `/` - Focus the search input from anywhere
-- `Alt+S` - Toggle the Settings panel
-- `Esc` - Close the Settings panel
-- `↓` - Navigate down through suggestions
-- `↑` - Navigate up through suggestions or return to search box
-- `Enter` - Perform search or select suggestion
+- `/` - Focus the search input from anywhere.
+- `Alt+S` - Toggle the Settings panel.
+- `Esc` - Close the Settings panel.
+- `↓` - Navigate down through suggestions.
+- `↑` - Navigate up through suggestions or return to search box.
+- `Enter` - Perform search or select suggestion.
 
 ## Technical Details
 
 - **Manifest Version**: 3
 - **Version**: 2.4
 - **Permissions**: `history`, `topSites`
-- **Local Storage**: Preferences (active engine, visibility, focus-on-load, placeholder, settings button visibility, search engines visibility, search button visibility)
-- **Browser Support**: Chrome / Chromium and Firefox
+- **Logic**:
+    - **URL Detection**: Uses regex to identify domain patterns and prepends `https://`.
+    - **Suggestions**: Merges browser Top Sites and History matches, limited to 6 results.
+    - **Theme Handling**: Dynamic CSS variable overrides for Light/Dark/Browser themes.
+- **Browser Support**: Chrome / Chromium and Firefox (Advanced theme support on Firefox).
 
 ## File Structure
 
@@ -135,22 +140,25 @@ A minimalist browser extension (Chrome + Firefox) that replaces your new tab pag
 
 ## Settings
 
-The Settings panel (gear icon or press `Alt+S`) lets you:
+The Settings panel (press `Alt+S` or hover bottom-right to reveal gear icon) lets you:
 
-- **Focus search bar on new tab**: Enable/disable auto-focus on load
-- **Hide search placeholder**: Show a clean input without placeholder text
-- **Hide settings button**: Hide the gear icon (can still access via `Alt+S`)
-- **Hide search engines list**: Hide the search engine selector buttons
-- **Hide search button**: Disable the search button (Enter key still works)
-- **Show/hide engines**: Choose which engines appear in the navbar
+- **Focus search bar on new tab**: Enable/disable auto-focus on load.
+- **Hide search placeholder**: Show a clean input without placeholder text.
+- **Hide settings button**: Hide the gear icon (can still access via `Alt+S`).
+- **Hide search engines list**: Hide the search engine selector buttons.
+- **Hide search button**: Disable the search button (Enter key still works).
+- **Hide search engine logo**: Toggle the visibility of the search engine logo next to the input.
+- **Switch to light mode**: Toggle between dark and light themes.
+- **Use browser theme**: Sync the extension theme with your browser (Firefox only).
+- **Show/hide engines**: Choose which engines appear in the navbar.
 
 ## Privacy
 
-- No data is collected or transmitted to external servers
-- History suggestions are processed locally using the browser's history API
-- Top sites are retrieved locally using the browser's topSites API
-- Search queries are sent directly to your chosen search engine
-- Favicons are loaded from Google's favicon service
+- No data is collected or transmitted to external servers.
+- History suggestions are processed locally using the browser's history API.
+- Top sites are retrieved locally using the browser's topSites API.
+- Search queries are sent directly to your chosen search engine.
+- Favicons are loaded from Google's favicon service (`s2/favicons`).
 
 ## License
 

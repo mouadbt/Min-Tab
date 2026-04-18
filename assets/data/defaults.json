@@ -22,6 +22,20 @@
       "url": "https://duckduckgo.com/?q="
     },
     {
+      "key": "brave",
+      "label": "Brave",
+      "active": true,
+      "preferred": false,
+      "url": "https://search.brave.com/search?q="
+    },
+    {
+      "key": "bing",
+      "label": "Bing",
+      "active": false,
+      "preferred": false,
+      "url": "https://www.bing.com/search?q="
+    },
+    {
       "key": "perplexity",
       "label": "Perplexity",
       "active": true,

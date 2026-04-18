@@ -105,7 +105,7 @@ A minimalist browser extension (Chrome + Firefox) that replaces your new tab pag
 ## Technical Details
 
 - **Manifest Version**: 3
-- **Version**: 2.4
+- **Version**: 2.5
 - **Permissions**: `history`, `topSites`
 - **Logic**:
     - **URL Detection**: Uses regex to identify domain patterns and prepends `https://`.

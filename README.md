@@ -9,7 +9,7 @@
 A minimalist browser extension (Chrome + Firefox) that replaces your new tab page with a clean interface focused on search functionality.
 **🎉 Now available on [Mozilla Add-ons](https://addons.mozilla.org/addon/min-tab/)!**
 
-![Min Tab Extension](./assets/screenshots/screenshot.png)
+![Min Tab Extension](./assets/screenshots/minimal-new-tab-4.png)
 
 ## Table of Contents
 - [Screenshots](#screenshots)

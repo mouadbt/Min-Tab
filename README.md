@@ -59,22 +59,34 @@ A minimalist browser extension (Chrome + Firefox) that replaces your new tab pag
 3. Confirm the installation prompt
 4. Open a new tab to see the new tab page
 
-#### From Source (Developer Mode)
-1. Clone or download this repository
-2. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
-3. Click "Load Temporary Add-on…"
-4. Select the repository's `manifest.json`
-5. Open a new tab to see the new tab page
+#### Manual Installation (.xpi)
+1. Download the latest `.xpi` file from the [Releases](https://github.com/mouad-eh/minimal-new-tab/releases) page.
+2. Open Firefox and navigate to `about:addons`.
+3. Click the gear icon (⚙️) and select "Install Add-on From File...".
+4. Select the downloaded `.xpi` file.
 
-> Note: The temporary add-on install resets when you restart Firefox. If you want a persistent install, use the [Mozilla Add-ons link](https://addons.mozilla.org/addon/min-tab/) above.
+#### From Source (Developer Mode)
+1. Clone or download this repository.
+2. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`.
+3. Click "Load Temporary Add-on…".
+4. Select the repository's `manifest.json`.
+
+> Note: The temporary add-on install resets when you restart Firefox. For a persistent install, use the [Mozilla Add-ons link](https://addons.mozilla.org/addon/min-tab/) or the `.xpi` from Releases.
 
 ### Chrome / Chromium
 
-1. Clone or download this repository
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode" (top right)
-4. Click "Load unpacked" and select the extension folder
-5. The extension will automatically replace your new tab page
+#### From Releases (Recommended for Manual Install)
+1. Download the latest `.zip` file from the [Releases](https://github.com/mouad-eh/minimal-new-tab/releases) page.
+2. Extract the `.zip` file to a folder.
+3. Open Chrome and navigate to `chrome://extensions/`.
+4. Enable "Developer mode" (top right toggle).
+5. Click "Load unpacked" and select the extracted folder.
+
+#### From Source
+1. Clone or download this repository.
+2. Open Chrome and navigate to `chrome://extensions/`.
+3. Enable "Developer mode".
+4. Click "Load unpacked" and select the extension folder.
 
 ## Usage
 

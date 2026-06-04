@@ -34,6 +34,7 @@
 
   /* Transitions */
   --transition: 0.3s ease-in-out;
+  --transition-fast: 0.15s ease-in-out;
 }
 
 * {
@@ -49,21 +50,20 @@ html,
 body {
   height: 100%;
   width: 100%;
-  margin: 0;
-  padding: 0;
   background-color: var(--background);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* --------------------------------------- genral elements */
+/* --------------------------------------- General elements */
 [hidden] {
   display: none !important;
 }
 button {
   background: transparent;
   border: none;
+  cursor: pointer;
 }
 
 button:focus-visible {
@@ -98,9 +98,8 @@ button:focus-visible {
 }
 
 /* --------------------------------------- Search elements */
-#search-container > div {
+#search-container > div:not(#top-website-list-container) {
   position: relative;
-  display: flex;
   justify-content: end;
   align-items: center;
   padding-bottom: var(--space-xxxs);
@@ -114,7 +113,7 @@ button:focus-visible {
   position: relative;
 }
 
-#search-container > div::after {
+#search-container > div:not(#top-website-list-container)::after {
   content: "";
   position: absolute;
   height: 1px;
@@ -125,11 +124,11 @@ button:focus-visible {
   left: 0;
 }
 
-#search-container > div:focus-within::after {
+#search-container > div:not(#top-website-list-container):focus-within::after {
   width: 100%;
 }
 
-#search-container > div:focus-within {
+#search-container > div:not(#top-website-list-container):focus-within {
   border-bottom: 1px solid transparent;
 }
 
@@ -187,8 +186,8 @@ button:focus-visible {
   margin-bottom: calc(-1 * var(--space-xxs));
 }
 
-#search-engines-list ::-webkit-scrollbar,
-#top-website-list ::-webkit-scrollbar {
+#search-engines-list::-webkit-scrollbar,
+#top-website-list::-webkit-scrollbar {
   display: none;
 }
 
@@ -244,12 +243,7 @@ button:focus-visible {
   justify-content: end;
 }
 
-#search-btn.hidden {
-  display: none;
-  pointer-events: none;
-  transition: transform var(--transition);
-}
-
+#search-btn.hidden,
 #search-btn.disabled {
   display: none !important;
   pointer-events: none;
@@ -471,9 +465,9 @@ button:focus-visible {
 
 /* Top sites*/
 #top-website-list-container {
-  justify-content: space-between !important;
+  display: flex;
+  justify-content: space-between;
   gap: var(--space-xs);
-  border: 0 !important;
   position: relative;
   margin-top: var(--space-xxs);
 }
@@ -484,9 +478,6 @@ button:focus-visible {
   width: var(--space-xs);
   height: 1px;
   background: var(--foreground50);
-}
-#top-website-list-container::after {
-  display: none;
 }
 #top-website-list-container #manage-top-websites-btn {
   display: flex;

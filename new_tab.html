@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -26,6 +26,46 @@
 
       <!-- suggestions -->
       <ul id="suggestions-list"></ul>
+      <!-- Top websites -->
+      <div id="top-website-list-container">
+        <ul id="top-website-list" tabindex="-1">
+          <li class="link">
+            <a href="grok.com">
+              <span>grok.com</span>
+            </a>
+            <div class="actions-btns">
+              <button
+                tabindex="-1"
+                class="icon-btn"
+                data-icon="pen"
+                title="edit link"
+                aria-label="edit link"
+              ></button>
+              <button
+                tabindex="-1"
+                class="icon-btn"
+                data-icon="trash"
+                title="delete link"
+                aria-label="delete link"
+              ></button>
+            </div>
+          </li>
+          <li><span>/</span></li>
+        </ul>
+        <button id="manage-top-websites-btn">
+          <span>Manage</span>
+          <span class="icon-btn" data-icon="pen"></span>
+        </button>
+      </div>
+      <div id="add-top-site-input-container">
+        <input
+          type="text"
+          id="add-top-site-input"
+          placeholder="add new favourite website"
+          data-action="add"
+        />
+        <button data-icon="plus" class="icon-btn"></button>
+      </div>
     </section>
 
     <!-- Settings -->
@@ -37,6 +77,7 @@
           class="icon-btn"
           data-icon="settings"
           aria-label="settings"
+          title="open settings"
         ></button>
       </div>
 
@@ -49,7 +90,7 @@
         <ul id="settings-search-engines" class="settings-list"></ul>
       </div>
     </section>
-     
+
     <script type="module" src="scripts/script.js"></script>
   </body>
 </html>

@@ -17,8 +17,13 @@ export const applySystemSetting = (key, isActive) => {
       break;
 
     case 'hideSettingsButton':
-      document.querySelector('#settings-btn')
-        .classList.toggle('hidden', isActive);
+      const settingsBtn = document.querySelector('#settings-btn');
+      settingsBtn.classList.toggle('hidden', isActive);
+      if (isActive && settingsBtn.classList.contains("hidden")) {
+        settingsBtn.setAttribute("tabindex", "-1");
+      }else{
+        settingsBtn.removeAttribute("tabindex");
+      }
       break;
 
     case 'hideEngines':

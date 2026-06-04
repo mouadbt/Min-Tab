@@ -61,7 +61,7 @@ export const setupGlobalListeners = (engines, settings) => {
     });
 
     // Search engine selection / delegation
-    document.querySelector("#search-engines-list").addEventListener('click', (e) => {
+    scrollContainer.addEventListener('click', (e) => {
         const btn = e.target.closest('button');
         if (btn) {
             handleEngineSelect(btn.dataset.key, engines);

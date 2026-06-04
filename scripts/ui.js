@@ -108,25 +108,14 @@ export const renderSettings = (settings, engines, icons) => {
   engines.forEach(option => createOptionElement(option, icons, enginesContainer));
 }
 
-// Disable settings button completely
-const updateSettingsButtonAccessibility = (settingsBtn) => {
-  if (settingsBtn.classList.contains("disabled")) {
-    settingsBtn.setAttribute("tabindex", "-1");
-  } else {
-    settingsBtn.removeAttribute("tabindex");
-  }
-}
-
 // Settings panel helper functions
 export const closeSettingsPanel = (settingspanel, settingsBtn) => {
   settingspanel.classList.add("hidden");
   settingsBtn.classList.remove("disabled");
-  updateSettingsButtonAccessibility(settingsBtn);
 }
 
 // Toggle settings panel
 export const toggleSettings = (settingspanel, settingsBtn) => {
   settingspanel.classList.toggle("hidden");
   settingsBtn.classList.toggle("disabled");
-  updateSettingsButtonAccessibility(settingsBtn);
 }

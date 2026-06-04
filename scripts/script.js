@@ -3,6 +3,7 @@ import { fetchResources, loadData } from "./utils.js";
 import { renderIcons, renderEngines, renderSettings } from "./ui.js";
 import { applyAllSettings } from "./settings.js";
 import { setupGlobalListeners } from "./events.js";
+import { initTopWebsiteLogic } from "./topWebsites.js";
 
 const init = async () => {
   // get the default data
@@ -34,6 +35,9 @@ const init = async () => {
 
   // Initialize searching logic
   initLogic();
+
+  // Initialize top websites logic
+  initTopWebsiteLogic();
 }
 
 // load and execute and start script after page fully load

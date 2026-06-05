@@ -94,11 +94,13 @@ button:focus-visible {
 .icon-btn svg {
   width: var(--space-sm);
   height: var(--space-sm);
-  /* fill: var(--foreground); */
+  fill: transparent;
+  stroke: var(--foreground);
 }
 
 /* --------------------------------------- Search elements */
-#search-container > div:not(#top-website-list-container) {
+#search-container #search-input-wrapper {
+  display: flex;
   position: relative;
   justify-content: end;
   align-items: center;
@@ -251,7 +253,7 @@ button:focus-visible {
 
 #settings-btn svg * {
   stroke: var(--foreground);
-  fill: none;
+  fill: transparent;
 }
 
 #settings-btn svg {

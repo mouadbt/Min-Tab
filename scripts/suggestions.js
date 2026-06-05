@@ -78,7 +78,7 @@ const renderSuggestionItems = async (items, suggestionsList) => {
 }
 
 // Get top sites from Firefox
-const getTopSitesFirefox = async () => {
+export const getTopSitesFirefox = async () => {
     try {
         return await browser.topSites.get();
     } catch (error) {
@@ -89,7 +89,7 @@ const getTopSitesFirefox = async () => {
 }
 
 // Get top sites from Chrome
-const getTopSitesChrome = (callback) => {
+export const getTopSitesChrome = (callback) => {
     chrome.topSites.get((topSites) => {
         callback(topSites || []);
     });

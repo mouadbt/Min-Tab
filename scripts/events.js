@@ -8,7 +8,9 @@ export const setupGlobalListeners = (engines, settings) => {
     const settingsBtn = document.querySelector("#settings-btn");
     const searchBtn = document.querySelector("#search-btn");
     const searchInput = document.querySelector("#search-input");
-    const scrollContainer = document.getElementById("search-engines-list");
+    const searchEnginesList = document.querySelector("#search-engines-list");
+    const topWebsiteList = document.querySelector("#top-website-list");
+    const scrollableElements = [searchEnginesList, topWebsiteList];
 
     document.addEventListener('keydown', (e) => {
 
@@ -61,7 +63,7 @@ export const setupGlobalListeners = (engines, settings) => {
     });
 
     // Search engine selection / delegation
-    scrollContainer.addEventListener('click', (e) => {
+    searchEnginesList.addEventListener('click', (e) => {
         const btn = e.target.closest('button');
         if (btn) {
             handleEngineSelect(btn.dataset.key, engines);
@@ -105,9 +107,12 @@ export const setupGlobalListeners = (engines, settings) => {
         link.classList.add("loading"); // show loading icon
     });
 
-    // make user able to scroll horizontally throw the search egnines by moving the cursor wheel
-    scrollContainer.addEventListener("wheel", (evt) => {
-        evt.preventDefault();
-        scrollContainer.scrollLeft += evt.deltaY;
+    // make user able to scroll horizontally by moving the cursor wheel
+    scrollableElements.forEach((el) => {
+        el.addEventListener("wheel", (evt) => {
+            console.log("gg")
+            evt.preventDefault();
+            el.scrollLeft += evt.deltaY;
+        });
     });
 }

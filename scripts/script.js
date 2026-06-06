@@ -18,9 +18,6 @@ const init = async () => {
   // Get the settings from localstorage or default const
   const settings = loadData("settingsOptions", DEFAULTS.settingsOptions);
 
-  // Render the icons in the page
-  renderIcons(icons);
-
   //  Render the search engines in the page
   renderEngines(engines);
 
@@ -37,7 +34,10 @@ const init = async () => {
   initLogic();
 
   // Initialize top websites logic
-  initTopWebsiteLogic();
+  await initTopWebsiteLogic();
+
+  // Render the icons in the page
+  renderIcons(icons);
 }
 
 // load and execute and start script after page fully load

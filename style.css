@@ -186,6 +186,12 @@ button:focus-visible {
   -ms-overflow-style: none;
   padding-left: var(--space-4xs);
   margin-bottom: calc(-1 * var(--space-xxs));
+  flex: 1;
+  min-width: 0;
+}
+
+#top-website-list li {
+  flex-shrink: 0;
 }
 
 #search-engines-list::-webkit-scrollbar,
@@ -520,19 +526,22 @@ button:focus-visible {
   display: flex;
   gap: var(--space-xxs);
   align-items: center;
-  width: 6rem;
+  /* width: 6rem; */
   overflow: hidden;
   transition: width 0.3s;
   padding: var(--space-4xs);
   margin-left: calc(-1 * var(--space-4xs));
+}
+#top-website-list li.link span {
+  white-space: nowrap;
 }
 #top-website-list .actions-btns {
   margin: 0;
   display: flex;
   align-items: center;
   gap: var(--space-xxxs);
-  transition: transform 0.3s;
-  margin-right: -12%;
+  transition: margin 0.3s;
+  margin-right: -3rem;
 }
 #top-website-list .actions-btns button,
 #top-website-list .actions-btns button svg {
@@ -541,8 +550,11 @@ button:focus-visible {
   width: var(--space-xs);
   height: var(--space-xs);
 }
+#top-website-list-container.edit-mode #top-website-list .actions-btns {
+  margin-right: 0;
+}
 #top-website-list-container.edit-mode .link {
-  width: 8.5rem;
+  /* width: 8.5rem; */
 }
 #top-website-list-container + #add-top-site-input-container {
   display: none;

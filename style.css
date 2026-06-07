@@ -13,7 +13,7 @@
   --font-size-small: 0.75rem;
 
   /* Layout dimensions */
-  --width-search: 30rem;
+  --width-search: 35rem;
 
   /* Spacing system */
   --space-4xs: 0.15rem;
@@ -109,13 +109,17 @@ button:focus-visible {
   border-bottom: 1px solid var(--foreground50);
 }
 
+#search-input-wrapper.minimal {
+  border-bottom: none !important;
+}
+
 #search-container {
   max-width: var(--width-search);
   width: 90%;
   position: relative;
 }
-
-#search-container > div:not(#top-website-list-container)::after {
+#search-container > div:not(#top-website-list-container)::after,
+#search-input-wrapper.minimal::before {
   content: "";
   position: absolute;
   height: 1px;
@@ -124,6 +128,22 @@ button:focus-visible {
   transition: width var(--transition);
   bottom: 0px;
   left: 0;
+}
+
+#search-input-wrapper.minimal::before {
+  width: 1px;
+  height: calc(100% - var(--space-xxxs));
+  background: var(--foreground50);
+  transform: translateX(-1rem) scaleY(1);
+  transition: transform 0.2s;
+  top: 0;transform-origin: bottom
+}
+#search-input-wrapper.minimal:focus-within::before {
+  transform: translateX(-1rem) scaleY(0);
+}
+
+#search-input-wrapper.minimal::after {
+  transition-delay: 0.2s !important;
 }
 
 #search-container > div:not(#top-website-list-container):focus-within::after {
@@ -166,6 +186,10 @@ button:focus-visible {
   color: var(--foreground50);
 }
 
+#searchIcon {
+  display: flex;
+  align-items: center;
+}
 #searchIcon img {
   width: var(--space-xs);
   height: auto;
@@ -180,7 +204,7 @@ button:focus-visible {
   list-style: none;
   gap: var(--space-xxxs);
   padding: var(--space-xxs);
-  max-width: 456px;
+  max-width: var(--width-search);
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -550,9 +574,6 @@ button:focus-visible {
 }
 #top-website-list-container.edit-mode #top-website-list .actions-btns {
   margin-right: 0;
-}
-#top-website-list-container.edit-mode .link {
-  /* width: 8.5rem; */
 }
 #top-website-list-container + #add-top-site-input-container {
   visibility: none;

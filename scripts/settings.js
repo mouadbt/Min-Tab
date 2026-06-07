@@ -48,6 +48,11 @@ export const applySystemSetting = (key, isActive) => {
         .classList.toggle('hidden', isActive);
       break;
 
+    case 'hideSearchInput':
+      document.querySelector('#search-input-wrapper')
+        .classList.toggle('minimal', isActive);
+      break;
+
     case 'lightmode':
       isActive ? changeTheme('light') : changeTheme('dark');
       break;

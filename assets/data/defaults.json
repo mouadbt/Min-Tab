@@ -101,6 +101,11 @@
       "key": "hideSearchLogo"
     },
     {
+      "label": "Hide search input",
+      "active": false,
+      "key": "hideSearchInput"
+    },
+    {
       "label": "switch to light mode",
       "active": false,
       "key": "lightmode"

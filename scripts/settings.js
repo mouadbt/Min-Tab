@@ -31,6 +31,13 @@ export const applySystemSetting = (key, isActive) => {
         .classList.toggle('hidden', isActive);
       break;
 
+    case 'hideTopSites':
+      document.querySelector('#top-website-list-container')
+        .classList.toggle('hidden', isActive);
+      document.querySelector('#add-top-site-input-container')
+        .classList.toggle('hidden', isActive);
+      break;
+
     case 'hideSearchButton':
       document.querySelector('#search-btn')
         .classList.toggle('disabled', isActive);

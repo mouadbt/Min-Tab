@@ -86,6 +86,11 @@
       "key": "hideEngines"
     },
     {
+      "label": "Hide favourite websites list",
+      "active": true,
+      "key": "hideTopSites"
+    },
+    {
       "label": "Hide search button",
       "active": false,
       "key": "hideSearchButton"

@@ -57,7 +57,7 @@ body {
 }
 
 /* --------------------------------------- General elements */
-[hidden] {
+.hidden {
   display: none !important;
 }
 button {
@@ -99,14 +99,14 @@ button:focus-visible {
 }
 
 /* --------------------------------------- Search elements */
-#search-container #search-input-wrapper {
+#search-container #search-input-wrapper,
+#add-top-site-input-container {
   display: flex;
   position: relative;
   justify-content: end;
   align-items: center;
   padding-bottom: var(--space-xxxs);
   border-bottom: 1px solid var(--foreground50);
-  transition: border var(--transition);
 }
 
 #search-container {
@@ -197,11 +197,6 @@ button:focus-visible {
 #search-engines-list::-webkit-scrollbar,
 #top-website-list::-webkit-scrollbar {
   display: none;
-}
-
-#search-engines-list.hidden,
-#searchIcon.hidden {
-  display: none !important;
 }
 
 #search-engines-list li button,
@@ -299,6 +294,7 @@ button:focus-visible {
   transform: translateY(0);
   opacity: 1 !important;
   pointer-events: all !important;
+  display: flex !important;
 }
 
 #settings-panel li {
@@ -478,6 +474,8 @@ button:focus-visible {
   gap: var(--space-xs);
   position: relative;
   margin-top: var(--space-xxs);
+  background: var(--background);
+  z-index: 1;
 }
 #top-website-list-container::before {
   content: "";
@@ -557,8 +555,19 @@ button:focus-visible {
   /* width: 8.5rem; */
 }
 #top-website-list-container + #add-top-site-input-container {
-  display: none;
+  visibility: none;
+  pointer-events: none;
 }
 #top-website-list-container.edit-mode + #add-top-site-input-container {
-  display: flex;
+  transform: translateY(110%);
+  visibility: visible;
+  pointer-events: unset;
+}
+
+#add-top-site-input-container {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  transition: transform 0.3s;
 }

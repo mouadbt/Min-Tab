@@ -3,10 +3,15 @@ import { loadData, saveData } from "./utils.js";
 const isFirefox = typeof browser !== 'undefined';
 const topWebsiteListContainer = document.querySelector("#top-website-list-container");
 const manageTopWebsitesBtn = document.querySelector("#manage-top-websites-btn");
+const addTopSiteInput = document.querySelector("#add-top-site-input");
+const newTopSiteBtn = document.querySelector("#new-top-site-btn");
+const toast = document.querySelector("#toast");
 let topsites = [];
 
 // Main logic to initilize Top Website logic
 export async function initTopWebsiteLogic() {
+
+    // handle editing of top websites list element visibility
     if (manageTopWebsitesBtn) {
         manageTopWebsitesBtn.addEventListener("click", () => {
             if (topWebsiteListContainer) {
@@ -15,18 +20,26 @@ export async function initTopWebsiteLogic() {
         });
     }
 
+    // handle getting top sties from memory of browsers history
     topsites = loadData("topsites", []);
-
-
     if (topsites.length > 0) {
         renderTopSites(topsites);
     } else {
-
         topsites = await loadTopSiteFromBrowser();
         const websitesArr = genrateTopSitesArray(topsites);
         renderTopSites(websitesArr);
         saveData("topsites", websitesArr);
     }
+
+    // handle adding new favourite website
+    addTopSiteInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            handleSubmitNewTopWebsite();
+        }
+    });
+    newTopSiteBtn.addEventListener('click', () => {
+        handleSubmitNewTopWebsite();
+    });
 }
 
 // load top websites from browser firefox based or chrome based
@@ -100,14 +113,35 @@ function renderTopSites(websitesArr) {
     });
 }
 
+// genrate arrya of top websites by including id for element
 function genrateTopSitesArray(topsites) {
     const top8 = topsites.slice(0, 8);
     return top8.map(el => {
-        const randomId = crypto.randomUUID().slice(0, 8);
+        const randomId = genrateRandomId();
         const titleLimit = 15;
-        const truncatedTitle = el.title.length > titleLimit 
-            ? el.title.slice(0, titleLimit) + ".." 
+        const truncatedTitle = el.title.length > titleLimit
+            ? el.title.slice(0, titleLimit) + ".."
             : el.title;
         return { id: randomId, title: truncatedTitle, url: el.url };
     });
+}
+
+function handleSubmitNewTopWebsite() {
+    const newTopSite = addTopSiteInput.value.trim();
+    const isValidURL = isUrl(newTopSite);
+    console.log({ newTopSite, isValidURL });
+}
+
+// check if value is URL
+function isUrl(value) {
+    try {
+        new URL(value);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+function genrateRandomId() {
+    return crypto.randomUUID().slice(0, 8);
 }

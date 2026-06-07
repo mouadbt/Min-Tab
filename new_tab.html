@@ -63,10 +63,14 @@
         <input
           type="url"
           id="add-top-site-input"
-          placeholder="add new favourite website"
+          placeholder="add new favourite website link"
           data-action="add"
         />
-        <button data-icon="plus" class="icon-btn"></button>
+        <button
+          data-icon="plus"
+          id="new-top-site-btn"
+          class="icon-btn"
+        ></button>
       </div>
     </section>
 
@@ -91,6 +95,7 @@
         <div id="settingsSeparator"></div>
         <ul id="settings-search-engines" class="settings-list"></ul>
       </div>
+      <div id="toast" class="hidden"></div>
     </section>
 
     <script type="module" src="scripts/script.js"></script>

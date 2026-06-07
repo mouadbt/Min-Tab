@@ -136,7 +136,8 @@ button:focus-visible {
   background: var(--foreground50);
   transform: translateX(-1rem) scaleY(1);
   transition: transform 0.2s;
-  top: 0;transform-origin: bottom
+  top: 0;
+  transform-origin: bottom;
 }
 #search-input-wrapper.minimal:focus-within::before {
   transform: translateX(-1rem) scaleY(0);
@@ -591,4 +592,17 @@ button:focus-visible {
   bottom: 0;
   width: 100%;
   transition: transform 0.3s;
+}
+
+/*  ----------------------------------- taost  */
+#toast {
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: var(--space-xxs);
+  border: solid 1px var(--foreground50);
+  position: fixed;
+  bottom: var(--space-sm);
+  background: var(--background);
+  padding: var(--space-xs);
+  z-index: 9;
 }

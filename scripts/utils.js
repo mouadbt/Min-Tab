@@ -1,3 +1,4 @@
+const toast = document.querySelector("#toast");
 // Get data from resources
 export const fetchResources = async (key) => {
     try {
@@ -32,4 +33,20 @@ export const focusOnSearchInput = (inputEl) => {
         location.search = "?focus";
         throw new Error("Redirecting to focus mode");
     }
+}
+
+
+// Handle toast
+export function showToast(msg) {
+    // toast.hidden = false;
+    toast.classList.remove('hidden');
+    toast.textContent = msg;
+    setTimeout(() => {
+        hideToast();
+    }, 5000);
+}
+export function hideToast() {
+    // toast.hidden = true;
+    toast.classList.add('hidden');
+    toast.textContent = '';
 }

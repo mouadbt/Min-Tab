@@ -1,5 +1,5 @@
 import { getTopSitesChrome, getTopSitesFirefox } from "./suggestions.js";
-import { loadData, saveData } from "./utils.js";
+import { loadData, saveData, showToast } from "./utils.js";
 const isFirefox = typeof browser !== 'undefined';
 const topWebsiteListContainer = document.querySelector("#top-website-list-container");
 const manageTopWebsitesBtn = document.querySelector("#manage-top-websites-btn");
@@ -32,14 +32,19 @@ export async function initTopWebsiteLogic() {
     }
 
     // handle adding new favourite website
-    addTopSiteInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
+    if (addTopSiteInput) {
+        const action = addTopSiteInput.dataset.action;
+        addTopSiteInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                handleTopSiteInputSubmit(action);
+            }
+        });
+    }
+    if (newTopSiteBtn) {
+        newTopSiteBtn.addEventListener('click', () => {
             handleSubmitNewTopWebsite();
-        }
-    });
-    newTopSiteBtn.addEventListener('click', () => {
-        handleSubmitNewTopWebsite();
-    });
+        });
+    }
 }
 
 // load top websites from browser firefox based or chrome based
@@ -126,10 +131,28 @@ function genrateTopSitesArray(topsites) {
     });
 }
 
-function handleSubmitNewTopWebsite() {
-    const newTopSite = addTopSiteInput.value.trim();
-    const isValidURL = isUrl(newTopSite);
-    console.log({ newTopSite, isValidURL });
+function handleTopSiteInputSubmit(action) {
+    const value = addTopSiteInput.value.trim();
+    if (!value) return;
+    switch (action) {
+        case 'add':
+            handleSubmitNewTopWebsite(value);
+            break;
+        default:
+            break;
+    }
+}
+
+// function topsitesManger(value, nextStep, errorMsg, customCallback) {}
+
+function handleSubmitNewTopWebsite(value) {
+    const isValidURL = isUrl(value);
+    if (!isValidURL) {
+        showToast("Pls Enter Valid URL. it must start with https://");
+    } else {
+        
+    }
+    // console.log({ newTopSite, isValidURL });
 }
 
 // check if value is URL

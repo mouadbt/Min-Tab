@@ -1,54 +1,54 @@
 import { getTopSitesChrome, getTopSitesFirefox } from "./suggestions.js";
-import { loadData, saveData, showToast } from "./utils.js";
+import { renderIcons } from "./ui.js";
+import { fetchResources, loadData, saveData, showToast } from "./utils.js";
 const isFirefox = typeof browser !== 'undefined';
-const topWebsiteListContainer = document.querySelector("#top-website-list-container");
-const manageTopWebsitesBtn = document.querySelector("#manage-top-websites-btn");
-const addTopSiteInput = document.querySelector("#add-top-site-input");
-const newTopSiteBtn = document.querySelector("#new-top-site-btn");
-const toast = document.querySelector("#toast");
-let topsites = [];
+const topSitesContainer = document.querySelector("#top-website-list-container");
+const manageTopSitesButton = document.querySelector("#manage-top-websites-btn");
+const topSiteInput = document.querySelector("#add-top-site-input");
+const addTopSiteButton = document.querySelector("#new-top-site-btn");
+let topSites = [];
 
 // Main logic to initilize Top Website logic
 export async function initTopWebsiteLogic() {
 
     // handle editing of top websites list element visibility
-    if (manageTopWebsitesBtn) {
-        manageTopWebsitesBtn.addEventListener("click", () => {
-            if (topWebsiteListContainer) {
-                topWebsiteListContainer.classList.toggle("edit-mode");
+    if (manageTopSitesButton) {
+        manageTopSitesButton.addEventListener("click", () => {
+            if (topSitesContainer) {
+                topSitesContainer.classList.toggle("edit-mode");
             }
         });
     }
 
     // handle getting top sties from memory of browsers history
-    topsites = loadData("topsites", []);
-    if (topsites.length > 0) {
-        renderTopSites(topsites);
+    topSites = loadData("topSites", []);
+    if (topSites.length > 0) {
+        renderTopSites(topSites);
     } else {
-        topsites = await loadTopSiteFromBrowser();
-        const websitesArr = genrateTopSitesArray(topsites);
-        renderTopSites(websitesArr);
-        saveData("topsites", websitesArr);
+        const browserSites = await loadTopSitesFromBrowser();
+        topSites = generateTopSitesArray(browserSites);
+        renderTopSites(topSites);
+        saveData("topSites", topSites);
     }
 
     // handle adding new favourite website
-    if (addTopSiteInput) {
-        const action = addTopSiteInput.dataset.action;
-        addTopSiteInput.addEventListener("keydown", (e) => {
+    if (topSiteInput) {
+        const action = topSiteInput.dataset.action;
+        topSiteInput.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
-                handleTopSiteInputSubmit(action);
+                handleTopSiteSubmit(action);
             }
         });
     }
-    if (newTopSiteBtn) {
-        newTopSiteBtn.addEventListener('click', () => {
-            handleSubmitNewTopWebsite();
+    if (addTopSiteButton) {
+        addTopSiteButton.addEventListener('click', () => {
+            handleTopSiteSubmit('add');
         });
     }
 }
 
 // load top websites from browser firefox based or chrome based
-async function loadTopSiteFromBrowser() {
+async function loadTopSitesFromBrowser() {
     if (isFirefox) {
         return getTopSitesFirefox();
     } else {
@@ -57,16 +57,16 @@ async function loadTopSiteFromBrowser() {
 }
 
 // Render Top sites list to the ui
-function renderTopSites(websitesArr) {
-    const topWebsiteList = document.querySelector("#top-website-list");
-    if (!topWebsiteList) return;
+function renderTopSites(topSites) {
+    const topSitesList = document.querySelector("#top-website-list");
+    if (!topSitesList) return;
 
     // Clear existing content safely without innerHTML
-    while (topWebsiteList.firstChild) {
-        topWebsiteList.removeChild(topWebsiteList.firstChild);
+    while (topSitesList.firstChild) {
+        topSitesList.removeChild(topSitesList.firstChild);
     }
 
-    websitesArr.forEach((site, index) => {
+    topSites.forEach((site, index) => {
         // Create the main list item for the link
         const li = document.createElement("li");
         li.className = "link";
@@ -75,96 +75,124 @@ function renderTopSites(websitesArr) {
         const a = document.createElement("a");
         a.href = site.url;
 
-        const spanTitle = document.createElement("span");
-        spanTitle.textContent = site.title;
-        a.appendChild(spanTitle);
+        const titleSpan = document.createElement("span");
+        titleSpan.textContent = site.title;
+        a.appendChild(titleSpan);
         li.appendChild(a);
 
         // Create the actions buttons container
-        const actionsDiv = document.createElement("div");
-        actionsDiv.className = "actions-btns";
+        const actionsContainer = document.createElement("div");
+        actionsContainer.className = "actions-btns";
 
         // Edit button
-        const editBtn = document.createElement("button");
-        editBtn.tabIndex = -1;
-        editBtn.className = "icon-btn";
-        editBtn.dataset.icon = "pen";
-        editBtn.title = "edit link";
-        editBtn.setAttribute("aria-label", "edit link");
-        editBtn.dataset.id = site.id;
-        actionsDiv.appendChild(editBtn);
+        const editButton = createIconButton({
+            icon: "pen",
+            title: "edit link",
+            id: site.id
+        });
+        actionsContainer.appendChild(editButton);
 
         // Delete button
-        const deleteBtn = document.createElement("button");
-        deleteBtn.tabIndex = -1;
-        deleteBtn.className = "icon-btn";
-        deleteBtn.dataset.icon = "trash";
-        deleteBtn.title = "delete link";
-        deleteBtn.setAttribute("aria-label", "delete link");
-        deleteBtn.dataset.id = site.id;
-        actionsDiv.appendChild(deleteBtn);
+        const deleteButton = createIconButton({
+            icon: "trash",
+            title: "delete link",
+            id: site.id
+        });
+        actionsContainer.appendChild(deleteButton);
 
-        li.appendChild(actionsDiv);
-        topWebsiteList.appendChild(li);
+        li.appendChild(actionsContainer);
+        topSitesList.appendChild(li);
 
         // Add separator if not the last item
-        if (index < websitesArr.length - 1) {
-            const separatorLi = document.createElement("li");
-            const separatorSpan = document.createElement("span");
-            separatorSpan.textContent = "/";
-            separatorLi.appendChild(separatorSpan);
-            topWebsiteList.appendChild(separatorLi);
+        if (index < topSites.length - 1) {
+            const separatorItem = document.createElement("li");
+            const separatorText = document.createElement("span");
+            separatorText.textContent = "/";
+            separatorItem.appendChild(separatorText);
+            topSitesList.appendChild(separatorItem);
         }
     });
+
+    // Re-render icons for the new buttons
+    fetchResources("icons").then(icons => {
+        if (icons) renderIcons(icons);
+    });
+}
+
+// helper fucntion to genearte buttons
+function createIconButton({ icon, title, id }) {
+    const button = document.createElement("button");
+
+    button.tabIndex = -1;
+    button.className = "icon-btn";
+    button.dataset.icon = icon;
+    button.title = title;
+    button.setAttribute("aria-label", title);
+    button.dataset.id = id;
+
+    return button;
 }
 
 // genrate arrya of top websites by including id for element
-function genrateTopSitesArray(topsites) {
-    const top8 = topsites.slice(0, 8);
-    return top8.map(el => {
-        const randomId = genrateRandomId();
-        const titleLimit = 15;
-        const truncatedTitle = el.title.length > titleLimit
-            ? el.title.slice(0, titleLimit) + ".."
-            : el.title;
-        return { id: randomId, title: truncatedTitle, url: el.url };
+function generateTopSitesArray(topSites) {
+    const firstEightSites = topSites.slice(0, 8);
+    return firstEightSites.map(el => {
+        const siteId = genratesiteId();
+        const title = el.title || el.url;
+        const maxTitleLength = 15;
+        const displayTitle = title.length > maxTitleLength
+            ? title.slice(0, maxTitleLength) + ".."
+            : title;
+        return { id: siteId, title: displayTitle, url: el.url };
     });
 }
 
-function handleTopSiteInputSubmit(action) {
-    const value = addTopSiteInput.value.trim();
-    if (!value) return;
+function handleTopSiteSubmit(action) {
+    const inputValue = topSiteInput.value.trim();
+    if (!inputValue) return;
     switch (action) {
         case 'add':
-            handleSubmitNewTopWebsite(value);
+            const success = addTopSite(inputValue);
+            if (success) {
+                topSiteInput.value = '';
+            }
             break;
         default:
             break;
     }
 }
 
-// function topsitesManger(value, nextStep, errorMsg, customCallback) {}
-
-function handleSubmitNewTopWebsite(value) {
-    const isValidURL = isUrl(value);
-    if (!isValidURL) {
+function addTopSite(inputValue) {
+    const isValid = isValidUrl(inputValue);
+    if (!isValid) {
         showToast("Pls Enter Valid URL. it must start with https://");
-    } else {
-        
+        return false;
     }
-    // console.log({ newTopSite, isValidURL });
+
+    const url = new URL(inputValue);
+    const domain = url.hostname.replace('www.', '');
+    const newSite = {
+        id: genratesiteId(),
+        title: domain,
+        url: inputValue
+    };
+
+    topSites.push(newSite);
+    saveData("topSites", topSites);
+    renderTopSites(topSites);
+    return true;
 }
 
-// check if value is URL
-function isUrl(value) {
+// check if inputValue is URL
+function isValidUrl(inputValue) {
     try {
-        new URL(value);
+        new URL(inputValue);
         return true;
     } catch {
         return false;
     }
 }
 
-function genrateRandomId() {
+function genratesiteId() {
     return crypto.randomUUID().slice(0, 8);
 }

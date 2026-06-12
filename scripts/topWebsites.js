@@ -6,8 +6,13 @@ const topSitesContainer = document.querySelector("#top-website-list-container");
 const manageTopSitesButton = document.querySelector("#manage-top-websites-btn");
 const topSiteInput = document.querySelector("#add-top-site-input");
 const addTopSiteButton = document.querySelector("#new-top-site-btn");
+    const topSitesList = document.querySelector("#top-website-list");
 let topSites = [];
-
+const NewFavUrlObj = {
+    id: null,
+    "title": null,
+    "url": null
+};
 // Main logic to initilize Top Website logic
 export async function initTopWebsiteLogic() {
 
@@ -33,18 +38,20 @@ export async function initTopWebsiteLogic() {
 
     // handle adding new favourite website
     if (topSiteInput) {
-        const action = topSiteInput.dataset.action;
         topSiteInput.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
-                handleTopSiteSubmit(action);
+                handleTopSiteSubmit();
             }
         });
     }
     if (addTopSiteButton) {
         addTopSiteButton.addEventListener('click', () => {
-            handleTopSiteSubmit('add');
+            handleTopSiteSubmit();
         });
     }
+
+    // handle edit top site event
+
 }
 
 // load top websites from browser firefox based or chrome based
@@ -58,7 +65,6 @@ async function loadTopSitesFromBrowser() {
 
 // Render Top sites list to the ui
 function renderTopSites(topSites) {
-    const topSitesList = document.querySelector("#top-website-list");
     if (!topSitesList) return;
 
     // Clear existing content safely without innerHTML
@@ -147,40 +153,66 @@ function generateTopSitesArray(topSites) {
     });
 }
 
-function handleTopSiteSubmit(action) {
+// the core engine that handle managing of top websites(add new,modify existing)
+function handleTopSiteSubmit(topSiteId = null) {
     const inputValue = topSiteInput.value.trim();
+    const action = topSiteInput.dataset.action;
+    const siteId = genratesiteId();
     if (!inputValue) return;
     switch (action) {
-        case 'add':
-            const success = addTopSite(inputValue);
-            if (success) {
-                topSiteInput.value = '';
+        case 'addNewUrl':
+            const isValid = isValidUrl(inputValue);
+            if (!isValid) {
+                showToast("Please Enter Valid URL. it must start with https://");
+                return false;
+            } else {
+                NewFavUrlObj.url = inputValue;
+                updateTopSiteInputMetaData('', 'Add title for your URL', 'addNewTitle', "Link is saved, now add title of the link");
+                topSiteInput.focus();
             }
             break;
+        case 'addNewTitle':
+            NewFavUrlObj.title = inputValue;
+            NewFavUrlObj.id = siteId;
+            topSites.push(NewFavUrlObj);
+            saveData("topSites", topSites);
+            renderTopSites(topSites);
+            updateTopSiteInputMetaData('', 'Add new favourite website link', 'addNewUrl', "Link is added successfuly");
+
+            break;
+        case 'editUrl':
+            if (!isValid) {
+                showToast("Please Enter Valid URL. it must start with https://");
+                return false;
+            } else {
+                // NewFavUrlObj.url = inputValue;
+                updateTopSiteInputMetaData('', 'Edit title', 'editTitle', "Link is updated, now edit the title of the link");
+                topSiteInput.focus();
+            }
+            break;
+        case 'editTitle':
+            console.log(inputValue);
+            // NewFavUrlObj.title = inputValue;
+            // NewFavUrlObj.id = siteId;
+            // topSites.push(NewFavUrlObj);
+            saveData("topSites", topSites);
+            renderTopSites(topSites);
+            updateTopSiteInputMetaData('', 'Add new favourite website link', 'addNewUrl', "Link is updated successfuly");
+            break;
+
         default:
             break;
     }
 }
 
-function addTopSite(inputValue) {
-    const isValid = isValidUrl(inputValue);
-    if (!isValid) {
-        showToast("Pls Enter Valid URL. it must start with https://");
-        return false;
+// Update state of the input
+function updateTopSiteInputMetaData(value, placeholder, dataAction, toastMsg = null) {
+    topSiteInput.value = value;
+    topSiteInput.placeholder = placeholder;
+    topSiteInput.dataset.action = dataAction;
+    if (toastMsg) {
+        showToast(toastMsg);
     }
-
-    const url = new URL(inputValue);
-    const domain = url.hostname.replace('www.', '');
-    const newSite = {
-        id: genratesiteId(),
-        title: domain,
-        url: inputValue
-    };
-
-    topSites.push(newSite);
-    saveData("topSites", topSites);
-    renderTopSites(topSites);
-    return true;
 }
 
 // check if inputValue is URL
@@ -193,6 +225,7 @@ function isValidUrl(inputValue) {
     }
 }
 
+// genrate a random id 
 function genratesiteId() {
     return crypto.randomUUID().slice(0, 8);
 }

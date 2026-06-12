@@ -110,7 +110,6 @@ export const setupGlobalListeners = (engines, settings) => {
     // make user able to scroll horizontally by moving the cursor wheel
     scrollableElements.forEach((el) => {
         el.addEventListener("wheel", (evt) => {
-            console.log("gg")
             evt.preventDefault();
             el.scrollLeft += evt.deltaY;
         });

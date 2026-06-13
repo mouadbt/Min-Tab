@@ -1,19 +1,35 @@
 import { getTopSitesChrome, getTopSitesFirefox } from "./suggestions.js";
 import { renderIcons } from "./ui.js";
-import { fetchResources, loadData, saveData, showToast } from "./utils.js";
+import { fetchResources, hideToast, loadData, saveData, showToast } from "./utils.js";
 const isFirefox = typeof browser !== 'undefined';
 const topSitesContainer = document.querySelector("#top-website-list-container");
 const manageTopSitesButton = document.querySelector("#manage-top-websites-btn");
 const topSiteInput = document.querySelector("#add-top-site-input");
 const addTopSiteButton = document.querySelector("#new-top-site-btn");
-    const topSitesList = document.querySelector("#top-website-list");
+const topSitesList = document.querySelector("#top-website-list");
 let topSites = [];
-const NewFavUrlObj = {
+// temporarily stores the new site url until its title is added
+let newFavUrl = null;
+// temporarily stores the title of the site currently edited  
+const topSiteToEdit = {
     id: null,
-    "title": null,
-    "url": null
+    title: null,
+    url: null
+}
+
+// tracks the site pending delete confirmation
+let OnDeleteState = {
+    onHold: false,
+    id: null
 };
-// Main logic to initilize Top Website logic
+
+// map of action buttons to their handlers
+const actions = {
+    delete: (id) => handledeleteTopSite(id),
+    edit: (id) => handleEditTopSite(id),
+};
+
+// Main logic to initialize Top Website logic
 export async function initTopWebsiteLogic() {
 
     // handle editing of top websites list element visibility
@@ -25,7 +41,7 @@ export async function initTopWebsiteLogic() {
         });
     }
 
-    // handle getting top sties from memory of browsers history
+    // handle getting top sites from memory or browser's history
     topSites = loadData("topSites", []);
     if (topSites.length > 0) {
         renderTopSites(topSites);
@@ -50,9 +66,26 @@ export async function initTopWebsiteLogic() {
         });
     }
 
-    // handle edit top site event
+    // handle delete top site event
+    topSitesList.addEventListener("click", (e) => {
+        const actionBtn = e.target.closest(".top-site-action-button");
+        if (!actionBtn) return;
+        const { id, action } = actionBtn.dataset;
+        actions[action]?.(id);
+    });
 
-}
+    // handle keyboard confirm/cancel for delete
+    document.addEventListener('keydown', (e) => {
+        if (OnDeleteState.onHold === true) {
+            if (e.key === "Enter") {
+                deleteTopSite(topSites);
+            } else if (e.key === "Escape") {
+                hideToast();
+                toggleDeletionConfirmationMode(false);
+            }
+        }
+    });
+};
 
 // load top websites from browser firefox based or chrome based
 async function loadTopSitesFromBrowser() {
@@ -61,7 +94,21 @@ async function loadTopSitesFromBrowser() {
     } else {
         return new Promise(resolve => getTopSitesChrome(resolve));
     }
-}
+};
+
+// generate array of top websites by including id for element
+function generateTopSitesArray(topSites) {
+    const firstEightSites = topSites.slice(0, 8);
+    return firstEightSites.map(el => {
+        const siteId = generateSiteId();
+        const title = el.title || el.url;
+        const maxTitleLength = 15;
+        const displayTitle = title.length > maxTitleLength
+            ? title.slice(0, maxTitleLength) + ".."
+            : title;
+        return { id: siteId, title: displayTitle, url: el.url };
+    });
+};
 
 // Render Top sites list to the ui
 function renderTopSites(topSites) {
@@ -94,7 +141,8 @@ function renderTopSites(topSites) {
         const editButton = createIconButton({
             icon: "pen",
             title: "edit link",
-            id: site.id
+            id: site.id,
+            action: "edit"
         });
         actionsContainer.appendChild(editButton);
 
@@ -102,7 +150,8 @@ function renderTopSites(topSites) {
         const deleteButton = createIconButton({
             icon: "trash",
             title: "delete link",
-            id: site.id
+            id: site.id,
+            action: "delete"
         });
         actionsContainer.appendChild(deleteButton);
 
@@ -123,87 +172,75 @@ function renderTopSites(topSites) {
     fetchResources("icons").then(icons => {
         if (icons) renderIcons(icons);
     });
-}
+};
 
-// helper fucntion to genearte buttons
-function createIconButton({ icon, title, id }) {
+// helper function to generate buttons
+function createIconButton({ icon, title, id, action }) {
     const button = document.createElement("button");
 
     button.tabIndex = -1;
-    button.className = "icon-btn";
+    button.classList.add("icon-btn", "top-site-action-button");
     button.dataset.icon = icon;
+    button.dataset.action = action;
     button.title = title;
     button.setAttribute("aria-label", title);
     button.dataset.id = id;
 
     return button;
-}
+};
 
-// genrate arrya of top websites by including id for element
-function generateTopSitesArray(topSites) {
-    const firstEightSites = topSites.slice(0, 8);
-    return firstEightSites.map(el => {
-        const siteId = genratesiteId();
-        const title = el.title || el.url;
-        const maxTitleLength = 15;
-        const displayTitle = title.length > maxTitleLength
-            ? title.slice(0, maxTitleLength) + ".."
-            : title;
-        return { id: siteId, title: displayTitle, url: el.url };
-    });
-}
-
-// the core engine that handle managing of top websites(add new,modify existing)
+// the core engine that handles managing of top websites (add new, modify existing)
 function handleTopSiteSubmit(topSiteId = null) {
     const inputValue = topSiteInput.value.trim();
     const action = topSiteInput.dataset.action;
-    const siteId = genratesiteId();
+    const siteId = generateSiteId();
     if (!inputValue) return;
+    const isValid = isValidUrl(inputValue);
     switch (action) {
+        // first step: validate url then ask for title
         case 'addNewUrl':
-            const isValid = isValidUrl(inputValue);
             if (!isValid) {
                 showToast("Please Enter Valid URL. it must start with https://");
                 return false;
             } else {
-                NewFavUrlObj.url = inputValue;
+                newFavUrl = inputValue;
                 updateTopSiteInputMetaData('', 'Add title for your URL', 'addNewTitle', "Link is saved, now add title of the link");
                 topSiteInput.focus();
             }
             break;
+        // second step: save new site with title and url
         case 'addNewTitle':
-            NewFavUrlObj.title = inputValue;
-            NewFavUrlObj.id = siteId;
-            topSites.push(NewFavUrlObj);
+            topSites.push({ id: siteId, title: inputValue, url: newFavUrl });
             saveData("topSites", topSites);
             renderTopSites(topSites);
-            updateTopSiteInputMetaData('', 'Add new favourite website link', 'addNewUrl', "Link is added successfuly");
+            updateTopSiteInputMetaData('', 'Add new favourite website link', 'addNewUrl', "Link is added successfully");
 
             break;
+        // first step of edit: validate new url then ask for title
         case 'editUrl':
             if (!isValid) {
                 showToast("Please Enter Valid URL. it must start with https://");
                 return false;
             } else {
-                // NewFavUrlObj.url = inputValue;
+                // newFavUrlObj.url = inputValue;
                 updateTopSiteInputMetaData('', 'Edit title', 'editTitle', "Link is updated, now edit the title of the link");
                 topSiteInput.focus();
             }
             break;
+        // second step of edit: save updated site
         case 'editTitle':
-            console.log(inputValue);
-            // NewFavUrlObj.title = inputValue;
-            // NewFavUrlObj.id = siteId;
-            // topSites.push(NewFavUrlObj);
+            // newFavUrlObj.title = inputValue;
+            // newFavUrlObj.id = siteId;
+            // topSites.push(newFavUrlObj);
             saveData("topSites", topSites);
             renderTopSites(topSites);
-            updateTopSiteInputMetaData('', 'Add new favourite website link', 'addNewUrl', "Link is updated successfuly");
+            updateTopSiteInputMetaData('', 'Add new favourite website link', 'addNewUrl', "Link is updated successfully");
             break;
 
         default:
             break;
     }
-}
+};
 
 // Update state of the input
 function updateTopSiteInputMetaData(value, placeholder, dataAction, toastMsg = null) {
@@ -213,7 +250,38 @@ function updateTopSiteInputMetaData(value, placeholder, dataAction, toastMsg = n
     if (toastMsg) {
         showToast(toastMsg);
     }
-}
+};
+
+// Handle delete top site from favourite list
+function handledeleteTopSite(id) {
+    toggleDeletionConfirmationMode(true);
+    OnDeleteState.id = id;
+    showToast(`Are you sure you want to remove this website ? Press "Enter" to confirm, "Esc" to cancel`, false);
+};
+
+function deleteTopSite(topSiteslist) {
+    const id = OnDeleteState.id;
+    topSites = topSiteslist.filter(el => el.id != id);
+    saveData("topSites", topSites);
+    renderTopSites(topSites);
+    toggleDeletionConfirmationMode(false);
+    OnDeleteState.id = null;
+    showToast("Favourite website removed successfully");
+};
+
+// Handle edit top site from favourite list
+function handleEditTopSite(id) {
+    topSiteToEdit = topSites.find((el) => el.id === id);
+    topSiteInput.value = topSiteToEdit.url;
+    topSiteInput.dataset.action = editeFavSiteTitle;
+};
+
+// enable/disable deletion confirmation mode and lock UI interaction state
+function toggleDeletionConfirmationMode(isDeletePending = true) {
+    OnDeleteState.onHold = isDeletePending;
+    document.body.classList.toggle('prevent-ui-interactivity', isDeletePending);
+};
+
 
 // check if inputValue is URL
 function isValidUrl(inputValue) {
@@ -223,9 +291,9 @@ function isValidUrl(inputValue) {
     } catch {
         return false;
     }
-}
+};
 
-// genrate a random id 
-function genratesiteId() {
+// generate a random id
+function generateSiteId() {
     return crypto.randomUUID().slice(0, 8);
-}
+};

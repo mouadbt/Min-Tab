@@ -37,16 +37,16 @@ export const focusOnSearchInput = (inputEl) => {
 
 
 // Handle toast
-export function showToast(msg) {
-    // toast.hidden = false;
+export function showToast(msg, dismiss = true) {
     toast.classList.remove('hidden');
     toast.textContent = msg;
-    setTimeout(() => {
-        hideToast();
-    }, 5000);
+    if (dismiss) {
+        setTimeout(() => {
+            hideToast();
+        }, 5000);
+    }
 }
 export function hideToast() {
-    // toast.hidden = true;
     toast.classList.add('hidden');
     toast.textContent = '';
 }

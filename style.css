@@ -57,6 +57,9 @@ body {
 }
 
 /* --------------------------------------- General elements */
+.prevent-ui-interactivity {
+  pointer-events: none;
+}
 .hidden {
   display: none !important;
 }
@@ -605,4 +608,5 @@ button:focus-visible {
   background: var(--background);
   padding: var(--space-xs);
   z-index: 9;
+  max-width: var(--width-search);
 }

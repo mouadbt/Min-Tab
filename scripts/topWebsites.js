@@ -37,6 +37,7 @@ export async function initTopWebsiteLogic() {
         manageTopSitesButton.addEventListener("click", () => {
             if (topSitesContainer) {
                 topSitesContainer.classList.toggle("edit-mode");
+                updateTopSiteInputMetaData("", "Add new favourite website link", "addNewUrl", false);
             }
         });
     }
@@ -222,7 +223,6 @@ function handleTopSiteSubmit(topSiteId = null) {
                 return false;
             } else {
                 topSiteToEdit.url = inputValue;
-                console.log(topSiteToEdit.title);
                 updateTopSiteInputMetaData(topSiteToEdit.title, 'Edit title', 'editTitle', true, "Link is updated, now edit the title of the link");
             }
             break;
@@ -232,7 +232,7 @@ function handleTopSiteSubmit(topSiteId = null) {
             topSiteToEdit.title = inputValue;
             topSites = topSites.map(site =>
                 site.id === topSiteToEdit.id
-                    ? topSiteToEdit
+                    ? { ...topSiteToEdit }
                     : site
             );
             saveData("topSites", topSites);
@@ -280,9 +280,9 @@ function deleteTopSite(topSiteslist) {
 function handleEditTopSite(id) {
     const topsiteData = topSites.find((el) => el.id === id);
     Object.assign(topSiteToEdit, topsiteData);
-    console.log(topSiteToEdit);
-    topSiteInput.value = topsiteData.url;
-    topSiteInput.dataset.action = 'editUrl';
+    updateTopSiteInputMetaData(topSiteToEdit.url, 'Edit Url', 'editUrl', true);
+
+
 };
 
 // enable/disable deletion confirmation mode and lock UI interaction state

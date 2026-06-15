@@ -204,8 +204,7 @@ function handleTopSiteSubmit(topSiteId = null) {
                 return false;
             } else {
                 newFavUrl = inputValue;
-                updateTopSiteInputMetaData('', 'Add title for your URL', 'addNewTitle', "Link is saved, now add title of the link");
-                topSiteInput.focus();
+                updateTopSiteInputMetaData('', 'Add title for your URL', 'addNewTitle', true, "Link is saved, now add title of the link");
             }
             break;
         // second step: save new site with title and url
@@ -213,7 +212,7 @@ function handleTopSiteSubmit(topSiteId = null) {
             topSites.push({ id: siteId, title: inputValue, url: newFavUrl });
             saveData("topSites", topSites);
             renderTopSites(topSites);
-            updateTopSiteInputMetaData('', 'Add new favourite website link', 'addNewUrl', "Link is added successfully");
+            updateTopSiteInputMetaData('', 'Add new favourite website link', 'addNewUrl', false, "Link is added successfully");
 
             break;
         // first step of edit: validate new url then ask for title
@@ -222,19 +221,24 @@ function handleTopSiteSubmit(topSiteId = null) {
                 showToast("Please Enter Valid URL. it must start with https://");
                 return false;
             } else {
-                // newFavUrlObj.url = inputValue;
-                updateTopSiteInputMetaData('', 'Edit title', 'editTitle', "Link is updated, now edit the title of the link");
-                topSiteInput.focus();
+                topSiteToEdit.url = inputValue;
+                console.log(topSiteToEdit.title);
+                updateTopSiteInputMetaData(topSiteToEdit.title, 'Edit title', 'editTitle', true, "Link is updated, now edit the title of the link");
             }
             break;
         // second step of edit: save updated site
         case 'editTitle':
-            // newFavUrlObj.title = inputValue;
-            // newFavUrlObj.id = siteId;
-            // topSites.push(newFavUrlObj);
+            topSiteInput.dataset.action = "addNewUrl";
+            topSiteToEdit.title = inputValue;
+            topSites = topSites.map(site =>
+                site.id === topSiteToEdit.id
+                    ? topSiteToEdit
+                    : site
+            );
             saveData("topSites", topSites);
             renderTopSites(topSites);
-            updateTopSiteInputMetaData('', 'Add new favourite website link', 'addNewUrl', "Link is updated successfully");
+            Object.assign(topSiteToEdit, { id: null, title: null, url: null });
+            updateTopSiteInputMetaData('', 'Add new favourite website link', 'addNewUrl', false, "Link is updated successfully");
             break;
 
         default:
@@ -243,12 +247,15 @@ function handleTopSiteSubmit(topSiteId = null) {
 };
 
 // Update state of the input
-function updateTopSiteInputMetaData(value, placeholder, dataAction, toastMsg = null) {
+function updateTopSiteInputMetaData(value, placeholder, dataAction, focsOnInput, toastMsg = null) {
     topSiteInput.value = value;
     topSiteInput.placeholder = placeholder;
     topSiteInput.dataset.action = dataAction;
     if (toastMsg) {
         showToast(toastMsg);
+    }
+    if (focsOnInput) {
+        topSiteInput.focus();
     }
 };
 
@@ -271,9 +278,11 @@ function deleteTopSite(topSiteslist) {
 
 // Handle edit top site from favourite list
 function handleEditTopSite(id) {
-    topSiteToEdit = topSites.find((el) => el.id === id);
-    topSiteInput.value = topSiteToEdit.url;
-    topSiteInput.dataset.action = editeFavSiteTitle;
+    const topsiteData = topSites.find((el) => el.id === id);
+    Object.assign(topSiteToEdit, topsiteData);
+    console.log(topSiteToEdit);
+    topSiteInput.value = topsiteData.url;
+    topSiteInput.dataset.action = 'editUrl';
 };
 
 // enable/disable deletion confirmation mode and lock UI interaction state

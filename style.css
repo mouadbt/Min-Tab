@@ -596,6 +596,9 @@ button:focus-visible {
   width: 100%;
   transition: transform 0.3s;
 }
+#top-website-list-container.no-separator::before {
+  display: none;
+}
 
 /*  ----------------------------------- taost  */
 #toast {

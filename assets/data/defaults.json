@@ -91,6 +91,11 @@
       "key": "hideTopSites"
     },
     {
+      "label": "Hide fav sites list's separator",
+      "active": false,
+      "key": "hideTopSitesSepar"
+    },
+    {
       "label": "Hide search button",
       "active": false,
       "key": "hideSearchButton"

@@ -38,6 +38,11 @@ export const applySystemSetting = (key, isActive) => {
         .classList.toggle('hidden', isActive);
       break;
 
+    case 'hideTopSitesSepar':
+      document.querySelector('#top-website-list-container')
+        .classList.toggle('no-separator', isActive);
+      break;
+
     case 'hideSearchButton':
       document.querySelector('#search-btn')
         .classList.toggle('disabled', isActive);

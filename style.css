@@ -217,6 +217,9 @@ button:focus-visible {
   flex: 1;
   min-width: 0;
 }
+#top-website-list {
+  gap: 0;
+}
 
 #top-website-list li {
   flex-shrink: 0;
@@ -552,11 +555,9 @@ button:focus-visible {
   display: flex;
   gap: var(--space-xxs);
   align-items: center;
-  /* width: 6rem; */
   overflow: hidden;
   transition: width 0.3s;
-  padding: var(--space-4xs);
-  margin-left: calc(-1 * var(--space-4xs));
+  padding: var(--space-xxxs);
 }
 #top-website-list li.link span {
   white-space: nowrap;
@@ -567,7 +568,7 @@ button:focus-visible {
   align-items: center;
   gap: var(--space-xxxs);
   transition: margin 0.3s;
-  margin-right: -3rem;
+  margin-right: -2.75rem;
 }
 #top-website-list .actions-btns button,
 #top-website-list .actions-btns button svg {

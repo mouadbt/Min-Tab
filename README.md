@@ -1,6 +1,6 @@
 # Min Tab
 
-![Version](https://img.shields.io/badge/version-2.4-blue)
+![Version](https://img.shields.io/badge/version-2.5-blue)
 ![Chrome](https://img.shields.io/badge/Chrome-supported-brightgreen?logo=googlechrome)
 [![Mozilla Add-on](https://img.shields.io/badge/Firefox_Add--on-Install-orange?logo=firefox)](https://addons.mozilla.org/addon/min-tab/)
 ![License](https://img.shields.io/badge/license-open%20source-green)

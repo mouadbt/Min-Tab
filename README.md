@@ -5,11 +5,12 @@
 [![Mozilla Add-on](https://img.shields.io/badge/Firefox_Add--on-Install-orange?logo=firefox)](https://addons.mozilla.org/addon/min-tab/)
 ![License](https://img.shields.io/badge/license-open%20source-green)
 ![No Tracking](https://img.shields.io/badge/tracking-none-lightgrey)
+![Downloads](https://img.shields.io/github/downloads/mouadbt/Min-Tab/total)
 
 A minimalist browser extension (Chrome + Firefox) that replaces your new tab page with a clean interface focused on search functionality.
 **🎉 Now available on [Mozilla Add-ons](https://addons.mozilla.org/addon/min-tab/)!**
 
-![Min Tab Extension](./assets/screenshots/minimal-new-tab-4.webp)
+![Min Tab Extension](./screenshots/2-default-dark-mode.png)
 
 ## Table of Contents
 - [Screenshots](#screenshots)
@@ -25,15 +26,19 @@ A minimalist browser extension (Chrome + Firefox) that replaces your new tab pag
 
 ## Screenshots  
 
-![screenshot](./assets/screenshots/image.webp)
+![screenshot](./screenshots/image.webp)
 
-![Light Mode](./assets/screenshots/light-mode.webp)
+![Light Mode](./screenshots/light-mode.webp)
 
-![suggestions](./assets/screenshots/suggestions-1.webp)
+![suggestions](./screenshots/suggestions-1.webp)
 
-![suggestions](./assets/screenshots/suggestions-2.webp)
+![suggestions](./screenshots/suggestions-2.webp)
 
-![settings](./assets/screenshots/settings.webp)
+![settings](./screenshots/settings.webp)
+
+![favourites-websites](./screenshots/favourite-sites.webp)
+
+![borwser-theme](./screenshots/browser-theme.webp)
 
 ## Features
 

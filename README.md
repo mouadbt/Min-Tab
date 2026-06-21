@@ -1,14 +1,16 @@
 # Min Tab
 
-![Version](https://img.shields.io/badge/version-2.5-blue)
-![Chrome](https://img.shields.io/badge/Chrome-supported-brightgreen?logo=googlechrome)
+![Version](https://img.shields.io/badge/version-2.5-purple)
+![Chrome](https://img.shields.io/badge/Chrome-supported-blue?logo=googlechrome)
 [![Mozilla Add-on](https://img.shields.io/badge/Firefox_Add--on-Install-orange?logo=firefox)](https://addons.mozilla.org/addon/min-tab/)
-![License](https://img.shields.io/badge/license-open%20source-green)
 ![No Tracking](https://img.shields.io/badge/tracking-none-lightgrey)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-yellow.svg)](LICENSE)
 ![Downloads](https://img.shields.io/github/downloads/mouadbt/Min-Tab/total)
 
 A minimalist browser extension (Chrome + Firefox) that replaces your new tab page with a clean interface focused on search functionality.
 **🎉 Now available on [Mozilla Add-ons](https://addons.mozilla.org/addon/min-tab/)!**
+
+Free and open-source under AGPL-3.0.
 
 ![Min Tab Extension](./screenshots/2-default-dark-mode.png)
 
@@ -171,19 +173,23 @@ The Settings panel (press `Alt+S` or hover bottom-right to reveal gear icon) let
 
 ## Privacy
 
-- No data is collected or transmitted to external servers.
-- History suggestions are processed locally using the browser's history API.
-- Top sites are retrieved locally using the browser's topSites API.
-- Search queries are sent directly to your chosen search engine.
-- Favicons are loaded from Google's favicon service (`s2/favicons`).
+- Min Tab does not collect, store, or transmit user data.
+- History suggestions are processed locally using the browser's History API.
+- Top sites are retrieved locally using the browser's Top Sites API.
+- Search queries are sent directly to your selected search engine when you perform a search.
+- Favicons are loaded from Google's favicon service (s2/favicons).
 
 ## License
 
-This project is open source. Free to modify and distribute.
+Copyright (C) 2026 Mouad
+
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
+
+See the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit issues or pull requests.
+By submitting a contribution, you agree that your contribution will be licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
 
 ## Star History
 
